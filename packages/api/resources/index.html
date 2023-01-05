@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <base href="/" />
+    <meta charset="UTF-8" />
+    <meta name="description" content="{{ description }}" />
+    <meta name="keywords" content="{{ keywords }}" />
+    <meta name="theme-color" content="{{ theme_color }}" />
+    <link rel="manifest" href="manifest.json" />
+
+    <!-- OpenGraph/FB -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ url }}" />
+    <meta property="og:title" content="{{ title }}" />
+    <meta property="og:description" content="{{ description }}" />
+    <meta property="og:image" content="Imagem" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="{{ url }}" />
+    <meta property="twitter:title" content="{{ title }}" />
+    <meta property="twitter:description" content="{{ description }}" />
+    <meta property="twitter:image" content="Imagem" />
+
+    <!-- Generic favicons -->
+    <link rel="shortcut icon" href="/api/icons/icon32x32" />
+    <link rel="icon" href="/api/icons/icon32x32" sizes="32x32" />
+    <link rel="icon" href="/api/icons/icon48x48" sizes="48x48" />
+    <link rel="icon" href="/api/icons/icon96x96" sizes="96x96" />
+    <link rel="icon" href="/api/icons/icon128x128" sizes="128x128" />
+    <link rel="icon" href="/api/icons/icon144x144" sizes="144x144" />
+
+    <!-- iOS -->
+    <link rel="apple-touch-icon" href="/api/icons/icon192x192" />
+
+    <!-- Windows -->
+    <meta name="msapplication-TileColor" content="{{ theme_color }}" />
+    <meta name="msapplication-TileImage" content="/api/icons/icon144x144" />
+
+    <title>{{ name }}</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      window.INITIAL_DATA = {{ initial_data }}
+    </script>
+    <div id="root">
+      <div id="__ignored">
+        {{ name }}
+      </div>
+      <noscript>
+        <h3 style="color: red">
+          O site não pôde ser carregado.<br />
+          Aguarde 10 segundos e atualize a página, ou, se for o caso,
+          habilite o JavaScript no seu navegador e tente novamente.
+        </h3>
+      </noscript>
+    </div>
+    <script type="text/javascript">
+      const ignored = document.querySelector('#__ignored')
+      if( ignored ) {
+        ignore.style.display = 'none'
+      }
+    </script>
+  </body>
+</html>

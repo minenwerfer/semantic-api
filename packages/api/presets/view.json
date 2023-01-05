@@ -1,0 +1,8 @@
+{
+  "individualActions": {
+    "ui/spawnView": {
+      "name": "action.spawnView",
+      "icon": "search-plus"
+    }
+  }
+}
