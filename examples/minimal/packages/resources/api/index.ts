@@ -1,5 +1,5 @@
-import type { ApiContext } from '@savitri/api'
-import { init } from '@savitri/api/server'
+import type { ApiContext } from '@semantic-api/core'
+import { init } from '@semantic-api/core/server'
 
 const context: Partial<ApiContext> = {
   apiConfig: {
