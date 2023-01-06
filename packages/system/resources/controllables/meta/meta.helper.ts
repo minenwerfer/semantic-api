@@ -1,16 +1,16 @@
 import { readdirSync } from 'fs'
-import type { Description } from '../../../types'
-import type { ApiContext } from '../../../api/types'
-import { preloadDescription } from '../../../api/core/collection'
-import { getEntityAsset } from '../../../api/core/assets'
+import type { Description } from '../../../../types'
+import type { ApiContext } from '../../../../api/types'
+import { preloadDescription } from '../../../../api/core/collection'
+import { getResourceAsset } from '../../../../api/core/assets'
 
 const __cachedDescriptions: Record<string, Description> = {}
 export const cachedDescriptions = __cachedDescriptions
 
 const discoverDescriptions = (dynamic?: boolean, internal?: boolean) => {
   const path = internal
-    ? `${__dirname}/../../collections`
-    : `${process.cwd()}/collections`
+    ? `${__dirname}/../../resources/collections`
+    : `${process.cwd()}/resources/collections`
 
   if( dynamic ) {
     return require(path)
@@ -20,7 +20,7 @@ const discoverDescriptions = (dynamic?: boolean, internal?: boolean) => {
     try {
       return {
         ...a,
-        [d]: getEntityAsset(d, 'description')
+        [d]: getResourceAsset(d, 'description')
       }
     } catch(e: any) {
       if( e.code !== 'MODULE_NOT_FOUND' ) {

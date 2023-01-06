@@ -1,6 +1,6 @@
-import type { Description } from '../../../types'
-import type { ApiContext } from '../../../api/types'
-import { getEntityAsset } from '../../../api'
+import type { Description } from '../../../../types'
+import type { ApiContext } from '../../../../api/types'
+import { getResourceAsset } from '../../../../api'
 import { getDescriptions } from '../meta/meta.helper'
 
 const __searchable: Record<string, Description> = {}
@@ -42,7 +42,7 @@ export const getSearchables = (context: ApiContext) => {
       }, {})
 
       // force model registration
-      getEntityAsset(collectionName, 'model')
+      getResourceAsset(collectionName, 'model')
 
       return {
         ...a,

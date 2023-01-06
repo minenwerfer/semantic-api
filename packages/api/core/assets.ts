@@ -5,7 +5,7 @@ import type {
   ApiFunction ,
   AnyFunctions,
   AssetType,
-  EntityType,
+  ResourceType,
   FunctionPath,
   AssetReturnType,
   ApiContext
@@ -35,16 +35,16 @@ const cacheIfPossible = (assetName: string, assetType: AssetType, fn: () => any)
   return asset
 }
 
-const isInternal = (entityName: string, entityType: EntityType = 'collection'): boolean => {
-  switch(  entityType ) {
-    case 'collection': return entityName in SystemCollections
-    case 'controllable': return entityName in SystemControllables
+const isInternal = (resourceName: string, resourceType: ResourceType = 'collection'): boolean => {
+  switch(  resourceType ) {
+    case 'collection': return resourceName in SystemCollections
+    case 'controllable': return resourceName in SystemControllables
   }
 }
 
-const getPrefix = (collectionName: string, internal: boolean, entityType: EntityType = 'collection') => {
+const getPrefix = (collectionName: string, internal: boolean, resourceType: ResourceType = 'collection') => {
   const pluralized = (() => {
-    switch( entityType ) {
+    switch( resourceType ) {
       case 'collection': return 'collections'
       case 'controllable': return 'controllables'
     }
@@ -84,17 +84,17 @@ const loadModelWithFallback = (collectionName: string, internal: boolean) => {
       throw e
     }
 
-    const description = getEntityAsset(collectionName, 'description')
+    const description = getResourceAsset(collectionName, 'description')
     return createModel(description)
   }
 }
 
-const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: EntityType) => {
-  const [entityName] = functionPath.split('@')
-  const proxyFn = (entityName: string, context: any, _entityType?: EntityType) => {
+const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType: ResourceType) => {
+  const [resourceName] = functionPath.split('@')
+  const proxyFn = (resourceName: string, context: any, _resourceType?: ResourceType) => {
     return new Proxy({}, {
-      get: (_, entityFunction: string) => {
-        const asset = getEntityFunction(`${entityName}@${entityFunction}`, _entityType)
+      get: (_, resourceFunction: string) => {
+        const asset = getResourceFunction(`${resourceName}@${resourceFunction}`, _resourceType)
         return typeof asset === 'function'
           ? (props?: any) => asset(props, context)
           : asset
@@ -108,7 +108,7 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
       validate: (...args: any[]) => null,
       hasRoles: (roles: Array<string>|string) => arraysIntersects(roles, context.token.user.roles),
       hasCategories: (categories: Array<string>|string) => {
-        const description = getEntityAsset(entityName, 'description')
+        const description = getResourceAsset(resourceName, 'description')
         if( !description.categories ) {
           return false
         }
@@ -120,30 +120,30 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
           what: {
             message,
             details,
-            context: entityName,
+            context: resourceName,
             owner: context.token.user?._id
           }
         })
       },
       collection: {} as CollectionFunctions,
-      entity: proxyFn(entityName, context, entityType)
+      resource: proxyFn(resourceName, context, resourceType)
     }
 
-    if( entityType === 'collection' ) {
-      const description = getEntityAsset(entityName, 'description')
+    if( resourceType === 'collection' ) {
+      const description = getResourceAsset(resourceName, 'description')
       newContext.validate = (...args: Parameters<ValidateFunction<any>>) => validateFromDescription(description, ...args)
-      newContext.collection = useCollection(entityName, newContext)
+      newContext.collection = useCollection(resourceName, newContext)
     }
 
     newContext.collections = new Proxy({}, {
-      get: (_, entityName: string) => {
-        return proxyFn(entityName, newContext)
+      get: (_, resourceName: string) => {
+        return proxyFn(resourceName, newContext)
       }
     })
 
     newContext.controllables = new Proxy({}, {
-      get: (_, entityName: string) => {
-        return proxyFn(entityName, newContext, 'controllable')
+      get: (_, resourceName: string) => {
+        return proxyFn(resourceName, newContext, 'controllable')
       }
     })
 
@@ -154,25 +154,25 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, entityType: E
 }
 
 
-const loadFunction = (functionPath: FunctionPath, entityType: EntityType = 'collection', internal: boolean = false) => {
-  const [entityName] = functionPath.split('@')
-  const prefix = getPrefix(entityName, internal, entityType)
+const loadFunction = (functionPath: FunctionPath, resourceType: ResourceType = 'collection', internal: boolean = false) => {
+  const [resourceName] = functionPath.split('@')
+  const prefix = getPrefix(resourceName, internal, resourceType)
 
   const originalFn: ApiFunction = require(`${prefix}/functions/${functionPath}`).default
-  return wrapFunction(originalFn, functionPath, entityType)
+  return wrapFunction(originalFn, functionPath, resourceType)
 }
 
-const loadFunctionWithFallback = (functionPath: FunctionPath, entityType: EntityType, internal: boolean) => {
+const loadFunctionWithFallback = (functionPath: FunctionPath, resourceType: ResourceType, internal: boolean) => {
   try {
-    return loadFunction(functionPath, entityType, internal)
+    return loadFunction(functionPath, resourceType, internal)
   } catch( e: any ) {
-    if( e.code !== 'MODULE_NOT_FOUND' || entityType !== 'collection' ) {
+    if( e.code !== 'MODULE_NOT_FOUND' || resourceType !== 'collection' ) {
       throw e
     }
 
-    const [entityName, functionName] = functionPath.split('@')
+    const [resourceName, functionName] = functionPath.split('@')
     const fn: ApiFunction<any> = (props, context) => {
-      const method = useCollection(entityName, context)[functionName as keyof CollectionFunctions]
+      const method = useCollection(resourceName, context)[functionName as keyof CollectionFunctions]
       if( !method || typeof method !== 'function' ) {
         throw new TypeError(
           `no such function ${functionPath}`
@@ -182,29 +182,29 @@ const loadFunctionWithFallback = (functionPath: FunctionPath, entityType: Entity
       return method(props)
     }
 
-    return wrapFunction(fn, functionPath, entityType)
+    return wrapFunction(fn, functionPath, resourceType)
   }
 }
 
-export const getEntityAsset = <Type extends AssetType>(
+export const getResourceAsset = <Type extends AssetType>(
   assetName: Type extends 'function'
     ? FunctionPath
     : string,
   assetType: Type,
-  entityType: EntityType = 'collection'
+  resourceType: ResourceType = 'collection'
 ): AssetReturnType<Type> => {
   return cacheIfPossible(
     assetName,
     assetType,
     () => {
-      const entityName = assetType === 'function'
+      const resourceName = assetType === 'function'
         ? assetName.split('@').shift()!
         : assetName
 
-      const internal = isInternal(entityName, entityType)
+      const internal = isInternal(resourceName, resourceType)
 
-      if( entityName !== 'meta' ) {
-        const description = global.descriptions?.[entityName]
+      if( resourceName !== 'meta' ) {
+        const description = global.descriptions?.[resourceName]
         if( description ) {
           switch( assetType ) {
             case 'description':
@@ -215,8 +215,8 @@ export const getEntityAsset = <Type extends AssetType>(
             case 'function': {
               const fn = description.functions?.[assetName.split('@').pop()!]
               return fn
-                ? wrapFunction(fn, assetName as FunctionPath, entityType)
-                : loadFunctionWithFallback(assetName as FunctionPath, entityType, internal)
+                ? wrapFunction(fn, assetName as FunctionPath, resourceType)
+                : loadFunctionWithFallback(assetName as FunctionPath, resourceType, internal)
             }
           }
         }
@@ -228,12 +228,12 @@ export const getEntityAsset = <Type extends AssetType>(
         case 'model':
           return loadModelWithFallback(assetName, internal)
         case 'function':
-          return loadFunctionWithFallback(assetName as FunctionPath, entityType, internal)
+          return loadFunctionWithFallback(assetName as FunctionPath, resourceType, internal)
       }
     }
   )
 }
 
-export const getEntityFunction = (functionPath: FunctionPath, entityType: EntityType = 'collection') => {
-  return getEntityAsset(functionPath, 'function', entityType)
+export const getResourceFunction = (functionPath: FunctionPath, resourceType: ResourceType = 'collection') => {
+  return getResourceAsset(functionPath, 'function', resourceType)
 }

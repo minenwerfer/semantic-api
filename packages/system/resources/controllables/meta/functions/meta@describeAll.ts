@@ -1,4 +1,4 @@
-import type { ApiFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../../api/types'
 import { getDescriptions } from '../meta.helper'
 
 const describeAll: ApiFunction<null> = (_props, context) => {

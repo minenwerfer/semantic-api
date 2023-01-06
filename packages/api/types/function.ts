@@ -32,7 +32,7 @@ export type AccessControl = {
 }
 
 export type ApiContext = {
-  entityName: string
+  resourceName: string
   apiConfig: ApiConfig
   accessControl: AccessControl
   injected: Record<string, any>
@@ -42,7 +42,7 @@ export type ApiContext = {
   hasRoles: (roles: Array<string>|string) => boolean
   hasCategories: (categories: Array<string>|string) => boolean
   collection: CollectionFunctions
-  entity: AnyFunctions
+  resource: AnyFunctions
   log: (message: string, details?: Record<string, any>) => Promise<Log>
   collections: Record<string, AnyFunctions>
   controllables: Record<string, AnyFunctions>

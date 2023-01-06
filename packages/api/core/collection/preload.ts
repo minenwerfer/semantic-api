@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import { getReferencedCollection } from '../../../common'
-import { getEntityAsset } from '../assets'
+import { getResourceAsset } from '../assets'
 import type { MaybeDescription, Description } from '../../../types'
 
 export const applyPreset = (description: MaybeDescription, presetName:string, parentName?:string) => {
@@ -18,7 +18,7 @@ export const applyPreset = (description: MaybeDescription, presetName:string, pa
 
 export const preloadDescription = (description: MaybeDescription) => {
   if( description.alias ) {
-    const _aliasedCollection = getEntityAsset(description.alias, 'description')
+    const _aliasedCollection = getResourceAsset(description.alias, 'description')
 
     const {
       $id: collectionName,
@@ -59,7 +59,7 @@ export const preloadDescription = (description: MaybeDescription) => {
         property.s$referencedCollection = reference.$ref
 
         if( !property.s$indexes && !property.s$inline ) {
-          const referenceDescription = getEntityAsset(reference.$ref!, 'description')
+          const referenceDescription = getResourceAsset(reference.$ref!, 'description')
           const indexes = property.s$indexes = referenceDescription.indexes
 
           if( !indexes ) {

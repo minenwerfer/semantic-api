@@ -13,7 +13,7 @@ import { getReferencedCollection } from '../../../common'
 import type { Description, CollectionProperty, MaybeDescription } from '../../../types'
 
 import { options as defaultOptions } from '../database'
-import { getEntityAsset } from '../assets'
+import { getResourceAsset } from '../assets'
 import { preloadDescription, applyPreset } from './preload'
 import { getTypeConstructor } from './typemapping'
 
@@ -72,12 +72,12 @@ export const descriptionToSchemaObj = (description: MaybeDescription) => {
     result.type = type
 
     if( typeof referencedCollection === 'string' ) {
-      const referenceDescription = getEntityAsset(referencedCollection, 'description')
+      const referenceDescription = getResourceAsset(referencedCollection, 'description')
       hasRefs = true
 
       const actualReferenceName = result.ref = referenceDescription.alias || referenceDescription.$id
       if( !__loadedModels.includes(actualReferenceName) ) {
-        getEntityAsset(actualReferenceName, 'model')
+        getResourceAsset(actualReferenceName, 'model')
         __loadedModels.push(actualReferenceName)
       }
 
@@ -189,7 +189,7 @@ export const createModel = <T=any>(
 
   for( const [propertyName, property] of Object.entries(description.properties) ) {
     if( property.s$isFile || property.s$inline ) {
-      const referenceDescription = getEntityAsset(property.s$referencedCollection!, 'description')
+      const referenceDescription = getResourceAsset(property.s$referencedCollection!, 'description')
       cascadingDelete.push({
         propertyName,
         collectionName: referenceDescription.alias || referenceDescription.$id,

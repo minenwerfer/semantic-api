@@ -1,6 +1,7 @@
-import { mongoose } from '../../../../api/core/database'
-import type { ApiFunction } from '../../../../api/types'
-import { makeException } from '../../../../api/core/exceptions'
+import type { ApiFunction } from '../../../../../api/types'
+import { mongoose } from '../../../../../api/core/database'
+import { makeException } from '../../../../../api/core/exceptions'
+import { isGranted } from '../../../../../api/core/accessControl/granted'
 import { getSearchables, buildAggregations } from '../searchable.helper'
 
 type Props = {
@@ -22,10 +23,10 @@ const search: ApiFunction<Props> = async (props, context) => {
   }
 
   const searchables = Object.entries(getSearchables(context))
-    .reduce((a, [key, value]: [string, any]) => {
-      // if( !this.isGranted(token, 'getAll', key) ) {
-      //   return a
-      // }
+    .reduce((a, [key, value]) => {
+      if( !isGranted(`${key}@getAll`, context) ) {
+        return a
+      }
 
       return {
         ...a,

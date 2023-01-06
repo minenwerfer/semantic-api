@@ -8,7 +8,7 @@ export type AssetType =
   | 'function'
 
 
-export type EntityType =
+export type ResourceType =
   'collection'
   | 'controllable'
 

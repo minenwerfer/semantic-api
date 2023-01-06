@@ -5,14 +5,14 @@ export const beforeRead: AccessControl['beforeRead'] = (_payload, _context) => {
   return preset
 }
 
-export const beforeWrite: AccessControl['beforeWrite'] = (_payload, { entityName, token }) => {
+export const beforeWrite: AccessControl['beforeWrite'] = (_payload, { resourceName, token }) => {
   const preset: any = {}
 
   if( !token?.user?.roles.includes('root') ) {
     return preset
   }
 
-  if( entityName === 'userExtra' ) {
+  if( resourceName === 'userExtra' ) {
     preset.owner = token?.user._id
   }
 

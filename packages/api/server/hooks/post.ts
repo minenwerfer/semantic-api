@@ -1,5 +1,5 @@
 import type { Request } from '@hapi/hapi'
-import type { HandlerRequest, ApiContext, EntityType } from '../../types'
+import type { HandlerRequest, ApiContext, ResourceType } from '../../types'
 import { useCollection } from '../../core/collection'
 
 type PostHookParams = {
@@ -7,8 +7,8 @@ type PostHookParams = {
   result: any
   request: Request & HandlerRequest
   context: ApiContext
-  entityName: string
-  entityType: EntityType
+  resourceName: string
+  resourceType: ResourceType
 }
 
 export const processRedirects = (params: PostHookParams) => {
@@ -29,8 +29,8 @@ export const appendPagination = async (params: PostHookParams) => {
     request,
     result,
     context,
-    entityName,
-    entityType
+    resourceName,
+    resourceType
   } = params
 
   if( redirected ) {
@@ -41,8 +41,8 @@ export const appendPagination = async (params: PostHookParams) => {
     result
   }
 
-  if( Array.isArray(result) && entityType === 'collection' ) {
-    const countFunction = useCollection(entityName, context).count
+  if( Array.isArray(result) && resourceType === 'collection' ) {
+    const countFunction = useCollection(resourceName, context).count
     const recordsTotal = typeof countFunction === 'function'
       ? await countFunction({ filters: request.payload?.filters || {} })
       : result.length

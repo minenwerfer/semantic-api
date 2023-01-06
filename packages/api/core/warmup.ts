@@ -1,6 +1,6 @@
 import type { ApiContext } from '../types'
-import { getEntityFunction } from './assets'
+import { getResourceFunction } from './assets'
 
 export default async (context: Pick<ApiContext, 'descriptions' | 'apiConfig'>) => {
-  return getEntityFunction('meta@describeAll', 'controllable')(null, context as ApiContext)
+  return getResourceFunction('meta@describeAll', 'controllable')(null, context as ApiContext)
 }

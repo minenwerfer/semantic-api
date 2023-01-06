@@ -19,37 +19,37 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
   return [
     {
       method: 'GET',
-      path: '/api/{entityName}/{id}',
+      path: '/api/{resourceName}/{id}',
       handler: defaultHandler(regularVerb('get'))
     },
     {
       method: 'GET',
-      path: '/api/{entityName}',
+      path: '/api/{resourceName}',
       handler: defaultHandler(regularVerb('getAll'))
     },
     {
       method: 'POST',
-      path: '/api/{entityName}',
+      path: '/api/{resourceName}',
       handler: defaultHandler(regularVerb('insert'))
     },
     {
       method: 'PUT',
-      path: '/api/{entityName}/{id}',
+      path: '/api/{resourceName}/{id}',
       handler: defaultHandler(regularVerb('modify'))
     },
     {
       method: 'DELETE',
-      path: '/api/{entityName}/{id}',
+      path: '/api/{resourceName}/{id}',
       handler: defaultHandler(regularVerb('delete'))
     },
     {
       method: 'POST',
-      path: '/api/{entityName}/{functionName}',
+      path: '/api/{resourceName}/{functionName}',
       handler: defaultHandler(customVerbs('collection'))
     },
     {
       method: ['POST', 'GET'],
-      path: '/api/_/{entityName}/{functionName}',
+      path: '/api/_/{resourceName}/{functionName}',
       handler: defaultHandler(customVerbs('controllable'))
     },
     {

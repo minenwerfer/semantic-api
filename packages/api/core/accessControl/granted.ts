@@ -1,15 +1,14 @@
-import type { FunctionPath, DecodedToken, ApiContext, Role } from '../../types'
+import type { FunctionPath, ApiContext, Role } from '../../types'
 import baseRoles from './baseRoles'
 
 const _isGranted = (
   functionPath: FunctionPath,
-  token: DecodedToken,
   context: ApiContext,
   targetRole?: Role
 ) => {
-  const [entityName, functionName] = functionPath.split('@')
+  const [resourceName, functionName] = functionPath.split('@')
 
-  const userRoles = token?.user?.roles || ['guest']
+  const userRoles: Array<string> = context.token?.user?.roles || ['guest']
   return userRoles.some((roleName) => {
     const currentRole = targetRole || context.accessControl.roles?.[roleName]
 
@@ -17,7 +16,7 @@ const _isGranted = (
       return false
     }
 
-    const subject = currentRole?.capabilities?.[entityName]
+    const subject = currentRole?.capabilities?.[resourceName]
     if( subject?.blacklist?.includes(functionName) ) {
       return false
     }
@@ -32,13 +31,12 @@ const _isGranted = (
 
 export const isGranted = (
   functionPath: FunctionPath,
-  token: DecodedToken,
   context: ApiContext
 ) => {
-  const baseRole = token?.user?._id
+  const baseRole = context.token?.user?._id
     ? baseRoles.authenticated
     : baseRoles.unauthenticated
 
-  return _isGranted(functionPath, token, context)
-    || _isGranted(functionPath, token, context, baseRole)
+  return _isGranted(functionPath, context)
+    || _isGranted(functionPath, context, baseRole)
 }

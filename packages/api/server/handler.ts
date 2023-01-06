@@ -1,13 +1,13 @@
 import './bootstrap'
 
 import * as R from 'ramda'
-import { getEntityFunction } from '../core/assets'
+import { getResourceFunction } from '../core/assets'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type {
   HandlerRequest,
   DecodedToken,
   ApiContext,
-  EntityType,
+  ResourceType,
   FunctionPath
 
 } from '../types'
@@ -112,7 +112,7 @@ export const safeHandleContext = (
   return safeHandle(fn2)
 }
 
-export const customVerbs = (entityType: EntityType) =>
+export const customVerbs = (resourceType: ResourceType) =>
   async (
   request: HandlerRequest,
   h: ResponseToolkit,
@@ -120,17 +120,17 @@ export const customVerbs = (entityType: EntityType) =>
 ) => {
   const {
     params: {
-      entityName,
+      resourceName,
       functionName
     }
   } = request
 
-  const functionPath: FunctionPath = `${entityName}@${functionName}`
+  const functionPath: FunctionPath = `${resourceName}@${functionName}`
 
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
   context.token = token
-  context.entityName = entityName
+  context.resourceName = resourceName
   context.response = h
 
   prePipe({
@@ -141,13 +141,13 @@ export const customVerbs = (entityType: EntityType) =>
     context
   })
 
-  const result = await getEntityFunction(functionPath, entityType)(request.payload, context)
+  const result = await getResourceFunction(functionPath, resourceType)(request.payload, context)
   return postPipe({
     request,
     result,
     context,
-    entityName,
-    entityType
+    resourceName,
+    resourceType
   })
 }
 
@@ -159,16 +159,16 @@ export const regularVerb = (functionName: RegularVerb) =>
 ) => {
   const {
     params: {
-      entityName,
+      resourceName,
       id
     }
   } = request
 
-  const functionPath: FunctionPath = `${entityName}@${functionName}`
+  const functionPath: FunctionPath = `${resourceName}@${functionName}`
 
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
-  context.entityName = entityName
+  context.resourceName = resourceName
   context.token = token
 
   prePipe({
@@ -193,13 +193,13 @@ export const regularVerb = (functionName: RegularVerb) =>
     }
   }
 
-  const result = await getEntityFunction(functionPath)(request.payload, context)
+  const result = await getResourceFunction(functionPath)(request.payload, context)
   return postPipe({
     request,
     result,
     context,
-    entityName,
-    entityType: 'collection'
+    resourceName,
+    resourceType: 'collection'
   })
 }
 
@@ -213,7 +213,7 @@ export const fileDownload = async (
   context.token = token
 
   const { hash, options } = request.params
-  const { filename, content, mime } = await getEntityFunction('file@download')(hash, context)
+  const { filename, content, mime } = await getResourceFunction('file@download')(hash, context)
 
   const parsedOptions = (options||'').split(',')
   const has = (opt: string) => parsedOptions.includes(opt)
@@ -232,7 +232,7 @@ export const fileInsert = async (
   const context = _context||fallbackContext
   context.token = token
 
-  const result = await getEntityFunction('file@insert')(request.payload, context)
+  const result = await getResourceFunction('file@insert')(request.payload, context)
 
   return { result }
 }

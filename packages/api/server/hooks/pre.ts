@@ -13,11 +13,7 @@ type PreHookParams = {
 }
 
 export const checkAC = (params: PreHookParams) => {
-  const granted = isGranted(
-    params.functionPath,
-    params.token,
-    params.context
-  )
+  const granted = isGranted(params.functionPath, params.context)
   
   if( !granted ) {
     throw makeException({
