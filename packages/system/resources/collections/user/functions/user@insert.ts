@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt'
-import type { ApiFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../../api/types'
 import { User } from '../user.description'
 import { saveWithExtra } from '../user.helper'
 

@@ -7,7 +7,7 @@ const context: Partial<ApiContext> = {
       guest: {
         capabilities: {
           person: {
-            methods: [
+            functions: [
               'hello'
             ]
           }

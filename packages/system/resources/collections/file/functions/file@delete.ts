@@ -1,4 +1,4 @@
-import type { ApiFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../../api/types'
 import FileModel from '../file.model'
 
 const { unlink } = require('fs').promises

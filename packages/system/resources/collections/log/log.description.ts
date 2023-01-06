@@ -1,4 +1,4 @@
-import { makeDescription, Schema } from '../../../api/core/collection'
+import { makeDescription, Schema } from '../../../../api/core/collection'
 
 export type Log = Schema<typeof schema>
 

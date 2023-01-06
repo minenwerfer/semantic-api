@@ -1,5 +1,5 @@
-import { TokenService } from '../../../../api/core/token'
-import type { ApiFunction } from '../../../../api/types'
+import { TokenService } from '../../../../../api/core/token'
+import type { ApiFunction } from '../../../../../api/types'
 import type { User } from '../user.description'
 import UserModel from '../user.model'
 import { userExtraModel } from '../user.helper'

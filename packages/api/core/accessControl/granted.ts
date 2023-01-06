@@ -24,7 +24,7 @@ const _isGranted = (
     return (
       currentRole?.grantEverything
       || subject?.grantEverything
-      || subject?.methods?.includes(functionName)
+      || subject?.functions?.includes(functionName)
     )
   })
 }

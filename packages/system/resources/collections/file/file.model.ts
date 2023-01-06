@@ -1,4 +1,4 @@
-import { createModel } from '../../../api/core/collection'
+import { createModel } from '../../../../api/core/collection'
 import { File, default as FileDescription } from './file.description'
 const { unlink } = require('fs').promises
 

@@ -18,7 +18,7 @@ export type Role = {
   grantEverything?: boolean
   capabilities?: Record<string, {
     grantEverything?: boolean
-    methods?: Array<string>
+    functions?: Array<string>
     blacklist?: Array<string>
   }>
 }

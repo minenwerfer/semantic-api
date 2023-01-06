@@ -1,5 +1,5 @@
 import { createHash } from 'crypto'
-import type { ApiFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../../api/types'
 import { File } from '../file.description'
 import FileModel from '../file.model'
 

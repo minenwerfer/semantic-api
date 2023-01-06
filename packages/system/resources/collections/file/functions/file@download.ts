@@ -1,4 +1,4 @@
-import type { ApiFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../../api/types'
 import type { File } from '../file.description'
 import FileModel from '../file.model'
 

@@ -4,29 +4,29 @@ export default {
   authenticated: {
     capabilities: {
       meta: {
-        methods: [
+        functions: [
           'describeAll'
         ]
       },
       searchable: {
-        methods: [
+        functions: [
           'search'
         ]
       },
       file: {
-        methods: [
+        functions: [
           'insert'
         ]
       },
       user: {
-        methods: [
+        functions: [
           'insert',
           'authenticate',
           'ping'
         ]
       },
       userExtra: {
-        methods: [
+        functions: [
           'insert'
         ]
       }
@@ -35,12 +35,12 @@ export default {
   unauthenticated: {
     capabilities: {
       meta: {
-        methods: [
+        functions: [
           'describeAll'
         ]
       },
       user: {
-        methods: [
+        functions: [
           'insert',
           'authenticate'
         ]

@@ -1,6 +1,6 @@
-import { Types } from '../../../api/core/database'
-import { useCollection, getResourceAsset } from '../../../api'
-import type { ApiFunction } from '../../../api/types'
+import { Types } from '../../../../api/core/database'
+import { useCollection, getResourceAsset } from '../../../../api'
+import type { ApiFunction } from '../../../../api/types'
 import type { User } from './user.description'
 
 type SaveWithExtraProps = {
