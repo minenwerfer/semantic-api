@@ -13,7 +13,7 @@
     "@types/node": "^17.0.1"
   },
   "dependencies": {
-    "@hapi/hapi": "^20.2.1",
+    "@hapi/hapi": "^21.1.0",
     "@savitri/common": "~1.0.0",
     "@savitri/system": "^1.0.0",
     "@savitri/types": "^1.0.0",
@@ -26,5 +26,8 @@
     "mongoose-lean-virtuals": "^0.9.1",
     "ts-node": "^10.4.0",
     "yaml": "^2.0.1"
+  },
+  "optionalDependencies": {
+    "mongodb-memory-server": "^8.10.2"
   }
 }

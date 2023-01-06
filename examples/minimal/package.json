@@ -1,6 +1,6 @@
 {
-  "name": "@semantic-api/system",
-  "version": "0.0.1-alpha",
+  "name": "api-headless",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,9 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.0"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.0"
+    "@savitri/api": "file:../../dist/api"
   }
 }

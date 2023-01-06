@@ -2,7 +2,7 @@ import type { ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest, DecodedToken, FunctionPath, ApiContext } from '../../types'
 import { PAGINATION_PER_PAGE_LIMIT } from '../../../types/constants'
 import { makeException } from '../../core/exceptions'
-import { isGranted } from '../../core/access/granted'
+import { isGranted } from '../../core/accessControl/granted'
 
 type PreHookParams = {
   request: HandlerRequest

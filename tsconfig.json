@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "esnext",
+    "module": "commonjs",
+    "strict": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "packages/api/**/*",
+    "packages/common/**/*",
+    "packages/system/**/*",
+    "packages/types/**/*"
+  ]
+}
