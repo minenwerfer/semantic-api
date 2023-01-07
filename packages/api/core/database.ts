@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 export * from 'mongoose'
 
 mongoose.Promise = global.Promise
@@ -28,8 +28,5 @@ export const connectDatabase = async () => {
     return envUri
   })()
 
-  mongoose.connect(mongodbUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  mongoose.connect(mongodbUri)
 }

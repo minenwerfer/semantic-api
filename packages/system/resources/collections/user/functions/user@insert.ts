@@ -1,7 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import type { ApiFunction } from '../../../../../api/types'
 import { User } from '../user.description'
-import { saveWithExtra } from '../user.helper'
 
 type Props = {
   what: Omit<Partial<User>, 'self_registered'> & {
@@ -12,7 +11,7 @@ type Props = {
 
 type Return = Promise<Partial<User>>
 
-const insert: ApiFunction<Props, Return> = async (props, context) => {
+const insert: ApiFunction<Props, typeof import('../user.library')> = async (props, context): Return => {
   const { token, collection, apiConfig } = context
   props.what.group = apiConfig.group
 
@@ -52,7 +51,7 @@ const insert: ApiFunction<Props, Return> = async (props, context) => {
   }
 
   return props.what.extra
-    ? saveWithExtra(props, context)
+    ? context.library.saveWithExtra(props, context)
     : collection.insert(props) as Promise<User>
 }
 

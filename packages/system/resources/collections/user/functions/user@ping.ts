@@ -1,6 +1,6 @@
 import type { ApiFunction } from '../../../../../api/types'
 
-const ping: ApiFunction<unknown, void> = (_props) => {
+const ping: ApiFunction = (_props) => {
   // does nothing
 }
 

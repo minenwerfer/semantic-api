@@ -6,14 +6,16 @@ export type AssetType =
   'model'
   | 'description'
   | 'function'
+  | 'library'
 
 
 export type ResourceType =
   'collection'
   | 'controllable'
 
-export type AssetReturnType<Type> = Type extends 'function'
-  ? ApiFunction<any, Promise<any>> : Type extends 'description'
+export type AssetReturnType<Type extends AssetType> = Type extends 'function'
+  ? ApiFunction<any> : Type extends 'description'
   ? Description : Type extends 'model'
-  ? Model<any> : never
+  ? Model<any> : Type extends 'library'
+  ? Record<string, (...args: any[]) => any> : never
 

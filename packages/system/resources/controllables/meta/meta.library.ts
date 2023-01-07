@@ -37,7 +37,7 @@ export const getDescriptions = ({
   apiConfig: {
     dynamicCollections
   },
-}: ApiContext): Record<string, Description> => {
+}: ApiContext<any>): Record<string, Description> => {
   if( Object.keys(__cachedDescriptions).length > 0 ) {
     return __cachedDescriptions
   }

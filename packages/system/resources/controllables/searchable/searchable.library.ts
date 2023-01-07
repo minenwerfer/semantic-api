@@ -1,7 +1,6 @@
 import type { Description } from '../../../../types'
 import type { ApiContext } from '../../../../api/types'
 import { getResourceAsset } from '../../../../api'
-import { getDescriptions } from '../meta/meta.helper'
 
 const __searchable: Record<string, Description> = {}
 
@@ -10,7 +9,7 @@ export const getSearchables = (context: ApiContext) => {
     return __searchable
   }
 
-  const descriptions = getDescriptions(context)
+  const descriptions = getResourceAsset('meta', 'library', 'controllable').getDescriptions(context)
 
   const searchable = Object.entries(descriptions)
     .reduce((a, [collectionName, description]: [string, any]) => {

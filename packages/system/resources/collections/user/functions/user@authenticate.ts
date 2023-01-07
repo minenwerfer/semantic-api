@@ -2,7 +2,6 @@ import { TokenService } from '../../../../../api/core/token'
 import type { ApiFunction } from '../../../../../api/types'
 import type { User } from '../user.description'
 import UserModel from '../user.model'
-import { userExtraModel } from '../user.helper'
 
 type Props = {
   email: string
@@ -24,7 +23,7 @@ type Return = Promise<{
   }
 }>
 
-const authenticate: ApiFunction<Props, Return> = async (props, context) => {
+const authenticate: ApiFunction<Props, typeof import ('../user.library')> = async (props, context): Return => {
   if( !props.email ) {
     throw new Error('Empty email or password')
   }
@@ -83,8 +82,8 @@ const authenticate: ApiFunction<Props, Return> = async (props, context) => {
     extra: {},
   }
 
-  if( context?.apiConfig?.populateUserExtra ) {
-    const UserExtra = userExtraModel()
+  if( context.apiConfig?.populateUserExtra ) {
+    const UserExtra = context.library.userExtraModel()
     const projection = context.apiConfig.populateUserExtra
       .reduce((a, f) => ({ ...a, [f]: 1 }), {})
 

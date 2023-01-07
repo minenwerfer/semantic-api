@@ -2,14 +2,14 @@ import type { ApiFunction } from '../../../../../api/types'
 import { mongoose } from '../../../../../api/core/database'
 import { makeException } from '../../../../../api/core/exceptions'
 import { isGranted } from '../../../../../api/core/accessControl/granted'
-import { getSearchables, buildAggregations } from '../searchable.helper'
 
 type Props = {
   query: Array<string>
 }
 
-const search: ApiFunction<Props> = async (props, context) => {
+const search: ApiFunction<Props, typeof import('../searchable.library')> = async (props, context) => {
   const { token, accessControl } = context
+
   if( !token?.user?.roles.length ) {
     throw makeException({
       name: 'AuthorizationError',
@@ -22,7 +22,7 @@ const search: ApiFunction<Props> = async (props, context) => {
     throw new Error('no query provided')
   }
 
-  const searchables = Object.entries(getSearchables(context))
+  const searchables = Object.entries(context.library.getSearchables(context))
     .reduce((a, [key, value]) => {
       if( !isGranted(`${key}@getAll`, context) ) {
         return a
@@ -38,7 +38,7 @@ const search: ApiFunction<Props> = async (props, context) => {
     ? (payload: Record<string, any>) => accessControl.beforeRead!(payload, context)
     : null
 
-  const aggregations = buildAggregations(
+  const aggregations = context.library.buildAggregations(
     searchables,
     props.query,
     beforeRead

@@ -21,7 +21,7 @@ export const useAccessControl = (description: Description, context?: ApiContext)
 
   const accessControl = context?.accessControl||{}
 
-  const beforeRead: ApiFunction<any, ReadPayload> = (props, context) => {
+  const beforeRead: ApiFunction<any> = (props, context): ReadPayload => {
     const newPayload = Object.assign({}, {
       filters: props?.filters||{},
       sort: props?.sort,
@@ -54,7 +54,7 @@ export const useAccessControl = (description: Description, context?: ApiContext)
     return newPayload
   }
 
-  const beforeWrite: ApiFunction<any, WritePayload> = (props, context) => {
+  const beforeWrite: ApiFunction<any> = (props, context): WritePayload => {
     const newPayload = Object.assign({ what: {} }, props)
 
     if( accessControl.beforeWrite && context.token ) {

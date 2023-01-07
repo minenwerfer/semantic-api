@@ -1,6 +1,6 @@
 import { makeDescription, Schema, Reference } from '../../../../api/core/collection'
 
-export type User = Omit<Schema<typeof schema>, 'role'> & {
+export type User = Omit<Schema<typeof schema>, 'roles'> & {
   roles: Array<string>
   testPassword?(password: string): boolean
   owner: Reference

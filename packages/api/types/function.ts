@@ -7,9 +7,9 @@ import type { ApiConfig, DecodedToken } from './server'
 
 export type FunctionPath = `${string}@${string}`
 
-export type ApiFunction<Props=unknown, Return={}> = (
+export type ApiFunction<Props=unknown, Library=Record<string, (...args: any) => any>, Return=any> = (
   props: Props,
-  context: ApiContext
+  context: ApiContext<Library>
 ) => Return
 
 export type AnyFunctions = CollectionFunctions & Record<string, (props?: any) => any>
@@ -31,7 +31,7 @@ export type AccessControl = {
   beforeWrite?: (payload: Record<string, any>, context: ApiContext) => Record<string, any>
 }
 
-export type ApiContext = {
+export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   resourceName: string
   apiConfig: ApiConfig
   accessControl: AccessControl
@@ -42,7 +42,9 @@ export type ApiContext = {
   hasRoles: (roles: Array<string>|string) => boolean
   hasCategories: (categories: Array<string>|string) => boolean
   collection: CollectionFunctions
+
   resource: AnyFunctions
+  library: Library
   log: (message: string, details?: Record<string, any>) => Promise<Log>
   collections: Record<string, AnyFunctions>
   controllables: Record<string, AnyFunctions>
@@ -51,7 +53,7 @@ export type ApiContext = {
   response: ResponseToolkit
 }
 
-export type ApiContextWithAC = ApiContext & {
+export type ApiContextWithAC<T=any> = ApiContext<T> & {
   acFunctions: ReturnType<typeof useAccessControl>
 }
 

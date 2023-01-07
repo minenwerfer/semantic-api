@@ -23,7 +23,8 @@ import { useCollection, createModel } from './collection'
 const __cached: Record<AssetType, Record<string, any>> = {
   model: {},
   description: {},
-  function: {}
+  function: {},
+  library: {}
 }
 
 const cacheIfPossible = (assetName: string, assetType: AssetType, fn: () => any) => {
@@ -127,7 +128,8 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
         })
       },
       collection: {} as CollectionFunctions,
-      resource: proxyFn(resourceName, context, resourceType)
+      resource: proxyFn(resourceName, context, resourceType),
+      library: getResourceAsset(resourceName, 'library', resourceType)
     }
 
     if( resourceType === 'collection' ) {
@@ -187,6 +189,19 @@ const loadFunctionWithFallback = (functionPath: FunctionPath, resourceType: Reso
   }
 }
 
+const loadLibrary = (resourceName: string, resourceType: ResourceType = 'collection', internal: boolean = false) => {
+  try {
+    const prefix = getPrefix(resourceName, internal, resourceType)
+    return require(`${prefix}/${resourceName}.library`)
+  } catch( e: any ) {
+    if( e.code !== 'MODULE_NOT_FOUND' ) {
+      throw e
+    }
+
+    return {}
+  }
+}
+
 export const getResourceAsset = <Type extends AssetType>(
   assetName: Type extends 'function'
     ? FunctionPath
@@ -230,6 +245,8 @@ export const getResourceAsset = <Type extends AssetType>(
           return loadModelWithFallback(assetName, internal)
         case 'function':
           return loadFunctionWithFallback(assetName as FunctionPath, resourceType, internal)
+        case 'library':
+          return loadLibrary(assetName, resourceType, internal)
       }
     }
   )

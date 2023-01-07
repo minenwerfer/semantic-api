@@ -13,7 +13,7 @@ export const userExtraModel = () => {
   return getResourceAsset('userExtra', 'model')
 }
 
-export const saveWithExtra: ApiFunction<SaveWithExtraProps, Promise<Partial<User>>> = async (props, context) => {
+export const saveWithExtra: ApiFunction<SaveWithExtraProps> = async (props, context): Promise<Partial<User>> => {
   const { collection } = context
   const { extra } = props.what
 
