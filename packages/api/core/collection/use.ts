@@ -1,9 +1,9 @@
-import type { ApiContext, ApiContextWithAC } from '../../types'
+import type { ApiContext, ApiContextWithAC, MongoDocument } from '../../types'
 import { getResourceAsset } from '../assets'
 import { useAccessControl } from '../accessControl/use'
 import useFunctions from './functions'
 
-export const useCollection = (collectionName: string, _context: ApiContext|null = null) => {
+export const useCollection = <T extends MongoDocument>(collectionName: string, _context: ApiContext|null = null) => {
   const context = _context || {} as ApiContext
 
   const description = getResourceAsset(collectionName, 'description')
@@ -24,7 +24,7 @@ export const useCollection = (collectionName: string, _context: ApiContext|null 
     acFunctions
   }
 
-  const functions = useFunctions(
+  const functions = useFunctions<T>(
     model,
     description,
     contextWithAC

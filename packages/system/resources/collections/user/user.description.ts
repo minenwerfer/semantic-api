@@ -1,8 +1,9 @@
-import { makeDescription, Schema } from '../../../../api/core/collection'
+import { makeDescription, Schema, Reference } from '../../../../api/core/collection'
 
 export type User = Omit<Schema<typeof schema>, 'role'> & {
   roles: Array<string>
   testPassword?(password: string): boolean
+  owner: Reference
 }
 
 const schema = {

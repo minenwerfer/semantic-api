@@ -9,7 +9,7 @@ export const cachedDescriptions = __cachedDescriptions
 
 const discoverDescriptions = (dynamic?: boolean, internal?: boolean) => {
   const path = internal
-    ? `${__dirname}/../../resources/collections`
+    ? `${__dirname}/../../collections`
     : `${process.cwd()}/resources/collections`
 
   if( dynamic ) {

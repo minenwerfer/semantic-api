@@ -26,7 +26,7 @@ export const saveWithExtra: ApiFunction<SaveWithExtraProps, Promise<Partial<User
   await userExtra.validate()
   const user = await collection.insert(props)
 
-  useCollection('userExtra', context).insert({
+  useCollection<User>('userExtra', context).insert({
     what: {
       ...extra,
       owner: user._id

@@ -62,7 +62,7 @@ export const formatValue = (
   const formatted = (() => {
     switch(true) {
       case ['date', 'date-time'].includes(property?.format!):
-        return (String(firstValue) as any).formatDateTime(property?.format === 'date-time')
+        return String(firstValue).formatDateTime(property?.format === 'date-time')
 
       case property?.type === 'boolean': return firstValue ? 'true' : 'false'
       case [undefined, null].includes(firstValue): return '-'

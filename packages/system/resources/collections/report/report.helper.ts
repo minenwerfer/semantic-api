@@ -1,6 +1,6 @@
 import path from 'path'
-import { fromEntries } from '../../../common/helpers'
-import type { Description, CollectionProperty } from '../../../types'
+import { fromEntries } from '../../../../common/helpers'
+import type { Description, CollectionProperty } from '../../../../types'
 const { writeFile } = require('fs').promises
 
 const getFilename = (ext: string) => {

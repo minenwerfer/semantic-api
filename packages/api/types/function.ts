@@ -1,7 +1,7 @@
 import { useAccessControl } from '../core/accessControl/use'
 import type { ResponseToolkit } from '@hapi/hapi'
 import type { MaybeDescription } from '../../types'
-import type { Log } from '../../system/collections/log/log.description'
+import type { Log } from '../../system/resources/collections/log/log.description'
 import type { CollectionFunctions } from '../core/collection/functions.types'
 import type { ApiConfig, DecodedToken } from './server'
 

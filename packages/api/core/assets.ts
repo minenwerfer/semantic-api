@@ -13,9 +13,10 @@ import type {
 } from '../types'
 
 import { arraysIntersects } from '../../common'
-import { default as SystemCollections } from '../../system/collections'
-import { default as SystemControllables } from '../../system/controllables'
+import { default as SystemCollections } from '../../system/resources/collections'
+import { default as SystemControllables } from '../../system/resources/controllables'
 import type { CollectionFunctions } from './collection/functions.types'
+import type { Log } from '../../system/resources/collections/log/log.description'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { useCollection, createModel } from './collection'
 
@@ -51,8 +52,8 @@ const getPrefix = (collectionName: string, internal: boolean, resourceType: Reso
   })()
 
   return internal
-    ? `${__dirname}/../../system/${pluralized}/${collectionName}`
-    : `${process.cwd()}/${pluralized}/${collectionName}`
+    ? `${__dirname}/../../system/resources/${pluralized}/${collectionName}`
+    : `${process.cwd()}/resources/${pluralized}/${collectionName}`
 }
 
 const loadDescription = (collectionName: string, internal: boolean) => {
@@ -116,7 +117,7 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
         return arraysIntersects(categories, description.categories)
       },
       log: (message, details) => {
-        return useCollection('log', context).insert({
+        return useCollection<Log>('log', context).insert({
           what: {
             message,
             details,

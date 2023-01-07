@@ -1,4 +1,4 @@
-import type { ApiFunction } from '../../../../api/types'
+import type { ApiFunction } from '../../../../../api/types'
 import { Report } from '../report.description'
 
 // import ReportModel from '../report.model'

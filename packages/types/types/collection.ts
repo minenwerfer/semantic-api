@@ -53,7 +53,7 @@ export type Layout = {
 
 export type Description = {
   $id: CollectionId
-  description?: string
+  title?: string
   categories?: Array<string>
 
   model?: Model<any>
