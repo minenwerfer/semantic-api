@@ -3,7 +3,7 @@
 
 ## Introduction
 
-semantic-api is a **REST framework** that aims to create resource-driven, fully-compliant REST APIs while enforcing a boilerplate-free and clean architecture.
+semantic-api is a **REST framework** that aims to create resource-driven, fully-compliant REST APIs while enforcing a boilerplate-free and clean architecture. It has out of the box Typescript integration, allowing you use consistent static typing in both backend and frontend.
 
 ## Why
 
@@ -12,6 +12,12 @@ The following is an excerpt from O'Reilly's book [RESTful Web Services](https://
 >A resource is anything that's important enough to be referenced as a thing in itself. If your users might "want to create a hyperlink to it, make or refute assertions about it, retrieve or cache a representation of it, include all or part of it by reference into another representation, anotate it, or perform other operations on it", then you should make it a resource. […] A resource may be a physical object like an apple, or an abstract concept like courage […]
 
 In semantic-api the "physical objects" are referred as "collections" and are always things that are stored on databases, and the "abstract concepts" are groups of endpoints that execute logic on a certain context.
+
+## Features
+
+- Out of the box user management, logging, file management
+- Comprehensive access control
+- Builtin runtime prop validation
 
 ## Getting started
 
