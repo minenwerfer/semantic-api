@@ -12,6 +12,8 @@ export const makeException = (custom: CustomException) => {
     name = custom.name
     code = custom.code
     details = custom.details
+    silent = custom.silent
+    logout = custom.logout
 
     constructor() {
       super(custom.message)

@@ -56,6 +56,8 @@ export const getDescriptions = ({
   }, {})
 
   Object.assign(__cachedDescriptions, descriptions)
+
+  global.descriptions = descriptions
   return descriptions
 }
 

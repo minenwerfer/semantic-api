@@ -68,6 +68,7 @@ export type Description = {
   // modifiers
   strict?: boolean // all properties are required
   owned?: boolean
+  alwaysOwned?: boolean
   report?: boolean
 
   // takes an array of something
@@ -107,6 +108,7 @@ export type MaybeDescription = Omit<Description,
   | 'name'
   | 'properties'
   | 'required'
+  | 'form'
   | 'indexes'
   | 'presets'
   | 'actions'
@@ -115,6 +117,7 @@ export type MaybeDescription = Omit<Description,
   $id: string
   name?: string
   required?: ReadonlyArray<string>
+  form?: ReadonlyArray<string>|Record<string, ReadonlyArray<string>>
   indexes?: ReadonlyArray<string>
   presets?: ReadonlyArray<string>
   properties?: Record<string, any>
@@ -148,7 +151,7 @@ type CollectionPropertyAux = {
   meta?: boolean
   form?: Array<string>
 
-  noform?: boolean
+  noForm?: boolean
   unique?: boolean
   hidden?: boolean
   purge?: boolean

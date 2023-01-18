@@ -42,7 +42,8 @@ export default {
       user: {
         functions: [
           'insert',
-          'authenticate'
+          'authenticate',
+          'ping'
         ]
       }
     }

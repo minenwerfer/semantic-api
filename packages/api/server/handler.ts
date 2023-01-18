@@ -79,7 +79,9 @@ export const safeHandle = (
         name: error.name,
         code: error.code,
         message: error.message,
-        details: error.details
+        details: error.details,
+        silent: error.silent,
+        logout: error.logout,
       }
     }
 

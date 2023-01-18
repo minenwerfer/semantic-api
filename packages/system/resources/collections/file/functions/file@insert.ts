@@ -1,7 +1,6 @@
 import { createHash } from 'crypto'
 import type { ApiFunction } from '../../../../../api/types'
 import { File } from '../file.description'
-import FileModel from '../file.model'
 
 const { writeFile, unlink } = require('fs').promises
 const { STORAGE_PATH } = process.env
@@ -28,7 +27,12 @@ const insert: ApiFunction<Props> = async (props, { token, collection }) => {
     throw new Error('filename lacks extension')
   }
 
-  const oldFile = await FileModel.findOne({ _id: props.what._id })
+  const oldFile = await collection.get({
+    filters: {
+      _id: props.what._id 
+    }
+  })
+
   if( oldFile ) {
     if( oldFile.immutable === true ) {
       throw new Error('você não pode mais editar esse arquivo')

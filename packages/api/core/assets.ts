@@ -107,6 +107,7 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
   const wrapper: ApiFunction = (props, context) => {
     const newContext: ApiContext = {
       ...context,
+      descriptions: global.descriptions,
       validate: (...args: any[]) => null,
       hasRoles: (roles: Array<string>|string) => arraysIntersects(roles, context.token.user.roles),
       hasCategories: (categories: Array<string>|string) => {
@@ -134,7 +135,15 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
 
     if( resourceType === 'collection' ) {
       const description = getResourceAsset(resourceName, 'description')
-      newContext.validate = (...args: Parameters<ValidateFunction<any>>) => validateFromDescription(description, ...args)
+      newContext.model = getResourceAsset(resourceName, 'model')
+      newContext.description = description
+      newContext.validate = (...args: Parameters<ValidateFunction<any>>) => {
+        const targetDescription = args.length === 3
+          ? args.pop()
+          : description
+
+        return validateFromDescription(targetDescription, ...args)
+      }
       newContext.collection = useCollection(resourceName, newContext)
     }
 

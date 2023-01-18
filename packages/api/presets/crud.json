@@ -1,11 +1,4 @@
 {
-  "functions": [
-    "get",
-    "getAll",
-    "insert",
-    "modify",
-    "delete"
-  ],
   "actions": {
     "ui/spawnAdd": {
       "name": "action.add",

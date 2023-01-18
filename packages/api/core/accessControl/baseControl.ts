@@ -1,19 +1,32 @@
 import { AccessControl } from '../../types'
 
-export const beforeRead: AccessControl['beforeRead'] = (_payload, _context) => {
-  const preset: any = {}
+export const beforeRead: AccessControl['beforeRead'] = (_payload, { token, description }) => {
+  const preset: any = {
+    filters: {}
+  }
+
+  if( token.user ) {
+    if( !token.user.roles?.includes('root') || description.alwaysOwned ) {
+      preset.filters.owner = token.user._id
+    }
+  }
+
   return preset
 }
 
-export const beforeWrite: AccessControl['beforeWrite'] = (_payload, { resourceName, token }) => {
-  const preset: any = {}
-
-  if( !token?.user?.roles.includes('root') ) {
-    return preset
+export const beforeWrite: AccessControl['beforeWrite'] = (payload, { token, description }) => {
+  const preset: any = {
+    what: {}
   }
 
-  if( resourceName === 'userExtra' ) {
-    preset.owner = token?.user._id
+  if( token.user ) {
+    if( !token.user.roles?.includes('root') || description.alwaysOwned ) {
+      if( payload.filters ) {
+        payload.filters.owned = token.user._id
+      }
+
+      preset.what.owner = token.user._id
+    }
   }
 
   return preset

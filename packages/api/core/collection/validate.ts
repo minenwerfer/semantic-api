@@ -8,12 +8,13 @@ const runtimeValidationError = (message: string, details?: Record<string, any>) 
   details
 })
 
-export type ValidateFunction<T> = (what: T, required?: Array<keyof T>) => void
+export type ValidateFunction<T> = (what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
 
 export const validateFromDescription = <T>(
-  description: Description,
+  description: Omit<Description, '$id'>,
   what: T,
-  required?: Array<keyof T>
+  required?: Array<keyof T>|null,
+  ..._: any[]
 ) => {
   if( !what ) {
     throw runtimeValidationError('target is empty')

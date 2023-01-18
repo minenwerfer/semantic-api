@@ -17,7 +17,7 @@ const schema = {
     },
     file: {
       $ref: 'file',
-      s$noform: true
+      s$noForm: true
     },
     format: {
       enum: [
@@ -44,11 +44,11 @@ const schema = {
     },
     filters: {
       type: 'object',
-      s$noform: true
+      s$noForm: true
     },
     entries_count: {
       type: 'number',
-      s$noform: true
+      s$noForm: true
     }
   }
 } as const

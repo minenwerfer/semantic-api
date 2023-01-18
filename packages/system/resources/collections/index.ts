@@ -1,7 +1,9 @@
 export default {
   file: {},
-  user: {},
-  report: {},
+  log: {},
+  message: {},
   notification: {},
-  log: {}
+  report: {},
+  savedItem: {},
+  user: {},
 }

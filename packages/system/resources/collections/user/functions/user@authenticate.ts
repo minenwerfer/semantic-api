@@ -1,4 +1,5 @@
 import { TokenService } from '../../../../../api/core/token'
+import { makeException } from '../../../../../api'
 import type { ApiFunction } from '../../../../../api/types'
 import type { User } from '../user.description'
 import UserModel from '../user.model'
@@ -55,18 +56,24 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
     }
   }
 
-  const user = await UserModel.findOne({ email: props.email }).select('+password')
+  const user = await UserModel.findOne({ email: props.email }).select('+password -saved_pages')
   if( !user || !await user.testPassword!(props.password) ) {
-    throw new Error('invalid username or password')
+    throw makeException({
+      name: 'AuthenticationError',
+      message: 'AuthenticationError.invalid_credentials'
+    })
   }
 
   const { password, ...leanUser } = user.toObject()
   if( !user.active ) {
-    throw new Error('this user is inactive')
+    throw makeException({
+      name: 'AuthenticationError',
+      message: 'AuthenticationError.inactive_user'
+    })
   }
 
   context.log('successful authentication', {
-    email: user.email
+    owner: user._id
   })
 
   const tokenContent = {

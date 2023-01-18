@@ -28,6 +28,7 @@ export default makeDescription<typeof schema>(schema, {
   ],
   filters: [
     'context',
-    'message'
+    'message',
+    'owner'
   ]
 })

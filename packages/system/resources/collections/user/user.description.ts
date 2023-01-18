@@ -9,10 +9,17 @@ export type User = Omit<Schema<typeof schema>, 'roles'> & {
 const schema = {
   $id: 'user',
   required: [
-    'first_name',
-    'last_name',
-    'role',
+    'full_name',
+    'roles',
     'email'
+  ],
+  form: [
+    'full_name',
+    'active',
+    'roles',
+    'email',
+    'phone',
+    'picture'
   ],
   indexes: [
     'full_name'
@@ -49,7 +56,6 @@ const schema = {
       type: 'string',
       s$inputType: 'password',
       s$hidden: true,
-      s$noform: true
     },
     phone: {
       type: 'string',
@@ -63,7 +69,6 @@ const schema = {
     },
     group: {
       type: 'string',
-      s$noform: true
     },
     self_registered: {
       type: 'boolean',
@@ -74,7 +79,6 @@ const schema = {
       items: {
         type: 'string'
       },
-      s$noform: true
     },
     updated_at: {
       type: 'string',

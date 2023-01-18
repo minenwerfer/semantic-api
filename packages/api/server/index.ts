@@ -31,7 +31,7 @@ export const init = async (_context?: Partial<ApiContext>|null): Promise<Hapi.Se
   const context = Object.assign(_context||{}, {
     apiConfig,
     accessControl,
-  })
+  }) as ApiContext
 
   console.time('warmup')
   await warmup(context)
