@@ -1,4 +1,5 @@
-import type { Description } from '../../../types'
+import { Types } from 'mongoose'
+import type { Description, CollectionProperty } from '../../../types'
 import { makeException } from '../exceptions'
 import { getTypeConstructor } from './typemapping'
 
@@ -9,6 +10,19 @@ const runtimeValidationError = (message: string, details?: Record<string, any>) 
 })
 
 export type ValidateFunction<T> = (what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
+
+const isValidReference = (property: CollectionProperty, value: any) => {
+  if( !property.s$isReference ) {
+    return false
+  }
+
+  try {
+    new Types.ObjectId(value)
+    return true
+  } catch(e) {
+    return false
+  }
+}
 
 export const validateFromDescription = <T>(
   description: Omit<Description, '$id'>,
@@ -22,7 +36,7 @@ export const validateFromDescription = <T>(
 
   const propsSet = required
     ? new Set([ ...required, ...Object.keys(what) ])
-    : new Set(Object.keys(description.properties))
+    : new Set([ ...Object.keys(description.properties), ...Object.keys(what) ])
 
   const getType = (value: any) => {
     return Array.isArray(value)
@@ -81,6 +95,7 @@ export const validateFromDescription = <T>(
     if(
       actualConstructor !== expectedConstructor
       && !(Array.isArray(expectedConstructor) && actualConstructor === Array)
+      && !(isValidReference(property, value))
     ) {
       errors[prop] = {
         type: 'unmatching',
@@ -92,7 +107,11 @@ export const validateFromDescription = <T>(
     }
 
     if( Array.isArray(expectedConstructor) ) {
-      const extraneous = (value as Array<any>).find((v) => v.constructor !== expectedConstructor[0])
+      const extraneous = (value as Array<any>).find((v) => (
+        v.constructor !== expectedConstructor[0]
+          && !isValidReference(property, v)
+      ))
+
       if( extraneous ) {
         errors[prop] = {
           type: 'extraneous_element',

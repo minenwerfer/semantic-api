@@ -4,6 +4,6 @@ export default {
   message: {},
   notification: {},
   report: {},
-  savedItem: {},
+  subscription: {},
   user: {},
 }

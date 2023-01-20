@@ -22,7 +22,7 @@ export const beforeWrite: AccessControl['beforeWrite'] = (payload, { token, desc
   if( token.user ) {
     if( !token.user.roles?.includes('root') || description.alwaysOwned ) {
       if( payload.filters ) {
-        payload.filters.owned = token.user._id
+        payload.filters.owner = token.user._id
       }
 
       preset.what.owner = token.user._id

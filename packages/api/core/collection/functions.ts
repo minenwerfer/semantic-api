@@ -106,6 +106,10 @@ export default <T extends MongoDocument>(
       const result = await model.findOne(props.filters, normalizeProjection<T>(props.project))
         .lean(LEAN_OPTIONS)
 
+      if( !result ) {
+        return null
+      }
+
       return pipe(result as T)
     },
 

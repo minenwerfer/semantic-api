@@ -13,8 +13,15 @@ const schema = {
       type: 'string'
     },
     content: {
-      type: 'string'
+      type: 'string',
+      s$element: 'textarea'
     },
+    seen_by: {
+      type: 'array',
+      items: {
+        $ref: 'user'
+      }
+    }
   }
 } as const
 

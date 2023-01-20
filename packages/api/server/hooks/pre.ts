@@ -18,7 +18,8 @@ export const checkAC = (params: PreHookParams) => {
   if( !granted ) {
     throw makeException({
       name: 'AuthorizationError',
-      message: 'forbidden by access control'
+      message: 'forbidden by access control',
+      logout: !!params.context.token.user?.roles
     })
   }
 

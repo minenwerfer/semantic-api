@@ -3,7 +3,7 @@ import { makeDescription, Schema } from '../../../../api/core/collection'
 export type SavedItem = Schema<typeof schema>
 
 const schema = {
-  $id: 'savedItem',
+  $id: 'subscription',
   owned: true,
   properties: {
     title: {
@@ -28,7 +28,8 @@ const schema = {
       type: 'array',
       items: {
         $ref: 'message'
-      }
+      },
+      s$maxDepth: 4
     },
   }
 } as const

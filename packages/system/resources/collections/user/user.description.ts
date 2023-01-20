@@ -130,8 +130,7 @@ export default makeDescription<typeof schema>(schema, {
     ]
   },
   filters: [
-    'first_name',
-    'last_name',
+    'full_name',
     'role',
     'email',
     'phone'
