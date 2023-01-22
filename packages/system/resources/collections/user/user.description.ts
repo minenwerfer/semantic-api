@@ -80,6 +80,12 @@ const schema = {
         type: 'string'
       },
     },
+    resources_usage: {
+      type: 'object',
+      additionalProperties: {
+        $ref: 'resourceUsage'
+      }
+    },
     updated_at: {
       type: 'string',
       format: 'date-time',
@@ -131,13 +137,13 @@ export default makeDescription<typeof schema>(schema, {
   },
   filters: [
     'full_name',
-    'role',
+    'roles',
     'email',
     'phone'
   ],
   table: [
     'full_name',
-    'role',
+    'roles',
     'picture',
     'active',
     'updated_at'

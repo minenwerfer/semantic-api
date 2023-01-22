@@ -27,7 +27,8 @@ export type PropertyAux =
   { [P in keyof EnumType]?: EnumType[P] } &
   { [P in keyof PrimitiveType]?: PrimitiveType[P] }
 
-export type Property = (RefType | EnumType | PrimitiveType) & PropertyAux &  {
+export type Property = /* (RefType | EnumType | PrimitiveType) & */ PropertyAux &  {
+  additionalProperties?: Property
   format?: PropertyFormat
 
   default?: any

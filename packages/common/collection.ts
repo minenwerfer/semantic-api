@@ -10,7 +10,7 @@ export const getReferencedCollection = (property?: CollectionProperty) => {
 export function getIndexes(
   description: Pick<Description, 'properties'>,
   key: string
-): Array<string> {
+) {
   const property = description.properties?.[key]
   const { $ref, s$indexes } = getReferencedCollection(property)||{}
 

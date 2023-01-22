@@ -1,9 +1,9 @@
 import * as R from 'ramda'
 import { getReferencedCollection } from '../../../common'
 import { getResourceAsset } from '../assets'
-import type { MaybeDescription, Description } from '../../../types'
+import type { Description } from '../../../types'
 
-export const applyPreset = (description: MaybeDescription, presetName:string, parentName?:string) => {
+export const applyPreset = (entry: Description | Description['properties'], presetName:string, parentName?:string) => {
   const preset = require(`${__dirname}/../../presets/${presetName}`)
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
@@ -11,12 +11,12 @@ export const applyPreset = (description: MaybeDescription, presetName:string, pa
     (l, r) => R.is(Object, l) && R.is(Object, r)
       ? R.concat(l, r)
       : l,
-    description,
+    entry,
     presetObject
   )
 }
 
-export const preloadDescription = (description: MaybeDescription) => {
+export const preloadDescription = (description: Description) => {
   if( description.alias ) {
     const _aliasedCollection = getResourceAsset(description.alias, 'description')
 
@@ -31,10 +31,7 @@ export const preloadDescription = (description: MaybeDescription) => {
     Object.assign(description, temp)
   }
 
-  const presets = (description as {
-    -readonly [P in keyof Description]: Description[P]
-  }).presets || []
-
+  const presets = description.presets?.slice() || []
   if( description.owned ) {
     presets.push('owned')
   }
@@ -42,7 +39,7 @@ export const preloadDescription = (description: MaybeDescription) => {
   if( presets.length > 0 ) {
     const merge = presets?.reduce(
       (a, presetName: string) => applyPreset(a, presetName),
-      description as MaybeDescription
+      description as Description
     )
 
     Object.assign(description, merge)
@@ -60,7 +57,7 @@ export const preloadDescription = (description: MaybeDescription) => {
 
         if( !property.s$indexes && !property.s$inline ) {
           const referenceDescription = getResourceAsset(reference.$ref!, 'description')
-          const indexes = property.s$indexes = referenceDescription.indexes
+          const indexes = property.s$indexes = referenceDescription.indexes?.slice()
 
           if( !indexes ) {
             throw new Error(

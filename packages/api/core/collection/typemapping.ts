@@ -18,6 +18,13 @@ export const getTypeConstructor = (property: CollectionProperty): any => {
     return first?.constructor || String
   }
 
+  if( property.additionalProperties ) {
+    return [
+      Map,
+      getTypeConstructor(property.additionalProperties)
+    ]
+  }
+
   switch( property.format ) {
     case 'date':
     case 'date-time':

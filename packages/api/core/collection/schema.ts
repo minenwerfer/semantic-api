@@ -7,10 +7,8 @@ import {
 
 } from 'mongoose'
 
-import * as R from 'ramda'
-import * as TypeGuards from './typeguards'
 import { getReferencedCollection } from '../../../common'
-import type { Description, CollectionProperty, MaybeDescription } from '../../../types'
+import type { Description, CollectionProperty } from '../../../types'
 
 import { options as defaultOptions } from '../database'
 import { getResourceAsset } from '../assets'
@@ -27,13 +25,7 @@ type SchemaStructure = Record<string, Record<string, any>>
  */
 const __loadedModels: Array<string> = []
 
-export const descriptionToSchemaObj = (description: MaybeDescription) => {
-  R.pipe(
-    TypeGuards.presets,
-    TypeGuards.properties,
-    TypeGuards.actions
-  )(description)
-
+export const descriptionToSchemaObj = (description: Description) => {
   let hasRefs = false
 
   const convert = (a: any, [propertyName, property]: [string, CollectionProperty]) => {
@@ -69,7 +61,13 @@ export const descriptionToSchemaObj = (description: MaybeDescription) => {
     }
 
     const type = getTypeConstructor(property)
-    result.type = type
+    result.type = type[0] === Map
+      ? type[0]
+      : type
+
+    if( type[0] === Map ) {
+      result.of = type[1]
+    }
 
     if( typeof referencedCollection === 'string' ) {
       const referenceDescription = getResourceAsset(referencedCollection, 'description')
@@ -94,7 +92,7 @@ export const descriptionToSchemaObj = (description: MaybeDescription) => {
 
             return reference.s$maxDepth || 2
           })(),
-          select: reference.s$select && join(reference.s$select)
+          select: reference.s$select && join(reference.s$select.slice())
         }
       }
     }
@@ -116,10 +114,10 @@ export const descriptionToSchemaObj = (description: MaybeDescription) => {
   }
 
   if( description.presets ) {
-    description.properties = description.presets?.reduce((a: Description, presetName) => {
+    description.properties = description.presets?.reduce((a, presetName) => {
       return applyPreset(a, presetName, 'properties')
 
-    }, description.properties as Description)
+    }, description.properties)
   }
 
   const schemaStructure = Object.entries(description.properties)
@@ -132,7 +130,7 @@ export const descriptionToSchemaObj = (description: MaybeDescription) => {
 }
 
 export const descriptionToSchema = <T>(
-  description: MaybeDescription,
+  description: Description,
   options: SchemaOptions = {},
   cb?: ((structure: SchemaStructure) => void)|null
 ) => {
@@ -158,7 +156,7 @@ export const descriptionToSchema = <T>(
 }
 
 export const createModel = <T=any>(
-  _description: MaybeDescription,
+  _description: Description,
   config?: {
     options?: SchemaOptions|null,
     modelCallback?: ((structure: SchemaStructure) => void)|null,

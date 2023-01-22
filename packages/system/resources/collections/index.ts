@@ -2,8 +2,8 @@ export default {
   file: {},
   log: {},
   message: {},
-  notification: {},
   report: {},
+  resourceUsage: {},
   subscription: {},
   user: {},
 }

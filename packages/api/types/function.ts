@@ -1,7 +1,7 @@
 import type { Model } from 'mongoose'
 import { useAccessControl } from '../core/accessControl/use'
 import type { ResponseToolkit } from '@hapi/hapi'
-import type { Description, MaybeDescription } from '../../types'
+import type { Description } from '../../types'
 import type { Log } from '../../system/resources/collections/log/log.description'
 import type { CollectionFunctions } from '../core/collection/functions.types'
 import type { ApiConfig, DecodedToken } from './server'
@@ -34,12 +34,16 @@ export type AccessControl = {
 
 export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   resourceName: string
+  functionPath?: FunctionPath
+
   apiConfig: ApiConfig
   accessControl: AccessControl
   injected: Record<string, any>
   token: DecodedToken
 
   validate: <T>(what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
+  rateLimit: (limit: number) => void
+
   hasRoles: (roles: Array<string>|string) => boolean
   hasCategories: (categories: Array<string>|string) => boolean
   collection: CollectionFunctions
@@ -48,8 +52,10 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   resource: AnyFunctions
   library: Library
   log: (message: string, details?: Record<string, any>) => Promise<Log>
-  collections: Record<string, AnyFunctions>
   controllables: Record<string, AnyFunctions>
+  collections: Record<string, AnyFunctions & {
+    model: () => Model<any>
+  }>
 
   descriptions: Record<string, Description>
   description: Description

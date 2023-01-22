@@ -21,8 +21,6 @@ export type CollectionAction = Readonly<{
 }>
 
 export type CollectionActions = Record<string, null|CollectionAction>
-export type MaybeCollectionAction = Omit<CollectionAction, 'effect'> & { effect?: string }
-export type MaybeCollectionActions = Record<string, null|MaybeCollectionAction>
 
 export type FormLayout = {
   span: number
@@ -63,7 +61,7 @@ export type Description = {
   icon?: string
   options?: CollectionOptions
 
-  indexes?: Array<string>
+  indexes?: ReadonlyArray<string>
 
   // modifiers
   strict?: boolean // all properties are required
@@ -73,13 +71,13 @@ export type Description = {
 
   // takes an array of something
   route?: Array<string>
-  presets?: Array<CollectionPresets>
-  required?: Array<string>
+  presets?: ReadonlyArray<CollectionPresets>
+  required?: ReadonlyArray<string>
   table?: Array<string>
   tableMeta?: Array<string>
   reportProperties?: Array<string>
 
-  form?: Array<string>|Record<string, Array<string>>
+  form?: ReadonlyArray<string>|Record<string, Array<string>>
   writable?: Array<string>
   filters?: Array<string|{
     property: string
@@ -103,28 +101,6 @@ export type Description = {
   properties: Record<string, CollectionProperty>
 }
 
-export type MaybeDescription = Omit<Description,
-  '$id'
-  | 'name'
-  | 'properties'
-  | 'required'
-  | 'form'
-  | 'indexes'
-  | 'presets'
-  | 'actions'
-  | 'individualActions'
-> & {
-  $id: string
-  name?: string
-  required?: ReadonlyArray<string>
-  form?: ReadonlyArray<string>|Record<string, ReadonlyArray<string>>
-  indexes?: ReadonlyArray<string>
-  presets?: ReadonlyArray<string>
-  properties?: Record<string, any>
-  actions?: MaybeCollectionActions
-  individualActions?: MaybeCollectionActions
-}
-
 export type CollectionProperty = Property
   & { [P in keyof CollectionPropertyAux as `s$${P}`]: CollectionPropertyAux[P] }
 
@@ -146,10 +122,11 @@ type CollectionPropertyAux = {
   inputType?: PropertyInputType
   placeholder?: string
   hint?: string
-  mask?: string
   translate?: boolean
   meta?: boolean
-  form?: Array<string>
+
+  mask?: string|ReadonlyArray<string>
+  form?: ReadonlyArray<string>
 
   noForm?: boolean
   unique?: boolean
@@ -157,7 +134,7 @@ type CollectionPropertyAux = {
   purge?: boolean
 
   /** @see SvFile */
-  readonly accept?: Array<string>
+  readonly accept?: ReadonlyArray<string>
 
   isReference?: boolean
   isFile?: boolean
@@ -167,8 +144,8 @@ type CollectionPropertyAux = {
 
   array?: boolean
   limit?: number
-  indexes?: Array<string>
-  select?: Array<string>
+  indexes?: ReadonlyArray<string>
+  select?: ReadonlyArray<string>
   maxDepth?: number
   inline?: boolean
   inlineEditing?: boolean

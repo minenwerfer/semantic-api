@@ -56,7 +56,7 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
     }
   }
 
-  const user = await UserModel.findOne({ email: props.email }).select('+password -saved_pages')
+  const user = await UserModel.findOne({ email: props.email }).select('+password')
   if( !user || !await user.testPassword!(props.password) ) {
     throw makeException({
       name: 'AuthenticationError',
