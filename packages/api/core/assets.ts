@@ -18,7 +18,7 @@ import { default as SystemControllables } from '../../system/resources/controlla
 import type { CollectionFunctions } from './collection/functions.types'
 import type { Log } from '../../system/resources/collections/log/log.description'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
-import { rateLimit } from './rateLimiting'
+import { limitRate } from './rateLimiting'
 import { useCollection, createModel } from './collection'
 
 const __cached: Record<AssetType, Record<string, any>> = {
@@ -113,8 +113,8 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
       descriptions: global.descriptions,
       resourceName,
       validate: (..._args: [any]) => null,
-      rateLimit: (...args: [any]) => {
-        return rateLimit(context, ...args)
+      limitRate: (...args: [any]) => {
+        return limitRate(context, ...args)
       },
       hasRoles: (roles: Array<string>|string) => arraysIntersects(roles, context.token.user.roles),
       hasCategories: (categories: Array<string>|string) => {

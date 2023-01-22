@@ -1,7 +1,13 @@
 import type { Description, CollectionProperty } from '../types'
 
 export const getReferencedCollection = (property?: CollectionProperty) => {
-  const reference = property?.items || property
+  const search = [
+    property?.items,
+    property?.additionalProperties,
+    property
+  ]
+
+  const reference = search.find((_) => !!_)
   return reference?.$ref
     ? { ...property, ...reference }
     : null

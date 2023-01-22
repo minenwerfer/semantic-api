@@ -5,6 +5,7 @@ export type CustomException = {
   details?: Record<string, any>
   silent?: boolean
   logout?: boolean
+  httpCode?: number
 }
 
 export const makeException = (custom: CustomException) => {
@@ -14,6 +15,7 @@ export const makeException = (custom: CustomException) => {
     details = custom.details
     silent = custom.silent
     logout = custom.logout
+    httpCode = custom.httpCode
 
     constructor() {
       super(custom.message)

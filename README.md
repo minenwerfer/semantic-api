@@ -13,11 +13,12 @@ The following is an excerpt from O'Reilly's book [RESTful Web Services](https://
 
 In semantic-api the "physical objects" are referred as "collections" and are always things that are stored on databases, and the "abstract concepts" are groups of endpoints that execute logic on a certain context.
 
-## Features
+## Out of the box features
 
-- Out of the box user management, logging, file management
+- User management, logging, file management
 - Comprehensive access control
-- Builtin runtime prop validation
+- Rate limiting for throttling and paid usage
+- Runtime payload validation
 
 ## Getting started
 

@@ -2,7 +2,19 @@ import type { ApiContext } from '../types/function'
 import { getResourceAsset } from './assets'
 import { makeException } from './exceptions'
 
-export const rateLimit = async (context: ApiContext, limit: number) => {
+export type RateLimitingParams = {
+  limit?: number
+  scale?: number
+  increment?: number
+}
+
+const rateLimitingError = (message: string) => makeException({
+  name: 'RateLimitingError',
+  message,
+  httpCode: 429
+})
+
+export const limitRate = async (context: ApiContext, params: RateLimitingParams) => {
   const UserModel = getResourceAsset('user', 'model')
   const ResourceUsage = getResourceAsset('resourceUsage', 'model')
 
@@ -18,22 +30,35 @@ export const rateLimit = async (context: ApiContext, limit: number) => {
     })
   }
 
-  console.log(user)
+  const increment = params.increment || 1
+  const payload = {
+    $inc: {
+      hits: increment
+    },
+    $set: {}
+  }
 
-  const r = await ResourceUsage.create({
-    scale: 1,
-    limit: 2
-  })
+  const usage = user.resources_usage?.get(context.functionPath)
+  if( !usage ) {
+    const entry = await ResourceUsage.create({ hits: increment })
+    return UserModel.updateOne(
+      { _id: user._id },
+      { $set: { [`resources_usage.${context.functionPath}`]: entry._id } }
+    )
+  }
 
-  const x = await UserModel.updateOne(
-    { _id: user._id },
-    {
-      $set: {
-        [`resources_usage.${context.functionPath}`]: r._id
-      }
+  if( params.scale && (new Date().getTime()/1000 - usage.updated_at.getTime()/1000 < params.scale) ) {
+    throw rateLimitingError('not so fast')
+  }
+
+  if( params.limit && (usage.hits % params.limit === 0) ) {
+    payload.$set = {
+      last_maximum_reach: new Date()
     }
-  )
+  }
 
-  console.log(x)
-  console.log(context.functionPath)
+  return ResourceUsage.updateOne(
+    { _id: usage._id },
+    payload
+  )
 }

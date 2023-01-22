@@ -3,13 +3,13 @@ import type { Description, CollectionProperty } from '../../../types'
 import { makeException } from '../exceptions'
 import { getTypeConstructor } from './typemapping'
 
+export type ValidateFunction<T> = (what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
+
 const runtimeValidationError = (message: string, details?: Record<string, any>) => makeException({
   name: 'RuntimeValidationError',
   message,
   details
 })
-
-export type ValidateFunction<T> = (what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
 
 const isValidReference = (property: CollectionProperty, value: any) => {
   if( !property.s$isReference ) {

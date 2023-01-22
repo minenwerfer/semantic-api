@@ -84,7 +84,8 @@ const schema = {
       type: 'object',
       additionalProperties: {
         $ref: 'resourceUsage'
-      }
+      },
+      s$inline: true
     },
     updated_at: {
       type: 'string',

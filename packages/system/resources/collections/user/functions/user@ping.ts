@@ -1,8 +1,11 @@
 import type { ApiFunction } from '../../../../../api/types'
 import { makeException } from '../../../../../api'
 
-const ping: ApiFunction = (_props, { token, rateLimit }) => {
-  rateLimit(1)
+const ping: ApiFunction = async (_props, { token, limitRate }) => {
+  await limitRate({
+    limit: 10,
+    scale: 5
+  })
 
   if( !token.user?.roles?.length ) {
     throw makeException({

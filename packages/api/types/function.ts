@@ -4,6 +4,7 @@ import type { ResponseToolkit } from '@hapi/hapi'
 import type { Description } from '../../types'
 import type { Log } from '../../system/resources/collections/log/log.description'
 import type { CollectionFunctions } from '../core/collection/functions.types'
+import type { RateLimitingParams } from '../core/rateLimiting'
 import type { ApiConfig, DecodedToken } from './server'
 
 export type FunctionPath = `${string}@${string}`
@@ -42,7 +43,7 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   token: DecodedToken
 
   validate: <T>(what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
-  rateLimit: (limit: number) => void
+  limitRate: (params: RateLimitingParams) => Promise<void>
 
   hasRoles: (roles: Array<string>|string) => boolean
   hasCategories: (categories: Array<string>|string) => boolean

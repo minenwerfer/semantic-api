@@ -5,12 +5,13 @@ export type ResourceUsage = Schema<typeof schema>
 const schema = {
   $id: 'resourceUsage',
   properties: {
-    scale: {
+    hits: {
       type: 'integer'
     },
-    limit: {
-      type: 'integer'
-    },
+    last_maximum_reach: {
+      type: 'string',
+      format: 'date-time'
+    }
   }
 } as const
 

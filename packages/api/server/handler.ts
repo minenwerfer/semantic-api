@@ -82,6 +82,7 @@ export const safeHandle = (
         details: error.details,
         silent: error.silent,
         logout: error.logout,
+        httpCode: error.httpCode
       }
     }
 
