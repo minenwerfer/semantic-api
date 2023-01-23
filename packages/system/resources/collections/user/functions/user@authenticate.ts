@@ -56,7 +56,15 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
     }
   }
 
-  const user = await UserModel.findOne({ email: props.email }).select('+password')
+  const user = await UserModel.findOne(
+    { email: props.email },
+    {
+      email: 1,
+      password: 1,
+      active: 1
+    }
+  )
+
   if( !user || !await user.testPassword!(props.password) ) {
     throw makeException({
       name: 'AuthenticationError',
@@ -64,13 +72,19 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
     })
   }
 
-  const { password, ...leanUser } = user.toObject()
   if( !user.active ) {
     throw makeException({
       name: 'AuthenticationError',
       message: 'AuthenticationError.inactive_user'
     })
   }
+
+  const { password, ...leanUser } = await UserModel
+    .findOne({ email: user.email })
+    .lean({
+      autopopulate: true,
+      virtuals: true
+    })
 
   context.log('successful authentication', {
     owner: user._id

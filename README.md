@@ -19,6 +19,7 @@ In semantic-api the "physical objects" are referred as "collections" and are alw
 - Comprehensive access control
 - Rate limiting for throttling and paid usage
 - Runtime payload validation
+- User messaging system
 
 ## Getting started
 

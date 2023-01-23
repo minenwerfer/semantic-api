@@ -31,7 +31,7 @@ export const getFirstValue = (
   description: Pick<Description, 'properties'>,
   value: any,
   key: string
-): string|number|null => {
+) => {
   if( !value ) {
     return '-'
   }
@@ -48,11 +48,16 @@ export const getFirstValue = (
 
   })()[0]
 
-  const firstValue = Array.isArray(value)
-    ? value.map((v: any) => v[firstIndex]).join(', ')
-    : value[firstIndex]
+  if( Array.isArray(value) ) {
+    return value.map((v: any) => {
+      return v && typeof v === 'object'
+        ? v[firstIndex]
+        : v
 
-  return firstValue
+    }).join(', ')
+  }
+
+  return value[firstIndex]
 }
 
 export const formatValue = (
