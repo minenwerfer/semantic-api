@@ -13,7 +13,7 @@ import type {
 } from '../types'
 
 import { Error as MongooseError } from 'mongoose'
-import { TokenService } from '../core/token'
+import { Token } from '../core/token'
 import { makeException } from '../core/exceptions'
 import { checkAC, sanitizeRequest, prependPagination } from './hooks/pre'
 import { processRedirects, appendPagination } from './hooks/post'
@@ -47,7 +47,7 @@ const fallbackContext = {
 export const getToken = async (request: Request) => {
   try {
     return request.headers.authorization
-      ? TokenService.decode(request.headers.authorization.split('Bearer ').pop() || '')
+      ? Token.decode(request.headers.authorization.split('Bearer ').pop() || '')
       : {} as object
   } catch( e: any ) {
     throw makeException({
@@ -88,7 +88,6 @@ export const safeHandle = (
 
     if( error instanceof MongooseError.ValidationError ) {
       const errors = Object.values(error.errors)
-      response.error.silent = true
       response.error.validation = errors.reduce((a, error: any) => {
         return {
           ...a,

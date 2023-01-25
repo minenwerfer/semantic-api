@@ -1,5 +1,5 @@
 import { Types } from '../../../../api/core/database'
-import { useCollection, getResourceAsset } from '../../../../api'
+import { getResourceAsset } from '../../../../api'
 import type { ApiFunction } from '../../../../api/types'
 import type { User } from './user.description'
 
@@ -26,12 +26,24 @@ export const saveWithExtra: ApiFunction<SaveWithExtraProps> = async (props, cont
   await userExtra.validate()
   const user = await collection.insert(props)
 
-  useCollection<User>('userExtra', context).insert({
-    what: {
-      ...extra,
-      owner: user._id
+  try {
+    await context.collections.userExtra.insert({
+      what: {
+        ...extra,
+        owner: user._id
+      }
+    })
+  } catch(e) {
+    if( !props.what._id ) {
+      await collection.delete({
+        filters: {
+          _id: user._id
+        }
+      })
     }
-  })
+
+    throw e
+  }
 
   return user
 }

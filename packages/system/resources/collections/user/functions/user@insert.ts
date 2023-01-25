@@ -17,7 +17,7 @@ const insert: ApiFunction<Props, typeof import('../user.library')> = async (prop
 
   // user is being inserted by a non-root user
   if( !token?.user?.roles.includes('root') ) {
-    const userId = props.what._id = token?.user._id
+    const userId = props.what._id = token?.user?._id
     delete props.what.roles
 
     // a new user is being created

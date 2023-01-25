@@ -1,4 +1,4 @@
-import { TokenService } from '../../../../../api/core/token'
+import { Token } from '../../../../../api/core/token'
 import { makeException } from '../../../../../api'
 import type { ApiFunction } from '../../../../../api/types'
 import type { User } from '../user.description'
@@ -33,7 +33,7 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
     props.email === process.env.GODMODE_USERNAME
   && props.password === process.env.GODMODE_PASSWORD
   ) {
-    const token = await TokenService.sign({
+    const token = await Token.sign({
       user: {
         _id: null,
         roles: ['root']
@@ -103,21 +103,21 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
     extra: {},
   }
 
-  if( context.apiConfig?.populateUserExtra ) {
+  if( context.apiConfig.populateUserExtra ) {
     const UserExtra = context.library.userExtraModel()
     const projection = context.apiConfig.populateUserExtra
       .reduce((a, f) => ({ ...a, [f]: 1 }), {})
 
     const userExtra = await UserExtra
       .findOne({ owner: leanUser._id }, projection)
-      .lean()
+      .lean() || {}
 
     tokenContent.extra = userExtra
     response.extra = userExtra
   }
 
 
-  const token = await TokenService.sign(tokenContent) as string
+  const token = await Token.sign(tokenContent) as string
 
   return {
     ...response,

@@ -60,6 +60,10 @@ export const validateFromDescription = <T>(
     const value = what[prop as keyof T]
     const property = description.properties[prop]
 
+    if( prop === '_id' && typeof value === 'string' ) {
+      return
+    }
+
     if( !property ) {
       errors[prop] = {
         type: 'extraneous',

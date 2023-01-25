@@ -2,7 +2,7 @@ import * as R from 'ramda'
 import type { Model } from 'mongoose'
 import type { Description } from '../../../types'
 import type { ApiContextWithAC, MongoDocument } from '../../types'
-import type { GetAllProps, CollectionFunctions } from './functions.types'
+import type { GetAllProps, Project, CollectionFunctions } from './functions.types'
 import { fromEntries } from '../../../common/helpers'
 import { makeException } from '../exceptions'
 import { normalizeProjection, fill, prepareInsert } from './utils'
@@ -32,20 +32,30 @@ export default <T extends MongoDocument>(
     }
   } = context
   
-  const _insert = async (props: { what: Partial<T> }) => {
+  const _insert = async (props: {
+    what: Partial<T>
+    project?: Project<T>
+  }) => {
     const { _id } = props.what
     const { what } = beforeWrite(props, context)
     const readyWhat = prepareInsert(what, description)
+    const projection = props.project
+      && normalizeProjection(props.project, description)
 
     if( !_id ) {
       const newDoc = await model.create(readyWhat)
-      return model.findOne({ _id: newDoc._id }).lean(LEAN_OPTIONS)
+      return model.findOne({ _id: newDoc._id }, projection)
+        .lean(LEAN_OPTIONS)
     }
 
-    return model.findOneAndUpdate(
-      { _id }, readyWhat,
-      { new: true, runValidators: true }
-    ).lean(LEAN_OPTIONS)
+    const options = {
+      new: true,
+      runValidators: true,
+      projection
+    }
+
+    return model.findOneAndUpdate({ _id }, readyWhat, options)
+      .lean(LEAN_OPTIONS)
   }
 
   const _getAll = (props: GetAllProps<T>) => {
@@ -66,7 +76,7 @@ export default <T extends MongoDocument>(
       ? query.sort
       : props.sort || DEFAULT_SORT
 
-    return model.find(query.filters, normalizeProjection(props.project))
+    return model.find(query.filters, normalizeProjection(props.project, description))
       .sort(sort)
       .skip(props.offset || 0)
       .limit(props.limit)
@@ -103,8 +113,11 @@ export default <T extends MongoDocument>(
         (item) => fill(item, description),
       )
 
-      const result = await model.findOne(props.filters, normalizeProjection<T>(props.project))
-        .lean(LEAN_OPTIONS)
+      const result = await model.findOne(
+        props.filters,
+        normalizeProjection(props.project, description)
+
+      ).lean(LEAN_OPTIONS)
 
       if( !result ) {
         return null

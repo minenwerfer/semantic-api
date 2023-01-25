@@ -1,13 +1,30 @@
 import * as R from 'ramda'
 import type { Description } from '../../../types'
 import type { MongoDocument } from '../../types'
+import { makeException } from '../exceptions'
 
-export const normalizeProjection = <T>(projection?: Array<keyof T>|Record<keyof T, number>) => {
-  if( Array.isArray(projection) ) {
-    return projection.reduce((a, key) => ({ ...a, [key]: 1 }), {})
+export const normalizeProjection = <T>(
+  projection: T,
+  description: Pick<Description, 'properties'>
+) => {
+  if( !projection ) {
+    return {}
   }
 
-  return projection || {}
+  const target = Array.isArray(projection)
+    ? projection.map(prop => [prop, 1])
+    : Object.entries(projection)
+
+  return target.reduce((a, [key, value]) => {
+    if( !description.properties[key] || description.properties[key].s$hidden ) {
+      return a
+    }
+
+    return {
+      ...a,
+      [key]: value
+    }
+  }, {})
 }
 
 export const fill = <T extends MongoDocument>(
@@ -34,7 +51,12 @@ export const fill = <T extends MongoDocument>(
 
 export const prepareInsert = (
   payload: any,
-  description: Pick<Description, 'properties' | 'form' | 'writable'>
+  description: Pick<Description,
+    'properties'
+    | 'form'
+    | 'writable'
+    | 'immutable'
+  >
 ) => {
   const {
     _id,
@@ -44,9 +66,17 @@ export const prepareInsert = (
 
   } = payload
 
+  if( _id && description.immutable === true ) {
+    throw makeException({
+      name: 'ValueError',
+      message: 'tried to perform insert on immutable resource'
+    })
+  }
+
   const forbidden = (key: string) => {
     return description.properties[key]?.readOnly
       || (description.writable && !description.writable.includes(key)
+      || (Array.isArray(description.immutable) && description.immutable.includes(key))
     )
   }
   const prepareUpdate = () => Object.entries(rest as Record<string, any>).reduce((a: any, [key, value]) => {

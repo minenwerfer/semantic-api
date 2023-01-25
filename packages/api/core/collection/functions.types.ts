@@ -16,7 +16,7 @@ export type CollectionFunctions<
     : never
 }
 
-type Project<T> = Array<keyof T>|Record<keyof T, number>
+export type Project<T> = Array<keyof T>|Record<keyof T, number>
 
 type _ReturnTypes<T> = {
   insert: T
@@ -32,6 +32,7 @@ type _ReturnTypes<T> = {
 type Props<T> = {
   insert: {
     what: Partial<T>
+    project?: Project<T>
   }
   get: {
     filters?: Partial<T>

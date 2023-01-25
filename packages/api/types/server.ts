@@ -23,7 +23,7 @@ export type ApiConfig = {
 
   allowSignup?: boolean
   signupDefaults?: {
-    role: string
+    roles: Array<string>
     active: boolean
   }
 

@@ -72,9 +72,9 @@ type ReadonlyProperties<F> = IsReadonly<F>
 type OptionalProperties<F, E> = Exclude<keyof F, RequiredProperties<F, E> | ReadonlyProperties<F>>
 
 type StrictMode<F> = MongoDocument &
-  { [P in keyof F]: Type<F[P]> } &
-  { [P in UnrequiredProperties<F>]?: Type<F[P]> } &
-  { readonly [P in ReadonlyProperties<F>]?: Type<F[P]> }
+  { -readonly [P in keyof F]: Type<F[P]> } &
+  { -readonly [P in UnrequiredProperties<F>]?: Type<F[P]> } &
+  { readonly [P in ReadonlyProperties<F>]: Type<F[P]> }
 
 type PermissiveMode<F, E> = MongoDocument &
   { [P in OptionalProperties<F, E>]?: Type<F[P]> } &

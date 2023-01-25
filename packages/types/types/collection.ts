@@ -53,6 +53,7 @@ export type Description = {
   $id: CollectionId
   title?: string
   categories?: Array<string>
+  system?: boolean
 
   model?: Model<any>
   functions?: Record<string, ApiFunction<any, any>>
@@ -64,8 +65,9 @@ export type Description = {
   indexes?: ReadonlyArray<string>
 
   // modifiers
-  strict?: boolean // all properties are required
   owned?: boolean
+  strict?: boolean
+  immutable?: boolean|Array<string>
   alwaysOwned?: boolean
   report?: boolean
 
@@ -119,6 +121,7 @@ export type PropertyInputType =
 type CollectionPropertyAux = {
   icon?: string
   element?: PropertyElement
+  focus?: boolean
   inputType?: PropertyInputType
   placeholder?: string
   hint?: string

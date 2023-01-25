@@ -1,6 +1,6 @@
 {
   "name": "@semantic-api/api",
-  "version": "0.0.2-alpha",
+  "version": "0.0.31-alpha",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,9 +14,6 @@
   },
   "dependencies": {
     "@hapi/hapi": "^21.1.0",
-    "@savitri/common": "~1.0.0",
-    "@savitri/system": "^1.0.0",
-    "@savitri/types": "^1.0.0",
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
     "jsonwebtoken": "^8.5.1",

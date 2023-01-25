@@ -16,10 +16,6 @@ declare namespace process {
   }
 }
 
-/**
- * @exports @const
- * Random alphanumeric sequence for salting JWT.
- */
 export const { APPLICATION_SECRET } = process.env
 
 /**
@@ -28,22 +24,24 @@ export const { APPLICATION_SECRET } = process.env
  */
 export const EXPIRES_IN = 36000
 
-export class TokenService {
-  static sign(payload: object, secret?: string): Promise<void|string> {
-    if( !APPLICATION_SECRET ) {
-      throw new Error('APPLICATION_SECRET is undefined')
-    }
+export class Token {
+  static sign(_payload: Record<string, any>, secret?: string|null, options?: SignOptions) {
+    const payload = Object.assign({}, _payload)
+    delete payload.iat
+    delete payload.exp
 
-    return asyncSign(payload, secret || APPLICATION_SECRET, {
+    const signed = asyncSign(payload, secret || APPLICATION_SECRET, options || {
       expiresIn: EXPIRES_IN
-    })
+    }) as unknown
+
+    return signed as Promise<string>
   }
 
   static verify(token: string, secret?: string) {
     return asyncVerify(token, secret || APPLICATION_SECRET)
   }
 
-  static decode(token: string, secret?: string): Promise<any> {
+  static decode(token: string, secret?: string) {
     return asyncVerify(token, secret || APPLICATION_SECRET)
   }
 }
