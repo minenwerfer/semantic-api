@@ -99,7 +99,11 @@ export const safeHandle = (
       }, {})
     }
 
-    return response
+    if( request.headers['sec-fetch-mode'] === 'cors' ) {
+      return response
+    }
+
+    return h.response(response).code(error.httpCode)
   }
 }
 

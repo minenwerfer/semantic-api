@@ -15,7 +15,7 @@ export const makeException = (custom: CustomException) => {
     details = custom.details
     silent = custom.silent
     logout = custom.logout
-    httpCode = custom.httpCode
+    httpCode = custom.httpCode || 500
 
     constructor() {
       super(custom.message)

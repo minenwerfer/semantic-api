@@ -121,7 +121,6 @@ export type PropertyInputType =
 type CollectionPropertyAux = {
   icon?: string
   element?: PropertyElement
-  focus?: boolean
   inputType?: PropertyInputType
   placeholder?: string
   hint?: string
@@ -131,7 +130,9 @@ type CollectionPropertyAux = {
   mask?: string|ReadonlyArray<string>
   form?: ReadonlyArray<string>
 
+  focus?: boolean
   noForm?: boolean
+  noLabel?: boolean
   unique?: boolean
   hidden?: boolean
   purge?: boolean
