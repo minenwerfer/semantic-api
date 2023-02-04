@@ -87,7 +87,9 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
     })
 
   context.log('successful authentication', {
-    owner: user._id
+    email: leanUser.email,
+    roles: leanUser.roles,
+    _id: user._id
   })
 
   const tokenContent = {

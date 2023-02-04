@@ -1,7 +1,7 @@
 import type { ApiFunction } from '../../../../../api/types'
-import type { SavedItem } from '../subscription.description'
+import type { Subscription } from '../subscription.description'
 
-type Props = SavedItem
+type Props = Subscription
 
 const subscribe: ApiFunction<Props> = async (props, context) => {
   context.validate(props, ['identifier'])

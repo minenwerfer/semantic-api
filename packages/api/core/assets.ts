@@ -19,6 +19,7 @@ import type { CollectionFunctions } from './collection/functions.types'
 import type { Log } from '../../system/resources/collections/log/log.description'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { limitRate } from './rateLimiting'
+import { render } from './render'
 import { useCollection, createModel } from './collection'
 
 const __cached: Record<AssetType, Record<string, any>> = {
@@ -137,7 +138,8 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
       },
       collection: {} as CollectionFunctions,
       resource: proxyFn(resourceName, context, resourceType),
-      library: getResourceAsset(resourceName, 'library', resourceType)
+      library: getResourceAsset(resourceName, 'library', resourceType),
+      render: (...args: [any, any]) => render.apply({}, [context.h, ...args])
     }
 
     if( resourceType === 'collection' ) {

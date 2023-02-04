@@ -11,21 +11,8 @@ type PostHookParams = {
   resourceType: ResourceType
 }
 
-export const processRedirects = (params: PostHookParams) => {
-  const { result } = params
-  if( result?.headers?.location ) {
-    return {
-      redirected: true,
-      ...params,
-    }
-  }
-
-  return params
-}
-
 export const appendPagination = async (params: PostHookParams) => {
   const {
-    redirected,
     request,
     result,
     context,
@@ -33,7 +20,7 @@ export const appendPagination = async (params: PostHookParams) => {
     resourceType
   } = params
 
-  if( redirected ) {
+  if( result?.constructor.name === 'Response' ) {
     return result
   }
 

@@ -1,6 +1,7 @@
 import './bootstrap'
 
 import * as R from 'ramda'
+import sharp from 'sharp'
 import { getResourceFunction } from '../core/assets'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type {
@@ -16,7 +17,7 @@ import { Error as MongooseError } from 'mongoose'
 import { Token } from '../core/token'
 import { makeException } from '../core/exceptions'
 import { checkAC, sanitizeRequest, prependPagination } from './hooks/pre'
-import { processRedirects, appendPagination } from './hooks/post'
+import {  appendPagination } from './hooks/post'
 
 export type RegularVerb =
   'get'
@@ -33,7 +34,6 @@ const prePipe = R.pipe(
 )
 
 const postPipe = R.pipe(
-  processRedirects,
   appendPagination
 )
 
@@ -103,6 +103,7 @@ export const safeHandle = (
       return response
     }
 
+    error.httpCode ??= 500
     return h.response(response).code(error.httpCode)
   }
 }
@@ -137,7 +138,8 @@ export const customVerbs = (resourceType: ResourceType) =>
   const context = _context||fallbackContext
   context.token = token
   context.resourceName = resourceName
-  context.response = h
+  context.h = h
+  context.request = request
 
   prePipe({
     request,
@@ -148,6 +150,7 @@ export const customVerbs = (resourceType: ResourceType) =>
   })
 
   const result = await getResourceFunction(functionPath, resourceType)(request.payload, context)
+
   return postPipe({
     request,
     result,
@@ -176,6 +179,7 @@ export const regularVerb = (functionName: RegularVerb) =>
   const context = _context||fallbackContext
   context.resourceName = resourceName
   context.token = token
+  context.request = request
 
   prePipe({
     request,
@@ -221,11 +225,14 @@ export const fileDownload = async (
   const { hash, options } = request.params
   const { filename, content, mime } = await getResourceFunction('file@download')(hash, context)
 
-  const parsedOptions = (options||'').split(',')
-  const has = (opt: string) => parsedOptions.includes(opt)
+  const has = (opt: string) => options?.split('/').includes(opt)
 
-  return h.response(content)
-    .header('Content-Type', mime)
+  const processedContent = !has('nowebp') && mime.startsWith('image/') && mime !== 'image/webp'
+    ? ['image/webp', sharp(content).webp()]
+    : [mime, content]
+
+  return h.response(processedContent[1])
+    .header('Content-Type', processedContent[0])
     .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
 }
 

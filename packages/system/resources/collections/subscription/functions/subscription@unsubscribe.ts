@@ -1,8 +1,8 @@
 import { Types } from 'mongoose'
 import type { ApiFunction } from '../../../../../api/types'
-import type { SavedItem } from '../subscription.description'
+import type { Subscription } from '../subscription.description'
 
-type Props = Pick<SavedItem, 'identifier'>
+type Props = Pick<Subscription, 'identifier'>
 
 const unsubscribe: ApiFunction<Props> = async (props, context) => {
   context.validate(props, ['identifier'])

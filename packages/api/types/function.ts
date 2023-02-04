@@ -1,7 +1,8 @@
 import type { Model } from 'mongoose'
 import type { useAccessControl } from '../core/accessControl/use'
+import type { render } from '../core/render'
 import type { limitRate } from '../core/rateLimiting'
-import type { ResponseToolkit } from '@hapi/hapi'
+import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { Description } from '../../types'
 import type { Log } from '../../system/resources/collections/log/log.description'
 import type { CollectionFunctions } from '../core/collection/functions.types'
@@ -61,7 +62,12 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
 
   descriptions: Record<string, Description>
   description: Description
-  response: ResponseToolkit
+  request: Request & {
+    payload: Record<string, any>
+  }
+
+  h: ResponseToolkit
+  render: <T extends Record<string, any>>(path: string, options?: T) => ReturnType<typeof render>
 }
 
 export type ApiContextWithAC<T=any> = ApiContext<T> & {

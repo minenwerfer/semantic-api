@@ -17,11 +17,11 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
   }
 
   return [
-    {
-      method: 'GET',
-      path: '/api/{resourceName}/{id}',
-      handler: defaultHandler(regularVerb('get'))
-    },
+    // {
+    //   method: 'GET',
+    //   path: '/api/{resourceName}/{id}',
+    //   handler: defaultHandler(regularVerb('get'))
+    // },
     {
       method: 'GET',
       path: '/api/{resourceName}',
@@ -43,7 +43,7 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
       handler: defaultHandler(regularVerb('delete'))
     },
     {
-      method: 'POST',
+      method: ['POST', 'GET'],
       path: '/api/{resourceName}/{functionName}',
       handler: defaultHandler(customVerbs('collection'))
     },
@@ -54,7 +54,7 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
     },
     {
       method: 'GET',
-      path: '/api/file/{hash}/{options?}',
+      path: '/api/file/{hash}/{options*}',
       handler: defaultHandler(fileDownload)
     },
     {
@@ -64,6 +64,28 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
       options: {
         payload: {
           maxBytes: 2*(100*(1024**2))
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/{param}',
+      handler: {
+        directory: {
+          path: `${process.cwd()}/public`,
+          redirectToSlash: true,
+          index: true
+        }
+      }
+    },
+    {
+      method: 'GET',
+      path: '/public/{param}',
+      handler: {
+        directory: {
+          path: `${process.cwd()}/public`,
+          redirectToSlash: true,
+          index: true
         }
       }
     }

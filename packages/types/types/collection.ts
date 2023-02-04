@@ -18,6 +18,8 @@ export type CollectionAction = Readonly<{
   // route namespace
   fetchItem?: boolean
   clearItem?: boolean
+
+  requires?: Array<string>
 }>
 
 export type CollectionActions = Record<string, null|CollectionAction>

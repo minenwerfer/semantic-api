@@ -1,6 +1,6 @@
 import { makeDescription, Schema } from '../../../../api/core/collection'
 
-export type SavedItem = Schema<typeof schema>
+export type Subscription = Schema<typeof schema>
 
 const schema = {
   $id: 'subscription',

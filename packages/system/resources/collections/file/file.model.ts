@@ -35,11 +35,11 @@ export default createModel(FileDescription, {
     })
 
     schema.virtual('link').get(function(this: File) {
-      return `${link(this._id)}?${timestamp(this.last_modified)}`
+      return `${link(this._id)}/${timestamp(this.last_modified)}`
     })
 
     schema.virtual('download_link').get(function(this: File) {
-      return `${link(this._id)}/download?${timestamp(this.last_modified)}`
+      return `${link(this._id)}/download/${timestamp(this.last_modified)}`
     })
   }
 })

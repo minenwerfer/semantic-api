@@ -1,10 +1,10 @@
 import type { ApiFunction } from '../../../../../api/types'
 import type { Message } from '../../message/message.description'
-import type { SavedItem } from '../subscription.description'
+import type { Subscription } from '../subscription.description'
 
 type Props = {
   _id: string
-  item: SavedItem
+  item: Subscription
   message: Partial<Message>
 }
 
