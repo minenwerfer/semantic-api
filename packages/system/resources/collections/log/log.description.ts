@@ -4,8 +4,11 @@ export type Log = Schema<typeof schema>
 
 const schema = {
   $id: 'log',
-  owned: true,
   properties: {
+    owner: {
+      // don't use "owned: true", we want it this way
+      $ref: 'user'
+    },
     context: {
       type: 'string'
     },
