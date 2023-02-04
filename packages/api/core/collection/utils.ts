@@ -56,6 +56,7 @@ export const prepareInsert = (
     | 'form'
     | 'writable'
     | 'immutable'
+    | 'owned'
   >
 ) => {
   const {
@@ -66,10 +67,17 @@ export const prepareInsert = (
 
   } = payload
 
-  if( _id && description.immutable === true ) {
+  if( _id && description.immutable ) {
     throw makeException({
       name: 'ValueError',
       message: 'tried to perform insert on immutable resource'
+    })
+  }
+
+  if( (!payload.owner || !payload._id) && description.owned ) {
+    throw makeException({
+      name: 'ValueError',
+      message: 'tried to perform insert on an owned resource without specifying owner'
     })
   }
 

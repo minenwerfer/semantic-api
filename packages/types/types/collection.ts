@@ -147,6 +147,7 @@ type CollectionPropertyAux = {
   referencedCollection?: string
   preventPopulate?: boolean
   noId?: boolean
+  prefetch?: boolean|number
 
   array?: boolean
   limit?: number
