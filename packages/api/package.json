@@ -1,6 +1,6 @@
 {
   "name": "@semantic-api/api",
-  "version": "0.0.32-alpha",
+  "version": "0.0.34-alpha",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

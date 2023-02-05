@@ -1,7 +1,11 @@
 import * as R from 'ramda'
-import { getReferencedCollection } from '../../../common'
+import { getReferencedCollection, serialize } from '../../../common'
 import { getResourceAsset } from '../assets'
 import type { Description } from '../../../types'
+
+export type PreloadOptions = {
+  serialize?: boolean
+}
 
 export const applyPreset = (entry: Description | Description['properties'], presetName:string, parentName?:string) => {
   const preset = require(`${__dirname}/../../presets/${presetName}`)
@@ -16,7 +20,10 @@ export const applyPreset = (entry: Description | Description['properties'], pres
   )
 }
 
-export const preloadDescription = (description: Description) => {
+export const preloadDescription = <Options extends PreloadOptions, Return=Options extends { serialize: true }
+  ? Buffer
+  : Description
+>(description: Description, options?: Options) => {
   if( description.alias ) {
     const _aliasedCollection = getResourceAsset(description.alias, 'description')
 
@@ -74,5 +81,7 @@ export const preloadDescription = (description: Description) => {
     }, {})
   }
 
-  return description as Description
+  return (options?.serialize
+    ? serialize(description)
+    : description) as Return
 }

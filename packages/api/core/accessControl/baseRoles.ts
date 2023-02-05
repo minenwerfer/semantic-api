@@ -13,16 +13,17 @@ export default {
           'search'
         ]
       },
-      file: {
-        functions: [
-          'insert'
-        ]
-      },
+      // file: {
+      //   functions: [
+      //     'insert'
+      //   ]
+      // },
       user: {
         functions: [
           'insert',
           'authenticate',
-          'ping'
+          'ping',
+          'upload'
         ]
       },
       userExtra: {

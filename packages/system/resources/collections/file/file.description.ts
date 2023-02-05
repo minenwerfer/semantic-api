@@ -5,6 +5,7 @@ export type File = Schema<typeof schema>
 const schema = {
   $id: 'file',
   owned: true,
+  alwaysOwned: true,
   presets: [
     'owned'
   ],

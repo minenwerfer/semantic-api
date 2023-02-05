@@ -5,10 +5,6 @@ import { File } from '../file.description'
 const { writeFile, unlink } = require('fs').promises
 const { STORAGE_PATH } = process.env
 
-if( !STORAGE_PATH ) {
-  throw new Error('STORAGE_PATH is not set in the environment')
-}
-
 type Props = {
   what: { content: string } & Pick<File,
     '_id'
@@ -34,16 +30,10 @@ const insert: ApiFunction<Props> = async (props, { token, collection }) => {
   })
 
   if( oldFile ) {
-    if( oldFile.immutable === true ) {
-      throw new Error('você não pode mais editar esse arquivo')
-    }
-
-    try {
-      await unlink(oldFile.absolute_path)
-
-    } catch( error ) {
-      console.trace(error)
-    }
+    // if( oldFile.immutable === true ) {
+    //   throw new Error('você não pode mais editar esse arquivo')
+    // }
+    await unlink(oldFile.absolute_path).catch(console.trace)
   }
 
   const filenameHash = createHash('sha1')

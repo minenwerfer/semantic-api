@@ -1,16 +1,18 @@
 import type { FunctionPath, ApiContext, Role } from '../../types'
+import { deepMerge } from '../../../common'
 import baseRoles from './baseRoles'
 
-const _isGranted = (
+const internalIsGranted = (
   functionPath: FunctionPath,
   context: ApiContext,
-  targetRole?: Role
+  baseRole?: Role
 ) => {
   const [resourceName, functionName] = functionPath.split('@')
 
   const userRoles: Array<string> = context.token?.user?.roles || ['guest']
   return userRoles.some((roleName) => {
-    const currentRole = targetRole || context.accessControl.roles?.[roleName]
+    const currentRole = Object.assign({}, baseRole)
+    deepMerge(currentRole, context.accessControl.roles?.[roleName])
 
     if( !currentRole ) {
       return false
@@ -37,6 +39,5 @@ export const isGranted = (
     ? baseRoles.authenticated
     : baseRoles.unauthenticated
 
-  return _isGranted(functionPath, context)
-    || _isGranted(functionPath, context, baseRole)
+  return internalIsGranted(functionPath, context, baseRole)
 }

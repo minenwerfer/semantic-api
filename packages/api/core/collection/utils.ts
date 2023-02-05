@@ -55,8 +55,8 @@ export const prepareInsert = (
     'properties'
     | 'form'
     | 'writable'
-    | 'immutable'
     | 'owned'
+    | 'defaults'
   >
 ) => {
   const {
@@ -67,14 +67,7 @@ export const prepareInsert = (
 
   } = payload
 
-  if( _id && description.immutable ) {
-    throw makeException({
-      name: 'ValueError',
-      message: 'tried to perform insert on immutable resource'
-    })
-  }
-
-  if( (!payload.owner || !payload._id) && description.owned ) {
+  if( (!payload.owner && !_id) && description.owned ) {
     throw makeException({
       name: 'ValueError',
       message: 'tried to perform insert on an owned resource without specifying owner'
@@ -84,7 +77,6 @@ export const prepareInsert = (
   const forbidden = (key: string) => {
     return description.properties[key]?.readOnly
       || (description.writable && !description.writable.includes(key)
-      || (Array.isArray(description.immutable) && description.immutable.includes(key))
     )
   }
   const prepareUpdate = () => Object.entries(rest as Record<string, any>).reduce((a: any, [key, value]) => {
@@ -92,7 +84,11 @@ export const prepareInsert = (
       return a
     }
 
-    if( ( [undefined, null].includes(value) || R.isEmpty(value) ) && !Array.isArray(value) ) {
+    if(
+      ( [undefined, null].includes(value) || R.isEmpty(value) )
+        && !Array.isArray(value)
+        && !(key in (description.defaults||{}))
+    ) {
       a.$unset[key] = 1
       return a
     }
@@ -101,7 +97,7 @@ export const prepareInsert = (
     return a
 
   }, {
-    $set: {},
+    $set: description.defaults || {},
     $unset: {}
   })
 
@@ -114,7 +110,7 @@ export const prepareInsert = (
       ...a,
       [key]: value
     }
-  }, {})
+  }, description.defaults || {})
 
   const what = typeof _id === 'string'
     ? prepareUpdate()

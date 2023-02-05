@@ -1,9 +1,20 @@
+import type { default as FileInsert } from '../../../system/resources/collections/file/functions/file@insert'
+import type { default as FileDelete } from '../../../system/resources/collections/file/functions/file@delete'
+
+type UploadAuxProps = {
+  parentId: string
+  propertyName: string
+}
+
+export type UploadProps = UploadAuxProps & Parameters<typeof FileInsert>[0]
+export type FileDeleteProps = UploadAuxProps & Parameters<typeof FileDelete>[0]
+
 export type GetAllProps<T> = {
   filters?: Partial<T>
   offset?: number
   limit?: number
   sort?: QuerySort<T>
-  project?: Project<T>
+  project?: Projection<T>
 }
 
 export type CollectionFunctions<
@@ -16,7 +27,7 @@ export type CollectionFunctions<
     : never
 }
 
-export type Project<T> = Array<keyof T>|Record<keyof T, number>
+export type Projection<T> = Array<keyof T>|Record<keyof T, number>
 
 type _ReturnTypes<T> = {
   insert: T
@@ -27,16 +38,18 @@ type _ReturnTypes<T> = {
   modify: T|null
   modifyAll: unknown
   count: number
+  upload: ReturnType<typeof FileInsert>
+  deleteFile: ReturnType<typeof FileDelete>
 }
 
 type Props<T> = {
   insert: {
     what: Partial<T>
-    project?: Project<T>
+    project?: Projection<T>
   }
   get: {
     filters?: Partial<T>
-    project?: Project<T>
+    project?: Projection<T>
   }
   getAll: GetAllProps<T>
   delete: {
@@ -56,6 +69,8 @@ type Props<T> = {
   count: {
     filters?: Partial<T>
   }
+  upload: UploadProps
+  deleteFile: FileDeleteProps
 }
 
 type ReturnTypes<T> = {

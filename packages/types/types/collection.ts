@@ -29,6 +29,12 @@ export type FormLayout = {
   verticalSpacing: number
 }
 
+export type FiltersPreset = {
+  name: string
+  filters: Record<string, any>
+  table?: Array<string>
+}
+
 export type CollectionOptions = {
   queryPreset?: {
     filters?: Record<string, any>
@@ -57,6 +63,8 @@ export type Description = {
   categories?: Array<string>
   system?: boolean
 
+  preferred?: Record<string, Description>
+
   model?: Model<any>
   functions?: Record<string, ApiFunction<any, any>>
 
@@ -65,6 +73,7 @@ export type Description = {
   options?: CollectionOptions
 
   indexes?: ReadonlyArray<string>
+  defaults?: Record<string, any>
 
   // modifiers
   owned?: boolean
@@ -80,6 +89,8 @@ export type Description = {
   table?: Array<string>
   tableMeta?: Array<string>
   reportProperties?: Array<string>
+
+  filtersPresets?: Record<string, FiltersPreset>
 
   form?: ReadonlyArray<string>|Record<string, Array<string>>
   writable?: Array<string>

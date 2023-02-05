@@ -1,6 +1,8 @@
 import { AccessControl } from '../../types'
+import { checkImmutability } from './immutability'
 
-export const beforeRead: AccessControl['beforeRead'] = (_payload, { token, description }) => {
+export const beforeRead: AccessControl['beforeRead'] = async (_payload, context) => {
+  const { token, description } = context
   const preset: any = {
     filters: {}
   }
@@ -14,7 +16,8 @@ export const beforeRead: AccessControl['beforeRead'] = (_payload, { token, descr
   return preset
 }
 
-export const beforeWrite: AccessControl['beforeWrite'] = (payload, { token, description }) => {
+export const beforeWrite: AccessControl['beforeWrite'] = async (payload, context) => {
+  const { token, description } = context
   const preset: any = {
     what: {}
   }
@@ -27,6 +30,20 @@ export const beforeWrite: AccessControl['beforeWrite'] = (payload, { token, desc
 
       preset.what.owner = token.user._id
     }
+  }
+
+  const props = [
+    ...Object.keys(payload.what||{}),
+    ...Object.keys(payload.filters||{})
+  ]
+
+  const parentId = preset.what?._id || preset.filters?._id
+  console.log({ parentId })
+
+  if( parentId ) {
+    props.forEach(async (propName) => {
+      await checkImmutability(context, propName, parentId)
+    })
   }
 
   return preset

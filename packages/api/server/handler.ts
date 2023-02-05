@@ -232,8 +232,8 @@ export const fileDownload = async (
     : [mime, content]
 
   return h.response(processedContent[1])
-    .header('Content-Type', processedContent[0])
-    .header('Content-Disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
+    .header('content-type', processedContent[0])
+    .header('content-disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
 }
 
 export const fileInsert = async (

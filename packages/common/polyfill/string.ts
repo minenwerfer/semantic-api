@@ -2,8 +2,6 @@ declare global {
   interface String {
     capitalize: typeof capitalize
     formatDateTime: typeof formatDateTime
-    formatDocument: typeof formatDocument
-    formatPhone: typeof formatPhone
   }
 }
 
@@ -22,21 +20,7 @@ const formatDateTime = function(this: string, hours: boolean = false) {
   return d.formatToString(hours)
 }
 
-const formatDocument = function(this: string) {
-  return this && this
-  .split(/(\w{3})/).filter(_ => _).join('.')
-  .replace(/\.(\w{2})$/, '-$1')
-}
-
-const formatPhone = function(this: string) {
-  return this && this
-  .replace(/^0?(\w{2})/, '($1) ')
-  .replace(/(\w{4})$/, '-$1')
-}
-
 Object.assign(String.prototype, {
   capitalize,
   formatDateTime,
-  formatDocument,
-  formatPhone
 })

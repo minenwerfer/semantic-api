@@ -2,8 +2,9 @@ import * as R from 'ramda'
 import type { Model } from 'mongoose'
 import type { Description } from '../../../types'
 import type { ApiContextWithAC, MongoDocument } from '../../types'
-import type { GetAllProps, Project, CollectionFunctions } from './functions.types'
+import type { GetAllProps, Projection, CollectionFunctions } from './functions.types'
 import { fromEntries } from '../../../common/helpers'
+import { checkImmutability } from '../accessControl/immutability'
 import { makeException } from '../exceptions'
 import { normalizeProjection, fill, prepareInsert } from './utils'
 
@@ -34,10 +35,10 @@ export default <T extends MongoDocument>(
   
   const _insert = async (props: {
     what: Partial<T>
-    project?: Project<T>
+    project?: Projection<T>
   }) => {
     const { _id } = props.what
-    const { what } = beforeWrite(props, context)
+    const { what } = await beforeWrite(props, context)
     const readyWhat = prepareInsert(what, description)
     const projection = props.project
       && normalizeProjection(props.project, description)
@@ -58,7 +59,7 @@ export default <T extends MongoDocument>(
       .lean(LEAN_OPTIONS)
   }
 
-  const _getAll = (props: GetAllProps<T>) => {
+  const _getAll = async (props: GetAllProps<T>) => {
     if( typeof props.limit !== 'number' ) {
       props.limit = +(process.env.PAGINATION_LIMIT||35)
     }
@@ -70,7 +71,7 @@ export default <T extends MongoDocument>(
       ])
 
     const filters = fromEntries(entries) || {}
-    const query = beforeRead({ filters }, context)
+    const query = await beforeRead({ filters }, context)
 
     const sort = query.sort
       ? query.sort
@@ -140,7 +141,7 @@ export default <T extends MongoDocument>(
         throw new Error('no criteria specified')
       }
       
-      const query = beforeRead(props, context)
+      const query = await beforeRead(props, context)
       return model.findOneAndDelete(query.filters, { strict: 'throw' })
     },
 
@@ -155,29 +156,73 @@ export default <T extends MongoDocument>(
         ...rest
       }
 
-      const query = beforeRead({ filters }, context)
+      const query = await beforeRead({ filters }, context)
       return model.deleteMany(query.filters, { strict: 'throw' })
     },
 
     async modify(props) {
-      const { what, filters } = beforeWrite(props, context)
+      const { what, filters } = await beforeWrite(props, context)
       const readyWhat = prepareInsert(what, description)
 
       return model.findOneAndUpdate(filters, readyWhat, { new: true, runValidators: true })
     },
 
     async modifyAll(props) {
-      const { what, filters } = beforeWrite(props, context)
+      const { what, filters } = await beforeWrite(props, context)
       const readyWhat = prepareInsert(what, description)
 
       return model.updateMany(filters.filters, readyWhat)
     },
 
     async count(props) {
-      const query = beforeRead(props, context)
+      const query = await beforeRead(props, context)
       const count = await model.countDocuments(query.filters) as unknown
       return count as number
     },
+
+    async upload(_props) {
+      const {
+        propertyName,
+        parentId,
+        ...props
+
+      } = _props
+
+      if( !parentId ) {
+        throw new TypeError('no parentId')
+      }
+
+      await checkImmutability(
+        context,
+        propertyName,
+        parentId,
+        props.what._id as string
+      )
+
+      return context.collections.file.insert(props)
+    },
+
+    async deleteFile(_props) {
+      const {
+        propertyName,
+        parentId,
+        ...props
+
+      } = _props
+
+      if( !parentId ) {
+        throw new TypeError('no parentId')
+      }
+
+      await checkImmutability(
+        context,
+        propertyName,
+        parentId,
+        props.filters._id
+      )
+
+      return context.collections.file.delete(props)
+    }
   }
 
   return functions
