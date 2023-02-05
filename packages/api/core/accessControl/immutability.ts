@@ -13,14 +13,10 @@ const internalCheck = async (
     return
   }
 
-  if( parentId && (
+  const immutable =  parentId && (
     description.immutable === true
-    || (Array.isArray(description.immutable) && description.immutable.includes(propertyName) ))
-  ) {
-    throw new TypeError(
-      `tried to perform insert on immutable resource`
-    )
-  }
+    || (Array.isArray(description.immutable) && description.immutable.includes(propertyName) )
+  )
 
   const currentDocument = await context.resource.get({
     filters: {
@@ -35,7 +31,7 @@ const internalCheck = async (
   }
 
   if( childId ) {
-    if( currentDocument[propertyName]?._id.toString() !== childId ) {
+    if( currentDocument[propertyName] && currentDocument[propertyName]?._id.toString() !== childId ) {
       throw new TypeError('incorrect child')
     }
   }
@@ -43,7 +39,7 @@ const internalCheck = async (
   const fulfilled = currentDocument[propertyName]
     && !R.isEmpty(currentDocument[propertyName])
 
-  if( fulfilled ) {
+  if( immutable && fulfilled ) {
     throw new TypeError(
       `target is immutable`
     )

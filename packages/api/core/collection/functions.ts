@@ -199,7 +199,17 @@ export default <T extends MongoDocument>(
         props.what._id as string
       )
 
-      return context.collections.file.insert(props)
+      const file = await context.collections.file.insert(props)
+      const payload = context.description.properties[propertyName].type === 'array'
+        ? { $addToSet: { [propertyName]: file._id } }
+        : { $set: { [propertyName]: file._id } }
+
+      await context.model.updateOne(
+        { _id: parentId },
+        payload
+      )
+
+      return file
     },
 
     async deleteFile(_props) {

@@ -32,14 +32,12 @@ export const beforeWrite: AccessControl['beforeWrite'] = async (payload, context
     }
   }
 
-  const props = [
+  const props = new Set([
     ...Object.keys(payload.what||{}),
     ...Object.keys(payload.filters||{})
-  ]
+  ])
 
   const parentId = preset.what?._id || preset.filters?._id
-  console.log({ parentId })
-
   if( parentId ) {
     props.forEach(async (propName) => {
       await checkImmutability(context, propName, parentId)
