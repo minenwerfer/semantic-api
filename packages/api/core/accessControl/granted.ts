@@ -23,11 +23,17 @@ const internalIsGranted = (
       return false
     }
 
-    return (!currentRole.forbidEverything || subject?.functions?.includes(functionName)) && (
-      currentRole?.grantEverything
-      || subject?.grantEverything
-      || subject?.functions?.includes(functionName)
+    const allowedInToken = !context.token.allowed_functions || (
+      context.token.allowed_functions.includes(functionPath)
     )
+
+    return allowedInToken
+      && (!currentRole.forbidEverything || subject?.functions?.includes(functionName))
+      && (
+        currentRole?.grantEverything
+        || subject?.grantEverything
+        || subject?.functions?.includes(functionName)
+      )
   })
 }
 

@@ -2,6 +2,7 @@ import type { ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest, DecodedToken, FunctionPath, ApiContext } from '../../types'
 import { PAGINATION_PER_PAGE_LIMIT } from '../../../types/constants'
 import { makeException } from '../../core/exceptions'
+import { getResourceFunction } from '../../core/assets'
 import { isGranted } from '../../core/accessControl/granted'
 
 type PreHookParams = {
@@ -12,14 +13,32 @@ type PreHookParams = {
   context: ApiContext
 }
 
-export const checkAC = (params: PreHookParams) => {
-  const granted = isGranted(params.functionPath, params.context)
+export const checkAC = async (params: PreHookParams) => {
+  const { context } = params
+  if( context.token.key_id ) {
+    const key = await getResourceFunction('apiKey@get')({
+      filters: {
+        _id: context.token.key_id,
+        active: true
+      }
+    }, context)
+
+    if( !key ) {
+      throw makeException({
+        name: 'AuthorizationError',
+        message: 'invalid API key',
+        httpCode: 403
+      })
+    }
+  }
+
+  const granted = isGranted(params.functionPath, context)
   
   if( !granted ) {
     throw makeException({
       name: 'AuthorizationError',
       message: 'forbidden by access control',
-      logout: !!params.context.token.user?.roles,
+      logout: !!context.token.user?.roles,
       httpCode: 403
     })
   }

@@ -1,4 +1,5 @@
 export default {
+  apiKey: {},
   file: {},
   log: {},
   message: {},

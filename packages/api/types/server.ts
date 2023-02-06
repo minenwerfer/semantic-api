@@ -1,5 +1,6 @@
 import type { Request } from '@hapi/hapi'
 import type { User } from '../../system/resources/collections/user/user.description'
+import type { FunctionPath } from './function'
 
 export type HandlerRequest = Request & {
   payload: any
@@ -8,8 +9,10 @@ export type HandlerRequest = Request & {
 export type DecodedToken = {
   user: User
   extra?: Record<string, any>
+  allowed_functions?: Array<FunctionPath>
+  key_id?: string
+  key_name?: string
 }
-
 
 export type ApiConfig = {
   port?: number

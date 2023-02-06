@@ -27,15 +27,15 @@ export type RegularVerb =
   | 'delete'
   | 'deleteAll'
 
-const prePipe = R.pipe(
+const prePipe = R.pipeWith(R.andThen)([
   checkAC,
   sanitizeRequest,
   prependPagination
-)
+])
 
-const postPipe = R.pipe(
+const postPipe = R.pipeWith(R.andThen)([
   appendPagination
-)
+])
 
 const fallbackContext = {
   apiConfig: {},
@@ -141,13 +141,15 @@ export const customVerbs = (resourceType: ResourceType) =>
   context.h = h
   context.request = request
 
-  prePipe({
-    request,
-    token,
-    response: h,
-    functionPath,
-    context
-  })
+  await Promise.all([
+    prePipe({
+      request,
+      token,
+      response: h,
+      functionPath,
+      context
+    })
+  ])
 
   const result = await getResourceFunction(functionPath, resourceType)(request.payload, context)
 
@@ -181,13 +183,15 @@ export const regularVerb = (functionName: RegularVerb) =>
   context.token = token
   context.request = request
 
-  prePipe({
-    request,
-    token,
-    response: h,
-    functionPath,
-    context
-  })
+  await Promise.all([
+    prePipe({
+      request,
+      token,
+      response: h,
+      functionPath,
+      context
+    })
+  ])
 
   const requestCopy = Object.assign({}, request)
   requestCopy.payload ||= {}

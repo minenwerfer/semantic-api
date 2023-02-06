@@ -1,6 +1,6 @@
 {
   "name": "@semantic-api/system",
-  "version": "0.0.34-alpha",
+  "version": "0.0.35-alpha",
   "description": "",
   "main": "index.js",
   "scripts": {
