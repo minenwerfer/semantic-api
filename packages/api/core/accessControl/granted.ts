@@ -23,7 +23,7 @@ const internalIsGranted = (
       return false
     }
 
-    return (
+    return (!currentRole.forbidEverything || subject?.functions?.includes(functionName)) && (
       currentRole?.grantEverything
       || subject?.grantEverything
       || subject?.functions?.includes(functionName)

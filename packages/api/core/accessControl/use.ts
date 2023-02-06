@@ -1,7 +1,7 @@
 import { deepMerge } from '../../../common/helpers'
 import type { ApiFunction, ApiContext } from '../../types'
 import type { Description } from '../../../types'
-import * as baseControl from './baseControl'
+import * as baseControl from './baseLayers'
 
 type ReadPayload = {
   filters: Record<string, any>
@@ -21,8 +21,8 @@ export const useAccessControl = (description: Description, context?: ApiContext)
 
   const accessControl = context?.accessControl||{}
 
-  const beforeRead: ApiFunction<any> = (props, context): ReadPayload => {
-    const newPayload = Object.assign({}, {
+  const beforeRead: ApiFunction<any> = async (props, context): Promise<ReadPayload> => {
+    const payload = Object.assign({}, {
       filters: props?.filters||{},
       sort: props?.sort,
       limit: props?.limit
@@ -30,46 +30,46 @@ export const useAccessControl = (description: Description, context?: ApiContext)
 
     if( options.queryPreset ) {
       deepMerge(
-        newPayload,
+        payload,
         options.queryPreset
       )
     }
 
-    if( accessControl.beforeRead && context.token ) {
+    if( accessControl.layers?.read && context.token ) {
       deepMerge(
-        newPayload,
-        accessControl.beforeRead(newPayload, context)
+        payload,
+        await accessControl.layers?.read(context, { payload })
       )
     }
 
     deepMerge(
-      newPayload,
-      baseControl.beforeRead!(newPayload, context)
+      payload,
+      await baseControl.read!(context, { payload })
     )
 
-    if( newPayload.limit > 150 ) {
-      newPayload.limit = 150
+    if( payload.limit > 150 ) {
+      payload.limit = 150
     }
 
-    return newPayload
+    return payload
   }
 
-  const beforeWrite: ApiFunction<any> = (props, context): WritePayload => {
-    const newPayload = Object.assign({ what: {} }, props)
+  const beforeWrite: ApiFunction<any> = async (props, context): Promise<WritePayload> => {
+    const payload = Object.assign({ what: {} }, props)
 
-    if( accessControl.beforeWrite && context.token ) {
+    if( accessControl.layers?.write && context.token ) {
       deepMerge(
-        newPayload,
-        accessControl.beforeWrite(newPayload, context)
+        payload,
+        await accessControl.layers?.write(context, { payload })
       )
     }
 
     deepMerge(
-      newPayload,
-      baseControl.beforeWrite!(newPayload, context)
+      payload,
+      await baseControl.write!(context, { payload })
     )
 
-    return newPayload
+    return payload
   }
 
   return {

@@ -34,8 +34,8 @@ const search: ApiFunction<Props, typeof import('../searchable.library')> = async
       }
   }, {})
 
-  const beforeRead = accessControl.beforeRead
-    ? (payload: Record<string, any>) => accessControl.beforeRead!(payload, context)
+  const beforeRead = accessControl.layers?.read
+    ? (payload: Record<string, any>) => accessControl.layers?.read!(context, { payload })
     : null
 
   const aggregations = context.library.buildAggregations(

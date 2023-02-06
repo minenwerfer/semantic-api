@@ -196,7 +196,8 @@ export default <T extends MongoDocument>(
         context, {
           propertyName,
           parentId,
-          childId: props.what._id as string
+          childId: props.what._id as string,
+          payload: props
         }
       )
 
@@ -229,7 +230,8 @@ export default <T extends MongoDocument>(
         context, {
           propertyName,
           parentId,
-          childId: props.filters._id
+          childId: props.filters._id,
+          payload: props
         }
       )
 

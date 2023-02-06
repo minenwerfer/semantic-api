@@ -13,11 +13,12 @@ export default {
           'search'
         ]
       },
-      // file: {
-      //   functions: [
-      //     'insert'
-      //   ]
-      // },
+      file: {
+        forbidEverything: true,
+        functions: [
+          'download'
+        ]
+      },
       user: {
         functions: [
           'insert',

@@ -2,12 +2,7 @@ import type { Request } from '@hapi/hapi'
 import type { User } from '../../system/resources/collections/user/user.description'
 
 export type HandlerRequest = Request & {
-  payload: {
-    offset?: number
-    limit?: number
-    filters?: any
-    what?: any
-  }
+  payload: any
 }
 
 export type DecodedToken = {
