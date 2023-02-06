@@ -1,7 +1,6 @@
 import * as R from 'ramda'
 import type { Description } from '../../../types'
 import type { MongoDocument } from '../../types'
-import { makeException } from '../exceptions'
 
 export const normalizeProjection = <T>(
   projection: T,
@@ -66,13 +65,6 @@ export const prepareInsert = (
     ...rest
 
   } = payload
-
-  if( (!payload.owner && !_id) && description.owned ) {
-    throw makeException({
-      name: 'ValueError',
-      message: 'tried to perform insert on an owned resource without specifying owner'
-    })
-  }
 
   const forbidden = (key: string) => {
     return description.properties[key]?.readOnly

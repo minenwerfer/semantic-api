@@ -4,7 +4,7 @@ import type { Description } from '../../../types'
 import type { ApiContextWithAC, MongoDocument } from '../../types'
 import type { GetAllProps, Projection, CollectionFunctions } from './functions.types'
 import { fromEntries } from '../../../common/helpers'
-import { checkImmutability } from '../accessControl/immutability'
+import { checkImmutability } from '../accessControl/layers'
 import { makeException } from '../exceptions'
 import { normalizeProjection, fill, prepareInsert } from './utils'
 
@@ -193,10 +193,11 @@ export default <T extends MongoDocument>(
       }
 
       await checkImmutability(
-        context,
-        propertyName,
-        parentId,
-        props.what._id as string
+        context, {
+          propertyName,
+          parentId,
+          childId: props.what._id as string
+        }
       )
 
       const file = await context.collections.file.insert(props)
@@ -225,10 +226,11 @@ export default <T extends MongoDocument>(
       }
 
       await checkImmutability(
-        context,
-        propertyName,
-        parentId,
-        props.filters._id
+        context, {
+          propertyName,
+          parentId,
+          childId: props.filters._id
+        }
       )
 
       return context.collections.file.delete(props)

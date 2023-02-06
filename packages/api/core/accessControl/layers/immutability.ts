@@ -1,13 +1,10 @@
+import type { AccessControlLayer } from './types'
 import * as R from 'ramda'
-import type { ApiContext } from '../..'
 
-const internalCheck = async (
-  context: ApiContext,
-  propertyName: string,
-  parentId: string,
-  childId?: string
-) => {
+const internalCheck: AccessControlLayer = async (context, { propertyName: _propertyName, parentId, childId }) => {
   const { description } = context
+  const propertyName = _propertyName || ''
+
   const property = description.properties[propertyName]
   if( !property ) {
     return
@@ -44,24 +41,8 @@ const internalCheck = async (
       `target is immutable`
     )
   }
-
-  return property
 }
 
-export const checkImmutability = async (
-  context: ApiContext,
-  propertyName: string,
-  parentId: string,
-  childId?: string
-) => {
-  const property = await internalCheck(
-    context,
-    propertyName,
-    parentId,
-    childId
-  )
-
-  if( !property ) {
-    return
-  }
+export const checkImmutability: AccessControlLayer = async (context, props) => {
+  return internalCheck(context, props)
 }

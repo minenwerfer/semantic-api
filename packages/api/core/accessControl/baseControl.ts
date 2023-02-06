@@ -1,5 +1,5 @@
 import { AccessControl } from '../../types'
-import { checkImmutability } from './immutability'
+import { checkImmutability, checkOwnership } from './layers'
 
 export const beforeRead: AccessControl['beforeRead'] = async (_payload, context) => {
   const { token, description } = context
@@ -37,10 +37,20 @@ export const beforeWrite: AccessControl['beforeWrite'] = async (payload, context
     ...Object.keys(payload.filters||{})
   ])
 
-  const parentId = preset.what?._id || preset.filters?._id
+  const parentId = payload.what?._id || payload.filters?._id
+  const mergedPayload = Object.assign(Object.assign({}, payload.what||{}), payload.filters||{})
+
+  await checkOwnership(context, {
+    parentId,
+    payload: mergedPayload
+  })
+
   if( parentId ) {
-    props.forEach(async (propName) => {
-      await checkImmutability(context, propName, parentId)
+    props.forEach(async (propertyName) => {
+      await checkImmutability(context, {
+        propertyName,
+        parentId
+      })
     })
   }
 
