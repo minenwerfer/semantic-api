@@ -13,7 +13,7 @@ export const formatValue = (
   const firstValue = (() => {
     if( property?.s$isReference ) {
       const firstIndex = index || property.s$indexes![0]
-      return value[firstIndex]
+      return value?.[firstIndex]
     }
 
     return value
