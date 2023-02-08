@@ -1,3 +1,4 @@
+import * as R from 'ramda'
 import type { CollectionProperty } from '../types'
 
 export const formatValue = (
@@ -12,8 +13,12 @@ export const formatValue = (
 
   const firstValue = (() => {
     if( property?.s$isReference ) {
-      const firstIndex = index || property.s$indexes![0]
-      return value?.[firstIndex]
+      const firstIndex = index || property.s$indexes?.[0]
+      return firstIndex && value?.[firstIndex]
+    }
+    
+    if( R.is(Object, value) ) {
+      return Object.values(value)[0]
     }
 
     return value

@@ -188,10 +188,6 @@ export default <T extends MongoDocument>(
 
       } = _props
 
-      if( !parentId ) {
-        throw new TypeError('no parentId')
-      }
-
       await checkImmutability(
         context, {
           propertyName,
