@@ -1,9 +1,9 @@
 import { makeDescription, Schema } from '../../../../api/core/collection'
 
-export type Message = Schema<typeof schema>
+export type SubscriptionMessage = Schema<typeof schema>
 
 const schema = {
-  $id: 'message',
+  $id: 'subscriptionMessage',
   owned: true,
   indexes: [
     'title'
@@ -16,7 +16,7 @@ const schema = {
       type: 'string',
       s$element: 'textarea'
     },
-    seen_by: {
+    viewers: {
       type: 'array',
       items: {
         $ref: 'user'

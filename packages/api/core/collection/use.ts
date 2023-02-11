@@ -35,6 +35,6 @@ export const useCollection = <T extends MongoDocument>(collectionName: string, _
 
   return {
     ...functions,
-    model
+    model: () => model
   }
 }

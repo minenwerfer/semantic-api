@@ -1,11 +1,11 @@
 import type { ApiFunction } from '../../../../../api/types'
-import type { Message } from '../../message/message.description'
+import type { SubscriptionMessage } from '../../subscriptionMessage/subscriptionMessage.description'
 import type { Subscription } from '../subscription.description'
 
 type Props = {
   _id: string
   item: Subscription
-  message: Partial<Message>
+  message: Partial<SubscriptionMessage>
 }
 
 const pushMessage: ApiFunction<Props> = async (props, context) => {
@@ -23,13 +23,16 @@ const pushMessage: ApiFunction<Props> = async (props, context) => {
     [
       'content'
     ],
-    context.descriptions.message
+    context.descriptions.subscriptionMessage
   )
 
-  const message = await context.collections.message.insert({
+  const message = await context.collections.subscriptionMessage.insert({
     what: {
       ...props.message,
-      owner: context.token.user._id
+      owner: context.token.user._id,
+      viewers: [
+        context.token.user._id
+      ]
     }
   })
 
@@ -48,6 +51,7 @@ const pushMessage: ApiFunction<Props> = async (props, context) => {
       $setOnInsert: {
         title: props.item.title,
         description: props.item.description,
+        identifier: props.item.identifier,
         route: props.item.route,
         owner: context.token.user._id
       }

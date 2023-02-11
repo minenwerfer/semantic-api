@@ -3,7 +3,7 @@ import {
   Secret,
   SignOptions,
   sign,
-  verify
+  verify,
 
 } from 'jsonwebtoken'
 
@@ -37,11 +37,11 @@ export class Token {
     return signed as Promise<string>
   }
 
-  static verify(token: string, secret?: string) {
+  static async verify(token: string, secret?: string) {
     return asyncVerify(token, secret || APPLICATION_SECRET)
   }
 
   static decode(token: string, secret?: string) {
-    return asyncVerify(token, secret || APPLICATION_SECRET)
+    return this.verify(token, secret)
   }
 }

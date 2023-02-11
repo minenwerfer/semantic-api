@@ -27,10 +27,14 @@ const schema = {
     messages: {
       type: 'array',
       items: {
-        $ref: 'message'
+        $ref: 'subscriptionMessage'
       },
       s$maxDepth: 4
     },
+    was_viewed: {
+      type: 'boolean',
+      s$meta: true
+    }
   }
 } as const
 

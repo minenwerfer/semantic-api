@@ -48,7 +48,7 @@ export const init = async (_context?: Partial<ApiContext>|null): Promise<Hapi.Se
   }
 
   if( context?.descriptions ) {
-    global.descriptions = context.descriptions
+    Object.assign(global.descriptions, context.descriptions)
   }
 
   const server = Hapi.server({

@@ -12,7 +12,7 @@ const internalIsGranted = (
   const userRoles: Array<string> = context.token?.user?.roles || ['guest']
   return userRoles.some((roleName) => {
     const currentRole = Object.assign({}, baseRole)
-    deepMerge(currentRole, context.accessControl.roles?.[roleName])
+    deepMerge(currentRole, context.accessControl.roles?.[roleName]||{})
 
     if( !currentRole ) {
       return false

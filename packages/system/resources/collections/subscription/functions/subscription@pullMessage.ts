@@ -5,7 +5,7 @@ type Props = {
 }
 
 const pullMessage: ApiFunction<Props> = async (props, context) => {
-  await context.collections.message.delete({
+  await context.collections.subscriptionMessage.delete({
     filters: {
       _id: props._id
     }

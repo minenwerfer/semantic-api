@@ -38,7 +38,7 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
         _id: null,
         roles: ['root']
       },
-    }) as string
+    })
 
     return {
       user: {

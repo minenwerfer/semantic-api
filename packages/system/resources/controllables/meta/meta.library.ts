@@ -74,7 +74,7 @@ export const getDescriptions = ({
 
   Object.assign(__cachedDescriptions, descriptions)
 
-  global.descriptions = descriptions
+  global.descriptions = __cachedDescriptions
   return descriptions
 }
 
