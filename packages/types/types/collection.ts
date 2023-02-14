@@ -33,6 +33,7 @@ export type FiltersPreset = {
   name: string
   filters: Record<string, any>
   table?: Array<string>
+  badgeFunction?: string
 }
 
 export type CollectionOptions = {
