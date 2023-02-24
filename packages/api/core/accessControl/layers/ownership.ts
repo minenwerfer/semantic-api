@@ -6,6 +6,4 @@ export const checkOwnership: AccessControlLayer = async (context, { parentId, pa
       'tried to perform insert on an owned resource without specifying owner'
     )
   }
-
-  return payload
 }

@@ -17,11 +17,11 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
   }
 
   return [
-    // {
-    //   method: 'GET',
-    //   path: '/api/{resourceName}/{id}',
-    //   handler: defaultHandler(regularVerb('get'))
-    // },
+    {
+      method: 'GET',
+      path: '/api/{resourceName}/id/{id}',
+      handler: defaultHandler(regularVerb('get'))
+    },
     {
       method: 'GET',
       path: '/api/{resourceName}',

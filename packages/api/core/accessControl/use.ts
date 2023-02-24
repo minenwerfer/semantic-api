@@ -36,16 +36,10 @@ export const useAccessControl = (description: Description, context?: ApiContext)
     }
 
     if( accessControl.layers?.read && context.token ) {
-      deepMerge(
-        payload,
-        await accessControl.layers?.read(context, { payload })
-      )
+      await accessControl.layers?.read(context, { payload })
     }
 
-    deepMerge(
-      payload,
-      await baseControl.read!(context, { payload })
-    )
+    await baseControl.read!(context, { payload })
 
     if( payload.limit > 150 ) {
       payload.limit = 150
@@ -58,17 +52,10 @@ export const useAccessControl = (description: Description, context?: ApiContext)
     const payload = Object.assign({ what: {} }, props)
 
     if( accessControl.layers?.write && context.token ) {
-      deepMerge(
-        payload,
-        await accessControl.layers?.write(context, { payload })
-      )
+      await accessControl.layers?.write(context, { payload })
     }
 
-    deepMerge(
-      payload,
-      await baseControl.write!(context, { payload })
-    )
-
+    await baseControl.write!(context, { payload })
     return payload
   }
 

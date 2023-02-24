@@ -7,7 +7,7 @@ export {
   checkImmutability
 }
 
-export default [
+export const writeLayers = [
   checkOwnership,
   checkImmutability
 ]

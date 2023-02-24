@@ -11,10 +11,10 @@ const search: ApiFunction<Props, typeof import('../searchable.library')> = async
   const { token, accessControl } = context
 
   if( !token?.user?.roles.length ) {
-    throw makeException({
+    throw new (makeException({
       name: 'AuthorizationError',
       message: 'signed out'
-    })
+    }))
   }
 
   props.query = props.query.filter((q) => !!q)

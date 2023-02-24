@@ -24,10 +24,10 @@ export const limitRate = async (context: ApiContext, params: RateLimitingParams)
   )
 
   if( !user ) {
-    throw makeException({
+    throw new (makeException({
       name: 'RateLimitError',
       message: 'user not found'
-    })
+    }))
   }
 
   const increment = params.increment || 1
@@ -48,7 +48,7 @@ export const limitRate = async (context: ApiContext, params: RateLimitingParams)
   }
 
   if( params.scale && (new Date().getTime()/1000 - usage.updated_at.getTime()/1000 < params.scale) ) {
-    throw rateLimitingError('not so fast')
+    throw new (rateLimitingError('not so fast'))
   }
 
   if( params.limit && (usage.hits % params.limit === 0) ) {

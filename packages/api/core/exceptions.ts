@@ -22,5 +22,7 @@ export const makeException = (custom: CustomException) => {
     }
   }
 
-  return new Impl()
+  return Impl as (new () => {
+    [P in keyof Impl]: Impl[P]
+  })
 }

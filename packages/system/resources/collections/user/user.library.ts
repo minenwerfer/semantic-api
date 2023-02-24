@@ -27,7 +27,7 @@ export const saveWithExtra: ApiFunction<SaveWithExtraProps> = async (props, cont
   const user = await collection.insert(props)
 
   try {
-    await context.collections.userExtra.insert({
+    await context.collections.userExtra.insert<User>({
       what: {
         ...extra,
         owner: user._id

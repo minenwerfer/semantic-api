@@ -127,7 +127,7 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
         return arraysIntersects(categories, description.categories)
       },
       log: (message, details) => {
-        return useCollection<Log>('log', context).insert({
+        return useCollection<Log>('log', context).insert<Log>({
           what: {
             message,
             details,

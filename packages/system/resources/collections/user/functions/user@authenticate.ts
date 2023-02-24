@@ -66,17 +66,17 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
   )
 
   if( !user || !await user.testPassword!(props.password) ) {
-    throw makeException({
+    throw new (makeException({
       name: 'AuthenticationError',
       message: 'AuthenticationError.invalid_credentials'
-    })
+    }))
   }
 
   if( !user.active ) {
-    throw makeException({
+    throw new (makeException({
       name: 'AuthenticationError',
       message: 'AuthenticationError.inactive_user'
-    })
+    }))
   }
 
   const { password, ...leanUser } = await UserModel

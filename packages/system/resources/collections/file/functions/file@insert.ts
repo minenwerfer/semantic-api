@@ -23,7 +23,7 @@ const insert: ApiFunction<Props> = async (props, { token, collection }) => {
     throw new Error('filename lacks extension')
   }
 
-  const oldFile = await collection.get({
+  const oldFile = await collection.get<File>({
     filters: {
       _id: props.what._id 
     }

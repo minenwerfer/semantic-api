@@ -50,11 +50,11 @@ export const getToken = async (request: Request) => {
       ? Token.decode(request.headers.authorization.split('Bearer ').pop() || '')
       : {} as object
   } catch( e: any ) {
-    throw makeException({
+    throw new (makeException({
       name: 'AuthenticationError',
       message: e.message,
       logout: true
-    })
+    }))
   }
 }
 

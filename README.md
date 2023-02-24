@@ -1,5 +1,5 @@
 # semantic-api
-> The pure REST framework
+>The pure REST framework
 
 ## Introduction
 

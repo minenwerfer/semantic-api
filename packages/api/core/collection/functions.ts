@@ -2,7 +2,7 @@ import * as R from 'ramda'
 import type { Model } from 'mongoose'
 import type { Description } from '../../../types'
 import type { ApiContextWithAC, MongoDocument } from '../../types'
-import type { GetAllProps, Projection, CollectionFunctions } from './functions.types'
+import type { Projection, CollectionFunctions } from './functions.types'
 import { fromEntries } from '../../../common/helpers'
 import { checkImmutability } from '../accessControl/layers'
 import { makeException } from '../exceptions'
@@ -59,7 +59,7 @@ export default <T extends MongoDocument>(
       .lean(LEAN_OPTIONS)
   }
 
-  const _getAll = async (props: GetAllProps<T>) => {
+  const _getAll = async (props: Parameters<CollectionFunctions['getAll']>[0]) => {
     if( typeof props.limit !== 'number' ) {
       props.limit = +(process.env.PAGINATION_LIMIT||35)
     }
@@ -67,7 +67,7 @@ export default <T extends MongoDocument>(
     const entries = Object.entries(props.filters||{})
       .map(([key, value]) => [
         key,
-        value && typeof value === 'object' && 'id' in value ? value._id : value
+        value && typeof value === 'object' && '_id' in value ? value._id : value
       ])
 
     const filters = fromEntries(entries) || {}
@@ -84,12 +84,12 @@ export default <T extends MongoDocument>(
       .lean(LEAN_OPTIONS)
   }
 
-  const functions: CollectionFunctions<T> & {
+  const functions: CollectionFunctions & {
     context: () => ApiContextWithAC
   } = {
     context: () => context,
     async insert(props) {
-      const result = await _insert(props)
+      const result = await _insert(props as any)
       if( result ) {
         return fill(result, description)
       }
@@ -103,10 +103,10 @@ export default <T extends MongoDocument>(
       const pipe = R.pipe(
         (item) => {
           if( !item ) {
-            throw makeException({
+            throw new (makeException({
               name: 'ItemNotFound',
               message: 'item wasnt found'
-            })
+            }))
           }
 
           return item
@@ -115,7 +115,7 @@ export default <T extends MongoDocument>(
       )
 
       const result = await model.findOne(
-        props.filters,
+        props.filters as any,
         normalizeProjection(props.project, description)
 
       ).lean(LEAN_OPTIONS)
@@ -128,7 +128,7 @@ export default <T extends MongoDocument>(
     },
 
     async getAll(props) {
-     const result = await _getAll(props||{})
+     const result = await _getAll(props as any||{})
      return result.map((item) => {
        if( item ) {
          return fill(item, description)

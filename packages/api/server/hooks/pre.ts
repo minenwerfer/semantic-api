@@ -24,23 +24,23 @@ export const checkAC = async (params: PreHookParams) => {
     }, context)
 
     if( !key ) {
-      throw makeException({
+      throw new (makeException({
         name: 'AuthorizationError',
         message: 'invalid API key',
         httpCode: 403
-      })
+      }))
     }
   }
 
   const granted = isGranted(params.functionPath, context)
   
   if( !granted ) {
-    throw makeException({
+    throw new (makeException({
       name: 'AuthorizationError',
       message: 'forbidden by access control',
       logout: !!context.token.user?.roles,
       httpCode: 403
-    })
+    }))
   }
 
   return params

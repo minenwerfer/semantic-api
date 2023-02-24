@@ -2,7 +2,7 @@ import type { ApiContext } from '@semantic-api/core'
 import { init } from '@semantic-api/core/server'
 
 const context: Partial<ApiContext> = {
-  apiConfig: {
+  accessControl: {
     roles: {
       guest: {
         capabilities: {

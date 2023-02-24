@@ -2,7 +2,7 @@ import * as Hapi from '@hapi/hapi'
 import { default as Inert } from '@hapi/inert'
 
 import '../../common/polyfill'
-import  type { ApiContext } from '../types'
+import type { ApiContext } from '../types'
 import { connectDatabase } from '../core/database'
 import warmup from '../core/warmup'
 import getRoutes from './routes'

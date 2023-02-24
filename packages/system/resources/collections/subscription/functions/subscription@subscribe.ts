@@ -5,7 +5,7 @@ type Props = Subscription
 
 const subscribe: ApiFunction<Props> = async (props, context) => {
   context.validate(props, ['identifier'])
-  const item = await context.resource.get({
+  const item = await context.resource.get<Subscription>({
     filters: {
       identifier: props.identifier
     },

@@ -1,7 +1,7 @@
 import type { AccessControlLayer } from './types'
 import * as R from 'ramda'
 
-const internalCheck: (...args: Parameters<AccessControlLayer>) => Promise<void> = async (context, { propertyName: _propertyName, parentId, childId }) => {
+const internalCheck: (...args: Parameters<AccessControlLayer>) => Promise<void> = async (context, { propertyName: _propertyName, parentId, childId, payload }) => {
   const { description } = context
   const propertyName = _propertyName || ''
 
@@ -15,7 +15,7 @@ const internalCheck: (...args: Parameters<AccessControlLayer>) => Promise<void> 
     || (Array.isArray(description.immutable) && description.immutable.includes(propertyName) )
   )
 
-  const currentDocument = await context.resource.get({
+  const currentDocument = await context.resource.get<any>({
     filters: {
       _id: parentId
     }
@@ -36,7 +36,14 @@ const internalCheck: (...args: Parameters<AccessControlLayer>) => Promise<void> 
   const fulfilled = currentDocument[propertyName]
     && !R.isEmpty(currentDocument[propertyName])
 
-  if( immutable && fulfilled ) {
+  if(
+    immutable
+    && fulfilled
+    && (
+      property.s$inline
+        || currentDocument[propertyName]?._id.toString() !== payload[propertyName]
+    )
+  ) {
     throw new TypeError(
       `target is immutable`
     )
@@ -45,7 +52,7 @@ const internalCheck: (...args: Parameters<AccessControlLayer>) => Promise<void> 
 
 export const checkImmutability: AccessControlLayer = async (context, props) => {
   if( !props.parentId ) {
-    return props.payload
+    return
   }
 
   if( props.payload ) {
@@ -58,5 +65,5 @@ export const checkImmutability: AccessControlLayer = async (context, props) => {
   }
 
   await internalCheck(context, props)
-  return props.payload
+  // return props.payload
 }
