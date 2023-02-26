@@ -1,5 +1,5 @@
 export * from './http'
 export * from './helpers'
-export * from './collection'
 export * from './serialize'
+export * from './getReferencedCollection'
 export * from './formatValue'
