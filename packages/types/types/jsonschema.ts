@@ -28,6 +28,7 @@ export type PropertyAux =
   { [P in keyof PrimitiveType]?: PrimitiveType[P] }
 
 export type Property = /* (RefType | EnumType | PrimitiveType) & */ PropertyAux &  {
+  properties?: Record<string, Property>
   additionalProperties?: Property
   format?: PropertyFormat
 

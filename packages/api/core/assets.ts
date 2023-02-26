@@ -14,7 +14,7 @@ import type {
 
 import { arraysIntersects } from '../../common'
 import { default as SystemCollections } from '../../system/resources/collections'
-import { default as SystemControllables } from '../../system/resources/controllables'
+import { default as SystemAlgorithms } from '../../system/resources/algorithms'
 import type { CollectionFunctions } from './collection/functions.types'
 import type { Log } from '../../system/resources/collections/log/log.description'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
@@ -42,7 +42,7 @@ const cacheIfPossible = (assetName: string, assetType: AssetType, fn: () => any)
 const isInternal = (resourceName: string, resourceType: ResourceType = 'collection'): boolean => {
   switch(  resourceType ) {
     case 'collection': return resourceName in SystemCollections
-    case 'controllable': return resourceName in SystemControllables
+    case 'algorithm': return resourceName in SystemAlgorithms
   }
 }
 
@@ -50,7 +50,7 @@ const getPrefix = (collectionName: string, internal: boolean, resourceType: Reso
   const pluralized = (() => {
     switch( resourceType ) {
       case 'collection': return 'collections'
-      case 'controllable': return 'controllables'
+      case 'algorithm': return 'algorithms'
     }
   })()
 
@@ -162,9 +162,9 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
       }
     })
 
-    newContext.controllables = new Proxy({}, {
+    newContext.algorithms = new Proxy({}, {
       get: (_, resourceName: string) => {
-        return proxyFn(resourceName, newContext, 'controllable')
+        return proxyFn(resourceName, newContext, 'algorithm')
       }
     })
 

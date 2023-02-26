@@ -10,7 +10,7 @@ export const formatValue = (
   if( Array.isArray(value) ) {
     return value.map(v => formatValue(v, key, property)).join(', ')
   }
-
+  
   const firstValue = (() => {
     if( property?.s$isReference ) {
       const firstIndex = index || property.s$indexes?.[0]

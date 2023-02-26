@@ -6,5 +6,5 @@ export default async (context: Pick<ApiContext, 'descriptions' | 'apiConfig'>) =
     require('dotenv').config()
   }
 
-  return getResourceFunction('meta@describeAll', 'controllable')({ noSerialize: true }, context as ApiContext)
+  return getResourceFunction('meta@describeAll', 'algorithm')({ noSerialize: true }, context as ApiContext)
 }

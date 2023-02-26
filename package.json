@@ -2,5 +2,8 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "typescript": "^5.0.0-dev.20230224"
   }
 }

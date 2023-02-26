@@ -16,8 +16,6 @@ declare namespace process {
   }
 }
 
-export const { APPLICATION_SECRET } = process.env
-
 /**
  * @exports @const
  * Expiration time in seconds.
@@ -26,7 +24,9 @@ export const EXPIRES_IN = 36000
 
 export class Token {
   static sign(_payload: Record<string, any>, secret?: string|null, options?: SignOptions) {
+    const { APPLICATION_SECRET } = process.env
     const payload = Object.assign({}, _payload)
+
     delete payload.iat
     delete payload.exp
 
@@ -38,6 +38,7 @@ export class Token {
   }
 
   static async verify(token: string, secret?: string) {
+    const { APPLICATION_SECRET } = process.env
     return asyncVerify(token, secret || APPLICATION_SECRET)
   }
 

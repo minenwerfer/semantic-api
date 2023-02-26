@@ -9,7 +9,7 @@ export const getSearchables = (context: ApiContext) => {
     return __searchable
   }
 
-  const descriptions = getResourceAsset('meta', 'library', 'controllable').getDescriptions(context)
+  const descriptions = getResourceAsset('meta', 'library', 'algorithm').getDescriptions(context)
 
   const searchable = Object.entries(descriptions)
     .reduce((a, [collectionName, description]: [string, any]) => {

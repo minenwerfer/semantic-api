@@ -1,9 +1,9 @@
 import { Types } from 'mongoose'
-import { CollectionProperty } from '../../../types'
+import { Description, CollectionProperty } from '../../../types'
 
-export const getTypeConstructor = (property: CollectionProperty): any => {
+export const getTypeConstructor = (property: CollectionProperty, recurse: (description: Pick<Description, 'properties'>) => any): any => {
   if( property.type === 'array' ) {
-    const type = getTypeConstructor(property.items!)
+    const type = getTypeConstructor(property.items!, recurse)
     return [type]
   }
 
@@ -21,7 +21,14 @@ export const getTypeConstructor = (property: CollectionProperty): any => {
   if( property.additionalProperties ) {
     return [
       Map,
-      getTypeConstructor(property.additionalProperties)
+      getTypeConstructor(property.additionalProperties, recurse)
+    ]
+  }
+
+  if( property.properties ) {
+    return [
+      Object,
+      recurse(property as Parameters<typeof recurse>[0])
     ]
   }
 

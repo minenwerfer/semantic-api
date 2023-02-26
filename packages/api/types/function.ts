@@ -57,7 +57,7 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   resource: AnyFunctions
   library: Library
   log: (message: string, details?: Record<string, any>) => Promise<Log>
-  controllables: Record<string, AnyFunctions>
+  algorithms: Record<string, AnyFunctions>
   collections: Record<string, AnyFunctions & {
     model: () => Model<any>
   }>

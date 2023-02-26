@@ -11,7 +11,7 @@ export type AssetType =
 
 export type ResourceType =
   'collection'
-  | 'controllable'
+  | 'algorithm'
 
 export type AssetReturnType<Type extends AssetType> = Type extends 'function'
   ? ApiFunction<any> : Type extends 'description'

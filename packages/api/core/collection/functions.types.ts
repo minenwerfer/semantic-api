@@ -10,8 +10,12 @@ type UploadAuxProps = {
 export type UploadProps = UploadAuxProps & Parameters<typeof FileInsert>[0]
 export type FileDeleteProps = UploadAuxProps & Parameters<typeof FileDelete>[0]
 
+export type Filters<T> = Record<`$${string}`, any> & {
+  [P in keyof T]?: T[P] | Record<`$${string}`, any>
+}
+
 export type Projection<T> = Array<keyof T>|Record<keyof T, number>
-type QuerySort<T> = Record<keyof T, 1|-1>
+export type QuerySort<T> = Record<keyof T, 1|-1>
 
 export type CollectionFunctions = {
   insert: <T extends MongoDocument>(payload: {
@@ -20,12 +24,12 @@ export type CollectionFunctions = {
   }) => Promise<T>
 
   get: <T extends MongoDocument>(payload: {
-    filters?: Partial<T>
+   filters?: Filters<T>
     project?: Projection<T>
   }) => Promise<T>
 
   getAll: <T extends MongoDocument>(payload: {
-    filters?: Partial<T>
+   filters?: Filters<T>
     offset?: number
     limit?: number
     sort?: QuerySort<T>
@@ -33,25 +37,25 @@ export type CollectionFunctions = {
   }) => Promise<Array<T>>
 
   delete: <T extends MongoDocument>(payload: {
-    filters: Partial<T>
+   filters: Filters<T>
   }) => Promise<T|null>
 
   deleteAll: <T extends MongoDocument>(payload: {
-    filters: Partial<T>
+   filters: Filters<T>
   }) => Promise<unknown>
 
   modify: <T extends MongoDocument>(payload: {
-    filters: Partial<T>
+   filters: Filters<T>
     what: Partial<T>
   }) => Promise<T|null>
 
   modifyAll: <T extends MongoDocument>(payload: {
-    filters: Partial<T>
+   filters: Filters<T>
     what: Partial<T>
   }) => Promise<unknown>
 
   count: <T extends MongoDocument>(payload: {
-    filters?: Partial<T>
+    filters?: Filters<T>
   }) => Promise<number>
 
   upload: (payload: UploadProps) => ReturnType<typeof FileInsert>

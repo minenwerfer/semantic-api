@@ -50,7 +50,7 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
     {
       method: ['POST', 'GET'],
       path: '/api/_/{resourceName}/{functionName}',
-      handler: defaultHandler(customVerbs('controllable'))
+      handler: defaultHandler(customVerbs('algorithm'))
     },
     {
       method: 'GET',

@@ -25,12 +25,26 @@ type SchemaStructure = Record<string, Record<string, any>>
  */
 const __loadedModels: Array<string> = []
 
-export const descriptionToSchemaObj = (description: Description) => {
+export const descriptionToSchemaObj = (description: Omit<Description, '$id'>) => {
   let hasRefs = false
 
   const convert = (a: any, [propertyName, property]: [string, CollectionProperty]) => {
     if( property.s$meta ) {
       return a
+    }
+
+    const type = getTypeConstructor(property, (description) => descriptionToSchema(description, { _id: false }))
+    const containedType = Array.isArray(type) && type.length === 1
+      ? type[0]
+      : type
+
+    if( containedType[0] === Object ) {
+      return {
+        ...a,
+        [propertyName]: Array.isArray(type) && Array.isArray(type[0])
+          ? [containedType[1]]
+          : containedType[1]
+      }
     }
 
     const {
@@ -60,7 +74,6 @@ export const descriptionToSchemaObj = (description: Description) => {
       result.select = false
     }
 
-    const type = getTypeConstructor(property)
     result.type = type[0] === Map
       ? type[0]
       : type
@@ -130,7 +143,9 @@ export const descriptionToSchemaObj = (description: Description) => {
 }
 
 export const descriptionToSchema = <T>(
-  description: Description,
+  description: Omit<Description, '$id'> & {
+    $id?: Description['$id']
+  },
   options: SchemaOptions = {},
   cb?: ((structure: SchemaStructure) => void)|null
 ) => {
@@ -145,12 +160,14 @@ export const descriptionToSchema = <T>(
   }
 
   const schema = new Schema<T>(schemaStructure, options)
-  if( hasRefs ) {
-    schema.plugin(require('mongoose-autopopulate'))
-  }
+  if( description.$id ) {
+    if( hasRefs ) {
+      schema.plugin(require('mongoose-autopopulate'))
+    }
 
-  schema.plugin(require('mongoose-lean-getters'))
-  schema.plugin(require('mongoose-lean-virtuals'))
+    schema.plugin(require('mongoose-lean-getters'))
+    schema.plugin(require('mongoose-lean-virtuals'))
+  }
 
   return schema
 }

@@ -93,7 +93,7 @@ export const validateFromDescription = <T>(
       return
     }
 
-    const expectedConstructor = getTypeConstructor(description.properties[prop])
+    const expectedConstructor = getTypeConstructor(description.properties[prop], () => null)
     const actualConstructor = (value as any).constructor
 
     if(
