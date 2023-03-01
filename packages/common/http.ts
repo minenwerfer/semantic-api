@@ -1,12 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 export * from 'axios'
 
-/**
- * @exports
- * @class
- *
- * A wrapper for sending HTTP requests.
- */
 export class RequestProvider {
   private _instance: AxiosInstance
   private _proxiedInstance: AxiosInstance
@@ -18,10 +12,6 @@ export class RequestProvider {
   private _maxRetries = 3
   private _retries = 0
 
-  /**
-   * @constructor
-   * @param {AxiosRequestConfig} config - pass this config to axios along with the default one
-   */
   constructor(readonly config?: AxiosRequestConfig) {
     this._instance = axios.create({
       ...this._defaultConfig,
@@ -97,10 +87,6 @@ export class RequestProvider {
     return this._proxiedInstance
   }
 
-  /**
-   * @static @method
-   * Throws an error if request status is 200<=x<304 but "error" property is present.
-   */
   static throwOnError({ data }: AxiosResponse) {
     if( data.error ) {
       const error = new Error(data.error.message)

@@ -59,7 +59,7 @@ export const getSearchables = (context: ApiContext) => {
 export const buildAggregations = (
   searchables: any,
   query: Array<string>,
-  beforeRead: any
+  beforeRead: ((payload: any) => void)|null
 ) => {
   const aggregations: Record<string, any> = {}
 
@@ -97,7 +97,7 @@ export const buildAggregations = (
     }
 
     if( beforeRead ) {
-      Object.assign(matches, beforeRead(matches).filters)
+      beforeRead({ filters: matches })
     }
 
     aggregations[collectionName] = [

@@ -65,5 +65,4 @@ export const checkImmutability: AccessControlLayer = async (context, props) => {
   }
 
   await internalCheck(context, props)
-  // return props.payload
 }

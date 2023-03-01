@@ -49,6 +49,7 @@ export const validateFromDescription = <T>(
       | 'missing'
       | 'unmatching'
       | 'extraneous_element'
+      | 'numeric_constraint'
     details: {
       expected: string
       got: string
@@ -95,6 +96,23 @@ export const validateFromDescription = <T>(
 
     const expectedConstructor = getTypeConstructor(description.properties[prop], () => null)
     const actualConstructor = (value as any).constructor
+
+    if( expectedConstructor === Number ) {
+      if(
+          (property.maximum && property.maximum < <number>value)
+          || (property.minimum && property.minimum > <number>value)
+          || (property.exclusiveMaximum && property.exclusiveMaximum <= <number>value)
+          || (property.exclusiveMinimum && property.exclusiveMinimum >= <number>value)
+      ) {
+        errors[prop] = {
+          type: 'numeric_constraint',
+          details: {
+            expected: 'number',
+            got: 'invalid_number'
+          }
+        }
+      }
+    }
 
     if(
       actualConstructor !== expectedConstructor

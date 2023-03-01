@@ -14,7 +14,7 @@ export const makeDescription = <
   Description=Omit<_Description, keyof A | PropertyDependent> & {
     [P in PropertyDependent]?: AvailableProperties
   }
->(schema: A, description: Description = {} as Description): A & Description => ({
+>(schema: A, description?: Description): A & Description => ({
   ...schema,
-  ...description
+  ...description||{} as Description
 })

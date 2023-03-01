@@ -81,7 +81,6 @@ export type Description = {
   strict?: boolean
   immutable?: boolean|Array<string>
   alwaysOwned?: boolean
-  report?: boolean
 
   // takes an array of something
   route?: Array<string>
@@ -89,7 +88,6 @@ export type Description = {
   required?: ReadonlyArray<string>
   table?: Array<string>
   tableMeta?: Array<string>
-  reportProperties?: Array<string>
 
   filtersPresets?: Record<string, FiltersPreset>
 
