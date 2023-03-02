@@ -24,22 +24,21 @@ type MapType<T> = T extends { format: 'date'|'date-time' }
   ? Date : T extends { type: 'string' }
   ? string : T extends { type: 'number' }
   ? number : T extends { type: 'boolean' }
-  ? boolean : T extends { type: 'object' }
+  ? boolean : T extends { properties: any }
+  ? Schema<T & { $id: '' }> : T extends { type: 'object' }
   ? object: T extends { enum: ReadonlyArray<infer K> }
   ? K : T extends { $ref: string }
   ? Reference : never
 
 type CaseReference<T> = T extends { $id: string }
   ? Reference
+  : T extends { type: 'array', items: { properties: any } }
+  ? Array<MapType<T['items']>>
   : T extends { type: 'array', items: infer K }
   ? Array<MapType<K>>
   : MapType<T>
 
-type CaseArray<T> = T extends { array: true }
-  ? Array<CaseReference<T>>
-  : CaseReference<T>
-
-type Type<T> = CaseArray<T>
+type Type<T> = CaseReference<T>
 
 type IsRequired<
   F,
