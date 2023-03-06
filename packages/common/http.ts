@@ -4,7 +4,6 @@ export const request = async <Return=any>(
   url: string,
   payload?: any,
   params: RequestParams & { headers: Record<string, string> } = {
-    mode: 'cors',
     method: payload
       ? 'POST'
       : 'GET',
@@ -33,10 +32,7 @@ export const request = async <Return=any>(
       }
     }
 
-    return result as Awaited<ReturnType<typeof fetch>> & {
-      data: Return
-    }
-
+    return result
   }
 ) => {
   params.body = payload
