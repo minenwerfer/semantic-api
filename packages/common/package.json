@@ -1,6 +1,6 @@
 {
   "name": "@semantic-api/common",
-  "version": "0.0.39-alpha",
+  "version": "0.0.40-alpha",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.24.0",
     "bson": "^5.0.0",
     "ramda": "^0.28.0"
   },

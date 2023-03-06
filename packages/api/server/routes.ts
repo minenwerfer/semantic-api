@@ -55,7 +55,13 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
     {
       method: 'GET',
       path: '/api/file/{hash}/{options*}',
-      handler: defaultHandler(fileDownload)
+      handler: defaultHandler(fileDownload),
+      options: {
+        cache: {
+          expiresIn: 10000,
+          privacy: 'private'
+        }
+      }
     },
     {
       method: 'POST',

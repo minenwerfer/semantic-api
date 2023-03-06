@@ -1,109 +1,55 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-export * from 'axios'
+export type RequestParams = Parameters<typeof fetch>[1]
 
-export class RequestProvider {
-  private _instance: AxiosInstance
-  private _proxiedInstance: AxiosInstance
-  private _defaultConfig: object = {
-    //
-  }
-
-  private _authToken: string|null = null
-  private _maxRetries = 3
-  private _retries = 0
-
-  constructor(readonly config?: AxiosRequestConfig) {
-    this._instance = axios.create({
-      ...this._defaultConfig,
-      ...config,
-    })
-
-    this._instance.interceptors.request.use((config: any) => {
-      const newConfig = { ...config }
-
-      if( this.token ) {
-        Object.assign(newConfig, {
-          headers: {
-            authorization: `Bearer ${this.token}`
-          }
-        })
-      }
-
-      return newConfig
-    })
-
-    /**
-     * Chains throwOnError static method on axios calls.
-     */
-    this._proxiedInstance = new Proxy(this._instance, {
-      get: (target: any, key: string) => {
-        const method = target[key]
-
-        if( ![
-            'request',
-            'post',
-            'get'
-        ].includes(key) )  {
-           return typeof method === 'function'
-             ? (...args: any) => method.apply(target, args)
-             : method
-        }
-
-        const func = (...args: any) => {
-          return method.apply(target, args)
-            .then((res: AxiosResponse) => {
-              try {
-                RequestProvider.throwOnError(res)
-              } catch( err ) {
-                if( this._retries < this._maxRetries && res.status !== 200 ) {
-                  this._retries++
-                  return func(...args)
-                }
-
-                throw err
-              }
-
-              return res
-            })
-        }
-
-        return func
-      }
-
-    })
-  }
-
-  get token(): string|null {
-    return 'sessionStorage' in global
-      ? sessionStorage.getItem('auth:token')
-      : this._authToken
-  }
-
-  set token(value: string|null) {
-    this._authToken = value
-  }
-
-  get instance(): AxiosInstance {
-    return this._proxiedInstance
-  }
-
-  static throwOnError({ data }: AxiosResponse) {
-    if( data.error ) {
-      const error = new Error(data.error.message)
-      Object.assign(error, data.error)
-      throw error
+export const request = async <Return=any>(
+  url: string,
+  payload?: any,
+  params: RequestParams & { headers: Record<string, string> } = {
+    mode: 'cors',
+    method: payload
+      ? 'POST'
+      : 'GET',
+    headers: {
+      ...(payload
+        ? { 'content-type': 'application/json' }
+        : {})
+    },
+  },
+  transformer = async (response: Awaited<ReturnType<typeof fetch>>) => {
+    const result = response as Awaited<ReturnType<typeof fetch>> & {
+      data: Return
     }
+
+    result.data = await response.text() as Return
+
+    if( response.headers.get('content-type')?.startsWith('application/json') ) {
+      const data = result.data = JSON.parse(result.data as string) as Return & {
+        error?: any
+      }
+
+      if( data.error ) {
+        const error = new Error(data.error.message)
+        Object.assign(error, data.error)
+        throw error
+      }
+    }
+
+    return result as Awaited<ReturnType<typeof fetch>> & {
+      data: Return
+    }
+
+  }
+) => {
+  params.body = payload
+  const token = sessionStorage.getItem('auth:token')
+
+  if( token ) {
+    params.headers['authorization'] ??= `Bearer ${token}`
   }
 
-  public request(config: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.instance.request(config)
+  if( params.headers?.['content-type']?.startsWith('application/json') ) {
+    params.body = JSON.stringify(payload)
   }
 
-  public get(uri: string): Promise<AxiosResponse> {
-    return this.instance.get(uri)
-  }
-
-  public post(uri: string, data: any, options = {}): Promise<AxiosResponse> {
-    return this.instance.post(uri, data, options)
-  }
+  const response = await fetch(url, params)
+  return transformer(response)
 }

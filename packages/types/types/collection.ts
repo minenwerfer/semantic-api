@@ -24,9 +24,28 @@ export type CollectionAction = Readonly<{
 
 export type CollectionActions = Record<string, null|CollectionAction>
 
+export type Condition = {
+  operator:
+    'equal'
+    | 'unequal'
+    | 'in'
+    | 'notin'
+  term1: string
+  term2: string
+  else?: any
+}
+
 export type FormLayout = {
   span: number
   verticalSpacing: number
+  condition: Condition
+}
+
+export type TableLayout = {
+  actions: Record<string, {
+    button: boolean
+    condition: Condition
+  }>
 }
 
 export type FiltersPreset = {
@@ -100,7 +119,7 @@ export type Description = {
 
   layout?: Layout
   formLayout?: Record<string, Partial<FormLayout>>|object
-  tableLayout?: Record<string, any>|object
+  tableLayout?: Record<string, Partial<TableLayout>>|object
 
   // actions
   actions?: CollectionActions
