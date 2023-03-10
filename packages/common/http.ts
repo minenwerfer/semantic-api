@@ -36,10 +36,11 @@ export const request = async <Return=any>(
   }
 ) => {
   params.body = payload
-  const token = sessionStorage.getItem('auth:token')
-
-  if( token ) {
-    params.headers['authorization'] ??= `Bearer ${token}`
+  if( globalThis.sessionStorage ) {
+    const token = sessionStorage.getItem('auth:token')
+    if( token ) {
+      params.headers['authorization'] ??= `Bearer ${token}`
+    }
   }
 
   if( params.headers?.['content-type']?.startsWith('application/json') ) {
