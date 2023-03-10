@@ -26,6 +26,7 @@ const schema = {
 } as const
 
 export default makeDescription<typeof schema>(schema, {
+  icon: 'search-alt',
   presets: [
     'view'
   ],

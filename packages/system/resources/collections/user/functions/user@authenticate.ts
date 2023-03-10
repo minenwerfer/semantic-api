@@ -25,7 +25,7 @@ type Return = Promise<{
 }>
 
 const authenticate: ApiFunction<Props, typeof import ('../user.library')> = async (props, context): Return => {
-  if( !props.email ) {
+  if( !props?.email ) {
     throw new Error('Empty email or password')
   }
 

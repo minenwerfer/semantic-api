@@ -50,6 +50,7 @@ export type TableLayout = {
 
 export type FiltersPreset = {
   name: string
+  icon?: string
   filters: Record<string, any>
   table?: Array<string>
   badgeFunction?: string
