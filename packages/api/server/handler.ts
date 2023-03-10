@@ -1,5 +1,3 @@
-import './bootstrap'
-
 import * as R from 'ramda'
 import sharp from 'sharp'
 import { getResourceFunction } from '../core/assets'
