@@ -1,6 +1,6 @@
+import { unlink } from 'fs/promises'
 import { createModel } from '../../../../api/core/collection'
 import { File, default as FileDescription } from './file.description'
-const { unlink } = require('fs').promises
 
 const link = (_id: File['_id']) => `${process.env.API_URL}/file/${_id}`
 
@@ -8,7 +8,7 @@ const timestamp = (last_modified: Date) => last_modified
   ? new Date(last_modified).getTime()
   : 'fresh'
 
-const deleteFile = (path: string) => {
+const deleteFile = async (path: string) => {
   return unlink(path).catch(() => null)
 }
 

@@ -4,7 +4,6 @@ export type ApiKey = Schema<typeof schema>
 
 const schema = {
   $id: 'apiKey',
-  icon: 'brackets-curly',
   owned: true,
   strict: true,
   immutable: [
@@ -38,6 +37,7 @@ const schema = {
 } as const
 
 export default makeDescription(schema, {
+  icon: 'brackets-curly',
   presets: [
     'crud'
   ],

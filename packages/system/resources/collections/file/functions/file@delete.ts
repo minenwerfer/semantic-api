@@ -1,7 +1,6 @@
+import { unlink } from 'fs/promises'
 import type { ApiFunction } from '../../../../../api/types'
 import type { File } from '../file.description'
-
-const { unlink } = require('fs').promises
 
 type Props = {
   filters: {
@@ -15,7 +14,7 @@ const _delete: ApiFunction<Props> = async (props, { collection }) => {
     throw new Error('file not found')
   }
 
-  await unlink(file.absolute_path).catch(() => null)
+  await unlink(file.absolute_path!).catch(() => null)
   return collection.delete(props)
 }
 

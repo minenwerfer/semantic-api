@@ -1,8 +1,8 @@
 import { createHash } from 'crypto'
+import { writeFile, unlink } from 'fs/promises'
 import type { ApiFunction } from '../../../../../api/types'
 import { File } from '../file.description'
 
-const { writeFile, unlink } = require('fs').promises
 const { STORAGE_PATH } = process.env
 
 type Props = {
@@ -33,7 +33,7 @@ const insert: ApiFunction<Props> = async (props, { token, collection }) => {
     // if( oldFile.immutable === true ) {
     //   throw new Error('você não pode mais editar esse arquivo')
     // }
-    await unlink(oldFile.absolute_path).catch(console.trace)
+    await unlink(oldFile.absolute_path!).catch(console.trace)
   }
 
   const filenameHash = createHash('sha1')
