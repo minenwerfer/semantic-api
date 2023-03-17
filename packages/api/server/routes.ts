@@ -4,8 +4,7 @@ import {
   safeHandleContext,
   regularVerb,
   customVerbs,
-  fileDownload,
-  fileInsert
+  fileDownload
 
 } from './handler'
 
@@ -43,6 +42,16 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
       handler: defaultHandler(regularVerb('delete'))
     },
     {
+      method: 'POST',
+      path: '/api/{resourceName}/upload',
+      handler: defaultHandler(regularVerb('upload')),
+      options: {
+        payload: {
+          maxBytes: 2*(100*(1024**2))
+        }
+      }
+    },
+    {
       method: ['POST', 'GET'],
       path: '/api/{resourceName}/{functionName}',
       handler: defaultHandler(customVerbs('collection'))
@@ -60,16 +69,6 @@ export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
         cache: {
           expiresIn: 10000,
           privacy: 'private'
-        }
-      }
-    },
-    {
-      method: 'POST',
-      path: '/api/file',
-      handler: defaultHandler(fileInsert),
-      options: {
-        payload: {
-          maxBytes: 2*(100*(1024**2))
         }
       }
     },

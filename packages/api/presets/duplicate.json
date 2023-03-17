@@ -2,7 +2,8 @@
   "individualActions": {
     "ui/duplicate": {
       "name": "action.duplicate",
-      "icon": "share-alt"
+      "icon": "share-alt",
+      "translate": true
     }
   }
 }

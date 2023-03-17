@@ -3,7 +3,8 @@
     "deleteAll": {
       "name": "action.deleteAll",
       "ask": true,
-      "selection": true
+      "selection": true,
+      "translate": true
     }
   }
 }

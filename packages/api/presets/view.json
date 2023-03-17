@@ -1,8 +1,9 @@
 {
   "individualActions": {
     "ui/spawnView": {
-      "name": "action.spawnView",
-      "icon": "search-plus"
+      "name": "action.view",
+      "icon": "search-plus",
+      "translate": true
     }
   }
 }

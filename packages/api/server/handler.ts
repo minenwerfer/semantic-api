@@ -24,6 +24,7 @@ export type RegularVerb =
   | 'modify'
   | 'delete'
   | 'deleteAll'
+  | 'upload'
 
 const prePipe = R.pipeWith(R.andThen)([
   checkAC,
@@ -236,18 +237,4 @@ export const fileDownload = async (
   return h.response(processedContent[1])
     .header('content-type', processedContent[0])
     .header('content-disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
-}
-
-export const fileInsert = async (
-  request: HandlerRequest,
-  _h: ResponseToolkit,
-  _context?: ApiContext
-) => {
-  const token = await getToken(request) as DecodedToken
-  const context = _context||fallbackContext
-  context.token = token
-
-  const result = await getResourceFunction('file@insert')(request.payload, context)
-
-  return { result }
 }

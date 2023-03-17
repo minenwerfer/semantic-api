@@ -11,7 +11,7 @@ The following is an excerpt from O'Reilly's book [RESTful Web Services](https://
 
 >A resource is anything that's important enough to be referenced as a thing in itself. If your users might "want to create a hyperlink to it, make or refute assertions about it, retrieve or cache a representation of it, include all or part of it by reference into another representation, anotate it, or perform other operations on it", then you should make it a resource. […] A resource may be a physical object like an apple, or an abstract concept like courage […]
 
-In semantic-api the "physical objects" are referred as "collections" and are always things that are stored on databases, and the "abstract concepts" are groups of endpoints that execute logic on a certain context.
+In semantic-api the "physical objects" are referred as "collections" and are always things that are stored on databases, whereas the "abstract concepts" are groups of endpoints that execute logic on a certain context called "algorithms".
 
 ## Out of the box features
 

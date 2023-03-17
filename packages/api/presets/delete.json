@@ -3,7 +3,8 @@
     "delete": {
       "name": "action.delete",
       "icon": "trash-alt",
-      "ask": true
+      "ask": true,
+      "translate": true
     }
   }
 }
