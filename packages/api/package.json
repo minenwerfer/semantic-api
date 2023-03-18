@@ -1,9 +1,20 @@
 {
   "name": "@semantic-api/api",
+  "type": "module",
   "version": "0.0.42-alpha",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./cjs/index.js"
+    },
+    "./server": {
+      "import": "./esm/server/index.js",
+      "require": "./cjs/server/index.js"
+    }
   },
   "keywords": [],
   "author": "",
@@ -19,7 +30,8 @@
   "dependencies": {
     "@hapi/hapi": "^21.1.0",
     "@hapi/inert": "^7.0.0",
-    "@semantic-api/common": "^0.0.38-alpha",
+    "@semantic-api/common": "latest",
+    "@semantic-api/system": "latest",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.8",
     "jsonwebtoken": "^8.5.1",

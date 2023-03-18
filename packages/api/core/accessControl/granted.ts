@@ -1,5 +1,5 @@
 import type { FunctionPath, ApiContext, Role } from '../../types'
-import { deepMerge } from '../../../common'
+import { deepMerge } from '@semantic-api/common'
 import baseRoles from './baseRoles'
 
 const internalIsGranted = (

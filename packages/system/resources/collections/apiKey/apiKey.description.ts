@@ -1,4 +1,4 @@
-import { Schema, makeDescription } from '../../../../api'
+import { Schema, makeDescription } from '@semantic-api/api'
 
 export type ApiKey = Schema<typeof schema>
 

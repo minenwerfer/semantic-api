@@ -1,9 +1,10 @@
 {
   "scripts": {
     "build": "tsc",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch -p tsconfig.watch.json"
   },
   "dependencies": {
+    "tsc": "latest",
     "typescript": "^5.0.0-dev.20230224"
   }
 }

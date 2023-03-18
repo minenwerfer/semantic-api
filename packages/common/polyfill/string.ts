@@ -1,26 +1,13 @@
-declare global {
-  interface String {
-    capitalize: typeof capitalize
-    formatDateTime: typeof formatDateTime
-  }
+export const capitalize = function(target: string) {
+  return target.charAt(0).toUpperCase() + target.slice(1)
 }
 
-export = {}
-
-const capitalize = function(this: string) {
-  return this.charAt(0).toUpperCase() + this.slice(1)
-}
-
-const formatDateTime = function(this: string, hours: boolean = false) {
-  const d = new Date(this)
+export const formatDateTime = function(target: string, hours: boolean = false) {
+  const d = new Date(target)
   if( isNaN(d.getDate()) ) {
     return '-'
   }
 
-  return d.formatToString(hours)
+  return 'unimplemented'
+  // return d.formatToString(hours)
 }
-
-Object.assign(String.prototype, {
-  capitalize,
-  formatDateTime,
-})

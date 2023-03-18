@@ -1,15 +1,25 @@
 {
   "name": "@semantic-api/system",
+  "type": "module",
   "version": "0.0.42-alpha",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./cjs/index.js"
+    },
+    "./resources/collections": "./cjs/resources/collections/index.js",
+    "./resources/algorithms": "./cjs/resources/algorithms/index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@semantic-api/api": "latest",
     "bcrypt": "^5.1.0"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import { makeDescription, Schema } from '@savitri/api'
+import { makeDescription, Schema } from '@semantic-api/api'
 
 export type Person = Schema<typeof schema>
 

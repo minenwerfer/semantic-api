@@ -1,4 +1,4 @@
-import { deepMerge } from '../../../common/helpers'
+import { deepMerge } from '@semantic-api/common'
 import type { ApiFunction, ApiContext } from '../../types'
 import type { Description } from '../../../types'
 import * as baseControl from './baseLayers'

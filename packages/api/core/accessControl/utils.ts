@@ -1,4 +1,4 @@
-import { deepMerge } from '../../../common'
+import { deepMerge } from '@semantic-api/common'
 import type { Role, Roles } from '../../types'
 
 export const grantEverything = (names: Array<string>) => names.reduce((a, n) => {

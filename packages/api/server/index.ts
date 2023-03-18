@@ -1,7 +1,6 @@
 import Hapi from '@hapi/hapi'
 import Inert from '@hapi/inert'
 
-import '../../common/polyfill'
 import type { ApiContext } from '../types'
 import { connectDatabase } from '../core/database'
 import warmup from '../core/warmup'

@@ -1,5 +1,5 @@
 import type { Request } from '@hapi/hapi'
-import type { User } from '../../system/resources/collections/user/user.description'
+import type { User } from '@semantic-api/system/resources/collections/user/user.description'
 import type { FunctionPath } from './function'
 
 export type HandlerRequest = Request & {

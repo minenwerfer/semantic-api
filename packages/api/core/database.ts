@@ -1,7 +1,5 @@
-import mongoose from 'mongoose'
+import * as mongoose from 'mongoose'
 export * from 'mongoose'
-
-mongoose.Promise = global.Promise
 export { mongoose }
 
 export const options = {
@@ -10,7 +8,6 @@ export const options = {
     updatedAt: 'updated_at'
   }
 }
-
 
 export const connectDatabase = async () => {
   const mongodbUri = await (async () => {

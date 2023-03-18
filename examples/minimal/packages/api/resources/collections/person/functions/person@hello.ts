@@ -1,4 +1,4 @@
-import type { ApiFunction } from '@savitri/api'
+import type { ApiFunction } from '@semantic-api/api'
 import type { Person } from '../person.description'
 
 type Props = Pick<Person,

@@ -12,11 +12,11 @@ import type {
 
 } from '../types'
 
-import { arraysIntersects } from '../../common'
-import { default as SystemCollections } from '../../system/resources/collections'
-import { default as SystemAlgorithms } from '../../system/resources/algorithms'
+import { arraysIntersects } from '@semantic-api/common'
+import SystemCollections from '@semantic-api/system/resources/collections'
+import SystemAlgorithms from '@semantic-api/system/resources/algorithms'
+import type { Log } from '@semantic-api/system/resources/collections/log/log.description'
 import type { CollectionFunctions } from './collection/functions.types'
-import type { Log } from '../../system/resources/collections/log/log.description'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { limitRate } from './rateLimiting'
 import { render } from './render'
@@ -55,7 +55,7 @@ const getPrefix = (collectionName: string, internal: boolean, resourceType: Reso
   })()
 
   return internal
-    ? `${__dirname}/../../system/resources/${pluralized}/${collectionName}`
+    ? `@semantic-api/system/resources/${pluralized}/${collectionName}`
     : `${process.cwd()}/resources/${pluralized}/${collectionName}`
 }
 

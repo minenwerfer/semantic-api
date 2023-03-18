@@ -7,7 +7,7 @@ import {
 
 } from 'mongoose'
 
-import { getReferencedCollection } from '../../../common'
+import { getReferencedCollection } from '@semantic-api/common'
 import type { Description, CollectionProperty } from '../../../types'
 
 import { options as defaultOptions } from '../database'

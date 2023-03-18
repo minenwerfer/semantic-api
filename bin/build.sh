@@ -10,19 +10,30 @@ PACKAGES=(
   types
 )
 
-function do_pack() {
+function build() {
+  tsc
+  tsc -p tsconfig.esm.json
+
   for package in ${PACKAGES[*]}; do
+    mkdir -p "dist/${package}"
+
+    for mode in esm cjs; do
+      cp -r "dist/${mode}/${package}" "dist/${package}/${mode}"
+      test -e "dist/${package}/${mode}/node_modules" \
+        || ln -s $(realpath "packages/${package}/node_modules") "dist/${package}/${mode}"
+    done
+
     cp "packages/${package}/package.json" "dist/${package}/package.json"
+    echo '{"compilerOptions": {"type": "module"}}' | jq > "dist/${package}/esm/package.json"
+    echo '{"compilerOptions": {"type": "commonjs"}}' | jq > "dist/${package}/cjs/package.json"
   done
 }
 
-tsc || true && \
-  cp -r packages/api/presets dist/api && \
-  cp packages/api/RELEASE.yml dist/api/ 2>/dev/null && \
-  [ ! -z $BUILD_COMPONENTS ] && (cd web && npm run build)
+function cleanup() {
+  rm -rf dist
+}
 
-case "$COMMAND" in
-  pack)
-    do_pack
-  ;;
-esac
+set -x
+cleanup
+build
+set +x

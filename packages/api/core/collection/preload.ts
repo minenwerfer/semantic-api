@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import { getReferencedCollection, serialize } from '../../../common'
+import { getReferencedCollection, serialize } from '@semantic-api/common'
 import { getResourceAsset } from '../assets'
 import type { Description } from '../../../types'
 

@@ -1,5 +1,5 @@
-import type { ApiContext } from '@semantic-api/core'
-import { init } from '@semantic-api/core/server'
+import type { ApiContext } from '@semantic-api/api'
+import { init } from '@semantic-api/api/server'
 
 const context: Partial<ApiContext> = {
   accessControl: {

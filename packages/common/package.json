@@ -1,15 +1,21 @@
 {
   "name": "@semantic-api/common",
+  "type": "module",
   "version": "0.0.43-alpha",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "exports": {
+    "import": "./esm/index.js",
+    "require": "./cjs/index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@semantic-api/system": "latest",
     "bson": "^5.0.0",
     "ramda": "^0.28.0"
   },
