@@ -28,10 +28,7 @@ export const connectDatabase = async () => {
     return envUri
   })()
 
-  console.log('oi, eu sou goku, kk')
-  console.log(mongodbUri)
-  const res = await mongoose.connect(mongodbUri)
-  global.mongoose = res
-
-  return res
+  const connection = await mongoose.connect(mongodbUri)
+  global.mongoose = connection
+  return connection
 }
