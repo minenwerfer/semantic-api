@@ -84,7 +84,7 @@ export default <T extends MongoDocument>(
       .lean(LEAN_OPTIONS)
   }
 
-  const functions: CollectionFunctions & {
+  const functions: Omit<CollectionFunctions, 'model'> & {
     context: () => ApiContextWithAC
   } = {
     context: () => context,
@@ -202,7 +202,7 @@ export default <T extends MongoDocument>(
         ? { $addToSet: { [propertyName]: file._id } }
         : { $set: { [propertyName]: file._id } }
 
-      await context.model.updateOne(
+      await (await context.model()).updateOne(
         { _id: parentId },
         payload
       )

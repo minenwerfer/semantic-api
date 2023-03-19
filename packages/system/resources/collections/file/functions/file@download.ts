@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises'
-import type { ApiFunction } from '../../../../../api/types'
+import type { ApiFunction } from '@semantic-api/api'
 import type { File } from '../file.description'
 
 const download: ApiFunction<string> = async (_id, { collection }): Promise<Omit<File, 'content'> & { content: Buffer }> => {

@@ -11,8 +11,10 @@
     "resolveJsonModule": true,
     "paths": {
       "@semantic-api/api": ["./packages/api"],
+      "@semantic-api/api/*": ["./packages/api/*"],
       "@semantic-api/common": ["./packages/common"],
-      "@semantic-api/system/*": ["./packages/system/*"]
+      "@semantic-api/system/*": ["./packages/system/*"],
+      "@semantic-api/types": ["./packages/types"]
     }
   },
   "exclude": [

@@ -1,5 +1,5 @@
 import { unlink } from 'fs/promises'
-import { createModel } from '../../../../api/core/collection'
+import { createModel } from '@semantic-api/api'
 import { File, default as FileDescription } from './file.description'
 
 const link = (_id: File['_id']) => `${process.env.API_URL}/file/${_id}`

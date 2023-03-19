@@ -20,7 +20,7 @@ function build() {
     for mode in esm cjs; do
       cp -r "dist/${mode}/${package}" "dist/${package}/${mode}"
       test -e "dist/${package}/${mode}/node_modules" \
-        || ln -s $(realpath "packages/${package}/node_modules") "dist/${package}/${mode}"
+        || ln -s $(realpath "packages/${package}/node_modules") "dist/${package}/${mode}/node_modules"
     done
 
     cp "packages/${package}/package.json" "dist/${package}/package.json"
@@ -29,11 +29,19 @@ function build() {
   done
 }
 
+function move_assets() {
+  for mode in esm cjs; do
+    cp -r packages/api/presets "dist/api/${mode}/presets"
+  done
+}
+
 function cleanup() {
   rm -rf dist
 }
 
-set -x
-cleanup
-build
-set +x
+{
+  set -x
+  cleanup
+  build
+  move_assets
+}

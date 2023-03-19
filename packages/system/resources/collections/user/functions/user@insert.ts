@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt'
-import type { ApiFunction } from '../../../../../api/types'
+import type { ApiFunction } from '@semantic-api/api'
 import { User } from '../user.description'
 
 type Props = {

@@ -1,5 +1,5 @@
 import { unlink } from 'fs/promises'
-import type { ApiFunction } from '../../../../../api/types'
+import type { ApiFunction } from '@semantic-api/api'
 import type { File } from '../file.description'
 
 type Props = {

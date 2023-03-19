@@ -1,6 +1,6 @@
 import type { ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest, DecodedToken, FunctionPath, ApiContext } from '../../types'
-import { PAGINATION_PER_PAGE_LIMIT } from '../../../types/constants'
+import { PAGINATION_PER_PAGE_LIMIT } from '@semantic-api/types'
 import { makeException } from '../../core/exceptions'
 import { getResourceFunction } from '../../core/assets'
 import { isGranted } from '../../core/accessControl/granted'

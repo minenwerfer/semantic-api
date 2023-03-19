@@ -1,6 +1,7 @@
 import type { default as FileInsert } from '@semantic-api/system/resources/collections/file/functions/file@insert'
 import type { default as FileDelete } from '@semantic-api/system/resources/collections/file/functions/file@delete'
 import type { MongoDocument } from '../../types'
+import type { Model } from 'mongoose'
 
 type UploadAuxProps = {
   parentId: string
@@ -18,6 +19,7 @@ export type Projection<T> = Array<keyof T>|Record<keyof T, number>
 export type QuerySort<T> = Record<keyof T, 1|-1>
 
 export type CollectionFunctions = {
+  model: <T>() => Model<T>
   insert: <T extends MongoDocument>(payload: {
     what: Partial<T>
     project?: Projection<T>

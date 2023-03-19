@@ -1,6 +1,6 @@
 import type { Description } from '../../../../types'
-import type { ApiContext } from '../../../../api/types'
-import { getResourceAsset } from '../../../../api'
+import type { ApiContext } from '@semantic-api/api'
+import { getResourceAsset } from '@semantic-api/api'
 
 const __searchable: Record<string, Description> = {}
 

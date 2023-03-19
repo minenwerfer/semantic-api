@@ -3,8 +3,7 @@ import {
   models as mongooseModels,
   Model,
   Schema,
-  SchemaOptions,
-
+  SchemaOptions
 } from 'mongoose'
 
 import { getReferencedCollection } from '@semantic-api/common'
@@ -177,7 +176,7 @@ export const createModel = <T=any>(
   config?: {
     options?: SchemaOptions|null,
     modelCallback?: ((structure: SchemaStructure) => void)|null,
-    schemaCallback?: (schema: Schema) => void
+    schemaCallback?: (schema: Schema<T>) => void
   }
 ) => {
   const description = preloadDescription(_description)
@@ -264,5 +263,5 @@ export const createModel = <T=any>(
     schemaCallback(schema)
   }
 
-  return mongooseModel<T>(modelName, schema)
+  return global.mongoose.model<T>(modelName, schema)
 }

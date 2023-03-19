@@ -1,4 +1,4 @@
-import { makeDescription, Schema, Reference } from '../../../../api/core/collection'
+import { makeDescription, Schema, Reference } from '@semantic-api/api'
 
 export type User = Omit<Schema<typeof schema>, 'roles'> & {
   roles: Array<string>

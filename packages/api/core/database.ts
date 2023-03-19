@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose'
+import mongoose from 'mongoose'
 export * from 'mongoose'
 export { mongoose }
 
@@ -8,6 +8,9 @@ export const options = {
     updatedAt: 'updated_at'
   }
 }
+
+mongoose.set('strictQuery', true)
+mongoose.set('bufferCommands', false)
 
 export const connectDatabase = async () => {
   const mongodbUri = await (async () => {
@@ -25,5 +28,10 @@ export const connectDatabase = async () => {
     return envUri
   })()
 
-  mongoose.connect(mongodbUri)
+  console.log('oi, eu sou goku, kk')
+  console.log(mongodbUri)
+  const res = await mongoose.connect(mongodbUri)
+  global.mongoose = res
+
+  return res
 }

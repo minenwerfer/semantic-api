@@ -1,9 +1,8 @@
 import { readdirSync } from 'fs'
 import type { Description } from '../../../../types'
-import type { ApiContext } from '../../../../api/types'
-import { preloadDescription } from '../../../../api/core/collection'
-import { getResourceAsset } from '../../../../api/core/assets'
-import { default as SystemCollections } from '../../collections'
+import type { ApiContext } from '@semantic-api/api'
+import { preloadDescription, getResourceAsset } from '@semantic-api/api'
+import SystemCollections from '../../collections'
 
 const __cachedDescriptions: Record<string, Description> = {}
 export const cachedDescriptions = __cachedDescriptions

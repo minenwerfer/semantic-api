@@ -1,6 +1,5 @@
-import { Token } from '../../../../../api/core/token'
-import { makeException } from '../../../../../api'
-import type { ApiFunction } from '../../../../../api/types'
+import { Token, makeException } from '@semantic-api/api'
+import type { ApiFunction } from '@semantic-api/api'
 import type { User } from '../user.description'
 import UserModel from '../user.model'
 
@@ -106,7 +105,7 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
   }
 
   if( context.apiConfig.populateUserExtra ) {
-    const UserExtra = context.library.userExtraModel()
+    const UserExtra = await context.library.userExtraModel()
     const projection = context.apiConfig.populateUserExtra
       .reduce((a, f) => ({ ...a, [f]: 1 }), {})
 

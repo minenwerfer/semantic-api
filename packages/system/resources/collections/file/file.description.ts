@@ -1,4 +1,4 @@
-import { makeDescription, Schema } from '../../../../api/core/collection'
+import { makeDescription, Schema } from '@semantic-api/api'
 
 export type File = Schema<typeof schema>
 

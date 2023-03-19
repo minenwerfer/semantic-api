@@ -1,6 +1,6 @@
 export * from './core/assets'
 export * from './core/collection'
 export * from './core/exceptions'
-export * from './core/accessControl/utils'
+export * from './core/accessControl'
 export * from './core/token'
 export * from './types'

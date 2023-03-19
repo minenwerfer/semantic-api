@@ -1,6 +1,6 @@
 import type { ApiContext } from '../types/function'
-import { getResourceAsset } from './assets'
 import { makeException } from './exceptions'
+import { mongoose } from './database'
 
 export type RateLimitingParams = {
   limit?: number
@@ -15,8 +15,8 @@ const rateLimitingError = (message: string) => makeException({
 })
 
 export const limitRate = async (context: ApiContext, params: RateLimitingParams) => {
-  const UserModel = getResourceAsset('user', 'model')
-  const ResourceUsage = getResourceAsset('resourceUsage', 'model')
+  const UserModel = mongoose.models.user
+  const ResourceUsageModel = mongoose.models.resourceUsage
 
   const user = await UserModel.findOne(
     { _id: context.token?.user._id },
@@ -40,7 +40,7 @@ export const limitRate = async (context: ApiContext, params: RateLimitingParams)
 
   const usage = user.resources_usage?.get(context.functionPath)
   if( !usage ) {
-    const entry = await ResourceUsage.create({ hits: increment })
+    const entry = await ResourceUsageModel.create({ hits: increment })
     return UserModel.updateOne(
       { _id: user._id },
       { $set: { [`resources_usage.${context.functionPath}`]: entry._id } }
@@ -57,7 +57,7 @@ export const limitRate = async (context: ApiContext, params: RateLimitingParams)
     }
   }
 
-  return ResourceUsage.updateOne(
+  return ResourceUsageModel.updateOne(
     { _id: usage._id },
     payload
   )

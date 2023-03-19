@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt'
-import { createModel } from '../../../../api/core/collection'
+import { createModel } from '@semantic-api/api'
 import UserDescription from './user.description'
 
 export default createModel(UserDescription, {

@@ -12,8 +12,10 @@
       "import": "./esm/index.js",
       "require": "./cjs/index.js"
     },
-    "./resources/collections": "./cjs/resources/collections/index.js",
-    "./resources/algorithms": "./cjs/resources/algorithms/index.js"
+    "./resources/*": {
+      "import": "./esm/resources/*",
+      "require": "./cjs/resources/*"
+    }
   },
   "keywords": [],
   "author": "",

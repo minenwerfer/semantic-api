@@ -1,7 +1,6 @@
-import type { ApiFunction } from '../../../../../api/types'
-import { mongoose } from '../../../../../api/core/database'
-import { makeException } from '../../../../../api/core/exceptions'
-import { isGranted } from '../../../../../api/core/accessControl/granted'
+import type { ApiFunction } from '@semantic-api/api'
+import { makeException, isGranted } from '@semantic-api/api'
+import { mongoose } from '@semantic-api/api/database'
 
 type Props = {
   query: Array<string>

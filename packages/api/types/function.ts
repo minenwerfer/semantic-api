@@ -52,14 +52,14 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   hasRoles: (roles: Array<string>|string) => boolean
   hasCategories: (categories: Array<string>|string) => boolean
   collection: CollectionFunctions
-  model: Model<any>
+  model: <T>() => Promise<Model<T>>
 
   resource: AnyFunctions
   library: Library
   log: (message: string, details?: Record<string, any>) => Promise<Log>
   algorithms: Record<string, AnyFunctions>
   collections: Record<string, AnyFunctions & {
-    model: () => Model<any>
+    model: <T>() => Promise<Model<T>>
   }>
 
   descriptions: Record<string, Description>

@@ -1,6 +1,6 @@
 import { createHash } from 'crypto'
 import { writeFile, unlink } from 'fs/promises'
-import type { ApiFunction } from '../../../../../api/types'
+import type { ApiFunction } from '@semantic-api/api'
 import { File } from '../file.description'
 
 const { STORAGE_PATH } = process.env

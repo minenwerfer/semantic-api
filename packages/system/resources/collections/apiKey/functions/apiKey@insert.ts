@@ -1,6 +1,6 @@
-import type { ApiFunction } from '../../../../../api'
+import type { ApiFunction } from '@semantic-api/api'
 import type { ApiKey } from '../apiKey.description'
-import { Token } from '../../../../../api'
+import { Token } from '@semantic-api/api'
 
 type Props = {
   what: Partial<ApiKey>
@@ -36,7 +36,7 @@ const insert: ApiFunction<Props> = async (props, context) => {
     key_name: props.what.name
   }, null, {})
 
-  return context.model.findOneAndUpdate(
+  return (await context.model()).findOneAndUpdate(
     { _id: key_id },
     { $set: { content } },
     {

@@ -1,6 +1,6 @@
-import { Types } from '../../../../api/core/database'
-import { getResourceAsset } from '../../../../api'
-import type { ApiFunction } from '../../../../api/types'
+import { Types } from '@semantic-api/api/database'
+import { getResourceAsset } from '@semantic-api/api'
+import type { ApiFunction } from '@semantic-api/api'
 import type { User } from './user.description'
 
 type SaveWithExtraProps = {
@@ -9,7 +9,7 @@ type SaveWithExtraProps = {
   }
 }
 
-export const userExtraModel = () => {
+export const userExtraModel = async () => {
   return getResourceAsset('userExtra', 'model')
 }
 
@@ -17,7 +17,7 @@ export const saveWithExtra: ApiFunction<SaveWithExtraProps> = async (props, cont
   const { collection } = context
   const { extra } = props.what
 
-  const UserExtra = userExtraModel()
+  const UserExtra = await userExtraModel()
   const userExtra = new UserExtra({
     ...extra,
     owner: new Types.ObjectId()

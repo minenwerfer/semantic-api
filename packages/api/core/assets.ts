@@ -13,14 +13,12 @@ import type {
 } from '../types'
 
 import { arraysIntersects } from '@semantic-api/common'
-import SystemCollections from '@semantic-api/system/resources/collections'
-import SystemAlgorithms from '@semantic-api/system/resources/algorithms'
-import type { Log } from '@semantic-api/system/resources/collections/log/log.description'
+import SystemCollections from '@semantic-api/system/resources/collections/index.js'
+import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
 import type { CollectionFunctions } from './collection/functions.types'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { limitRate } from './rateLimiting'
 import { render } from './render'
-import { useCollection, createModel } from './collection'
 
 const __cached: Record<AssetType, Record<string, any>> = {
   model: {},
@@ -63,7 +61,7 @@ const loadDescription = (collectionName: string, internal: boolean) => {
   const prefix = getPrefix(collectionName, internal)
   const isValid = !collectionName.startsWith('_'),
     isJson = isValid && existsSync(`${prefix}/${collectionName}.description.json`),
-    path = require.resolve(`${prefix}/${collectionName}.description${isJson ? '.json' : ''}`)
+    path = require.resolve(`${prefix}/${collectionName}.description${isJson ? '.json' : '.js'}`)
 
   if( !isValid ) {
     return null
@@ -76,10 +74,10 @@ const loadDescription = (collectionName: string, internal: boolean) => {
 
 const loadModel = (collectionName: string, internal: boolean): Model<any>|null => {
   const prefix = getPrefix(collectionName, internal)
-  return require(`${prefix}/${collectionName}.model`).default
+  return require(`${prefix}/${collectionName}.model.js`).default
 }
 
-const loadModelWithFallback = (collectionName: string, internal: boolean) => {
+const loadModelWithFallback = async (collectionName: string, internal: boolean) => {
   try {
     return loadModel(collectionName, internal)
 
@@ -89,6 +87,7 @@ const loadModelWithFallback = (collectionName: string, internal: boolean) => {
     }
 
     const description = getResourceAsset(collectionName, 'description')
+    const { createModel } = require(`@semantic-api/api/collection/schema.js`)
     return createModel(description)
   }
 }
@@ -107,6 +106,7 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
   }
 
   const wrapper: ApiFunction = (props, context) => {
+    const { useCollection } = require(`@semantic-api/api/collection/use.js`)
     context.functionPath = functionPath
 
     const newContext: ApiContext = {
@@ -127,7 +127,7 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
         return arraysIntersects(categories, description.categories)
       },
       log: (message, details) => {
-        return useCollection<Log>('log', context).insert<Log>({
+        return useCollection('log', context).insert({
           what: {
             message,
             details,
@@ -144,7 +144,7 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
 
     if( resourceType === 'collection' ) {
       const description = getResourceAsset(resourceName, 'description')
-      newContext.model = getResourceAsset(resourceName, 'model')
+      newContext.model = async () => getResourceAsset(resourceName, 'model')
       newContext.description = description
       newContext.validate = (...args: Parameters<ValidateFunction<any>>) => {
         const targetDescription = args.length === 3
@@ -179,7 +179,7 @@ const loadFunction = (functionPath: FunctionPath, resourceType: ResourceType = '
   const [resourceName] = functionPath.split('@')
   const prefix = getPrefix(resourceName, internal, resourceType)
 
-  const originalFn: ApiFunction = require(`${prefix}/functions/${functionPath}`).default
+  const originalFn: ApiFunction = require(`${prefix}/functions/${functionPath}.js`).default
   return wrapFunction(originalFn, functionPath, resourceType)
 }
 
@@ -192,6 +192,8 @@ const loadFunctionWithFallback = (functionPath: FunctionPath, resourceType: Reso
     }
 
     const [resourceName, functionName] = functionPath.split('@')
+    const { useCollection } = require(`@semantic-api/api/collection/use.js`)
+
     const fn: ApiFunction<any> = (props, context) => {
       const method = useCollection(resourceName, context)[functionName as keyof CollectionFunctions]
       if( !method || typeof method !== 'function' ) {
@@ -210,7 +212,7 @@ const loadFunctionWithFallback = (functionPath: FunctionPath, resourceType: Reso
 const loadLibrary = (resourceName: string, resourceType: ResourceType = 'collection', internal: boolean = false) => {
   try {
     const prefix = getPrefix(resourceName, internal, resourceType)
-    return require(`${prefix}/${resourceName}.library`)
+    return require(`${prefix}/${resourceName}.library.js`)
   } catch( e: any ) {
     if( e.code !== 'MODULE_NOT_FOUND' ) {
       throw e

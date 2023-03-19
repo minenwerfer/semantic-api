@@ -1,5 +1,5 @@
-import type { ApiFunction } from '../../../../../api/types'
-import { serialize } from '../../../../../common'
+import type { ApiFunction } from '@semantic-api/api'
+import { serialize } from '@semantic-api/common'
 
 type Props = {
   noSerialize?: boolean
