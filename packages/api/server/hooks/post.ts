@@ -29,7 +29,7 @@ export const appendPagination = async (params: PostHookParams) => {
   }
 
   if( Array.isArray(result) && resourceType === 'collection' ) {
-    const countFunction = useCollection(resourceName, context).count
+    const countFunction = (await useCollection(resourceName, context)).count
     const recordsTotal = typeof countFunction === 'function'
       ? await countFunction({ filters: request.payload?.filters || {} })
       : result.length

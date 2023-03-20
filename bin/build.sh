@@ -1,20 +1,10 @@
 #!/bin/bash
 
-COMMAND=$(expr "$1" \| "")
-BUILD_COMPONENTS=
-
-PACKAGES=(
-  api
-  common
-  system
-  types
-)
-
 function build() {
   tsc
   tsc -p tsconfig.esm.json
 
-  for package in ${PACKAGES[*]}; do
+  for package in $(ls -1 packages); do
     mkdir -p "dist/${package}"
 
     for mode in esm cjs; do
@@ -24,8 +14,8 @@ function build() {
     done
 
     cp "packages/${package}/package.json" "dist/${package}/package.json"
-    echo '{"compilerOptions": {"type": "module"}}' | jq > "dist/${package}/esm/package.json"
-    echo '{"compilerOptions": {"type": "commonjs"}}' | jq > "dist/${package}/cjs/package.json"
+    echo '{"type": "module"}' | jq > "dist/${package}/esm/package.json"
+    echo '{"type": "commonjs"}' | jq > "dist/${package}/cjs/package.json"
   done
 }
 

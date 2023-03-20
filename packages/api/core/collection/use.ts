@@ -3,7 +3,7 @@ import { getResourceAsset } from '../assets'
 import { useAccessControl } from '../accessControl/use'
 import useFunctions from './functions'
 
-export const useCollection = <T extends MongoDocument>(collectionName: string, _context: ApiContext<any>|null = null) => {
+export const useCollection = async <T extends MongoDocument>(collectionName: string, _context: ApiContext<any>|null = null) => {
   const context = _context || {} as ApiContext
 
   const description = context.description = context.description?.$id === collectionName
@@ -28,7 +28,7 @@ export const useCollection = <T extends MongoDocument>(collectionName: string, _
   }
 
   const functions = useFunctions<T>(
-    model,
+    await (model as typeof model | Promise<typeof model>),
     description,
     contextWithAC
   )

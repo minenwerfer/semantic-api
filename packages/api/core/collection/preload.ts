@@ -8,7 +8,7 @@ export type PreloadOptions = {
 }
 
 export const applyPreset = (entry: Description | Description['properties'], presetName:string, parentName?:string) => {
-  const preset = require(`${__dirname}/../../presets/${presetName}`)
+  const preset = require(`@semantic-api/api/presets/${presetName}.json`)
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
   return R.mergeDeepWith(

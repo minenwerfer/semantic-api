@@ -67,9 +67,8 @@ const loadDescription = (collectionName: string, internal: boolean) => {
     return null
   }
   
-  return isJson
-    ? require(path)
-    : require(path).default
+  const content = require(path)
+  return content.default || content
 }
 
 const loadModel = (collectionName: string, internal: boolean): Model<any>|null => {
@@ -105,7 +104,7 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
     }) as AnyFunctions
   }
 
-  const wrapper: ApiFunction = (props, context) => {
+  const wrapper: ApiFunction = async (props, context) => {
     const { useCollection } = require(`@semantic-api/api/collection/use.js`)
     context.functionPath = functionPath
 
@@ -126,8 +125,8 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
 
         return arraysIntersects(categories, description.categories)
       },
-      log: (message, details) => {
-        return useCollection('log', context).insert({
+      log: async (message, details) => {
+        return (await useCollection('log', context)).insert({
           what: {
             message,
             details,
@@ -153,7 +152,7 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
 
         return validateFromDescription(targetDescription, ...args)
       }
-      newContext.collection = useCollection(resourceName, newContext)
+      newContext.collection = await useCollection(resourceName, newContext)
     }
 
     newContext.collections = new Proxy({}, {
@@ -194,8 +193,8 @@ const loadFunctionWithFallback = (functionPath: FunctionPath, resourceType: Reso
     const [resourceName, functionName] = functionPath.split('@')
     const { useCollection } = require(`@semantic-api/api/collection/use.js`)
 
-    const fn: ApiFunction<any> = (props, context) => {
-      const method = useCollection(resourceName, context)[functionName as keyof CollectionFunctions]
+    const fn: ApiFunction<any> = async (props, context) => {
+      const method = (await useCollection(resourceName, context))[functionName as keyof CollectionFunctions]
       if( !method || typeof method !== 'function' ) {
         throw new TypeError(
           `no such function ${functionPath}`
