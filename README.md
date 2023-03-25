@@ -15,11 +15,11 @@ In semantic-api the "physical objects" are referred as "collections" and are alw
 
 ## Out of the box features
 
-- User management, logging, file management
+- User management, logging, file uploading
 - Comprehensive access control
 - Rate limiting for throttling and paid usage
 - Runtime payload validation
-- User messaging system
+- Plugin system
 
 ## Getting started
 

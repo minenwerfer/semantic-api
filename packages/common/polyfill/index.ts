@@ -1,2 +1,2 @@
-import './date'
-import './string'
+export * from './date'
+export * from './string'

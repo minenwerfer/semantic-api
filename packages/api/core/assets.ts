@@ -37,6 +37,11 @@ const cacheIfPossible = (assetName: string, assetType: AssetType, fn: () => any)
   return asset
 }
 
+const requireWrapper = (path: string) => {
+  const content = require(path)
+  return content.default || content
+}
+
 const isInternal = (resourceName: string, resourceType: ResourceType = 'collection'): boolean => {
   switch(  resourceType ) {
     case 'collection': return resourceName in SystemCollections
@@ -67,13 +72,12 @@ const loadDescription = (collectionName: string, internal: boolean) => {
     return null
   }
   
-  const content = require(path)
-  return content.default || content
+  return requireWrapper(path)
 }
 
 const loadModel = (collectionName: string, internal: boolean): Model<any>|null => {
   const prefix = getPrefix(collectionName, internal)
-  return require(`${prefix}/${collectionName}.model.js`).default
+  return requireWrapper(`${prefix}/${collectionName}.model.js`)
 }
 
 const loadModelWithFallback = async (collectionName: string, internal: boolean) => {
@@ -178,7 +182,7 @@ const loadFunction = (functionPath: FunctionPath, resourceType: ResourceType = '
   const [resourceName] = functionPath.split('@')
   const prefix = getPrefix(resourceName, internal, resourceType)
 
-  const originalFn: ApiFunction = require(`${prefix}/functions/${functionPath}.js`).default
+  const originalFn = requireWrapper(`${prefix}/functions/${functionPath}.js`)
   return wrapFunction(originalFn, functionPath, resourceType)
 }
 

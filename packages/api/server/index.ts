@@ -37,11 +37,6 @@ export const init = async (_context?: Partial<ApiContext>|null): Promise<Hapi.Se
   await warmup(context)
     .then(() => console.timeEnd('warmup'))
 
-  if( process.argv.includes('--bell') ) {
-    const { exec } = require('child_process')
-    exec('aplay ~/bell.wav')
-  }
-
   if( apiConfig.modules ) {
     global.modules = apiConfig.modules
   }
