@@ -1,3 +1,5 @@
+import { formatToString } from './date'
+
 export const capitalize = function(target: string) {
   return target.charAt(0).toUpperCase() + target.slice(1)
 }
@@ -8,6 +10,5 @@ export const formatDateTime = function(target: string, hours: boolean = false) {
     return '-'
   }
 
-  return 'unimplemented'
-  // return d.formatToString(hours)
+  return formatToString(d, hours)
 }

@@ -92,7 +92,6 @@ type MapTypes<
   ? StrictMode<F>
   : PermissiveMode<F, ExplicitlyRequired>
 
-
 type Aux<T> = {
   -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer K>
     ? T[P] & ReadonlyArray<K>
@@ -100,6 +99,7 @@ type Aux<T> = {
     ? CollectionProperty[P]
     : never
 }
+
 type Writable<T> = {
   -readonly [P in keyof T]: Aux<T[P]>
 }

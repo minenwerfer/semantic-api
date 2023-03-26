@@ -7,7 +7,7 @@ import SystemCollections from '../../collections'
 const __cachedDescriptions: Record<string, Description> = {}
 export const cachedDescriptions = __cachedDescriptions
 
-const discoverDescriptions = (dynamic?: boolean, system?: boolean) => {
+const discoverDescriptions = ({ dynamic, system }: { dynamic?: boolean, system?: boolean }) => {
   const path = system
     ? `${__dirname}/../../collections`
     : `${process.cwd()}/resources/collections`
@@ -60,8 +60,8 @@ export const getDescriptions = ({
 
   const target: Record<string, Description> = {
     ...presetDescriptions||{},
-    ...discoverDescriptions(dynamicCollections),
-    ...discoverDescriptions(false, true)
+    ...discoverDescriptions({ dynamic: dynamicCollections }),
+    ...discoverDescriptions({ system: true })
   }
 
   const descriptions = Object.entries(target).reduce((a, [, collectionSchema]) => {

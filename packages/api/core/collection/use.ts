@@ -10,15 +10,14 @@ export const useCollection = async <T extends MongoDocument>(collectionName: str
     ? context.description
     : getResourceAsset(collectionName, 'description')
 
-  const originalCollectionName = description.alias || collectionName
-
-  const model = getResourceAsset(originalCollectionName, 'model')
-
   if( !description ) {
     throw new Error(
       `description of ${collectionName} not found`
     )
   }
+
+  const originalCollectionName = description.alias || collectionName
+  const model = getResourceAsset(originalCollectionName, 'model')
 
   const acFunctions = useAccessControl(description, context)
   const contextWithAC: ApiContextWithAC<any> = {
