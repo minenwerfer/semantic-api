@@ -3,7 +3,6 @@ import type { Model } from 'mongoose'
 import type { Description } from '../../../types'
 import type { ApiContextWithAC, MongoDocument } from '../../types'
 import type { Projection, CollectionFunctions } from './functions.types'
-import { fromEntries } from '@semantic-api/common'
 import { checkImmutability } from '../accessControl/layers'
 import { makeException } from '../exceptions'
 import { normalizeProjection, fill, prepareInsert } from './utils'
@@ -70,7 +69,7 @@ export default <T extends MongoDocument>(
         value && typeof value === 'object' && '_id' in value ? value._id : value
       ])
 
-    const filters = fromEntries(entries) || {}
+    const filters = Object.fromEntries(entries) || {}
     const query = await beforeRead({ filters }, context)
 
     const sort = query.sort

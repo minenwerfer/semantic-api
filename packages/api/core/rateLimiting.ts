@@ -24,10 +24,7 @@ export const limitRate = async (context: ApiContext, params: RateLimitingParams)
   )
 
   if( !user ) {
-    throw new (makeException({
-      name: 'RateLimitError',
-      message: 'user not found'
-    }))
+    throw new (rateLimitingError('user not found'))
   }
 
   const increment = params.increment || 1
@@ -43,7 +40,11 @@ export const limitRate = async (context: ApiContext, params: RateLimitingParams)
     const entry = await ResourceUsageModel.create({ hits: increment })
     return UserModel.updateOne(
       { _id: user._id },
-      { $set: { [`resources_usage.${context.functionPath}`]: entry._id } }
+      {
+        $set: {
+          [`resources_usage.${context.functionPath}`]: entry._id
+        }
+      }
     )
   }
 

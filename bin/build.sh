@@ -13,7 +13,7 @@ function build() {
         || ln -s $(realpath "packages/${package}/node_modules") "dist/${package}/${mode}/node_modules"
     done
 
-    cp "packages/${package}/package.json" "dist/${package}/package.json"
+    ln -s "packages/${package}/package.json" "dist/${package}/package.json"
     echo '{"type": "module"}' | jq > "dist/${package}/esm/package.json"
     echo '{"type": "commonjs"}' | jq > "dist/${package}/cjs/package.json"
   done
