@@ -10,7 +10,6 @@ VERSION_TYPES=(
 )
 
 function bump() {
-  ls -ltrah
   npm version "$1"
 }
 
