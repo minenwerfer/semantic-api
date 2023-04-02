@@ -20,12 +20,25 @@ import { validateFromDescription, ValidateFunction } from './collection/validate
 import { limitRate } from './rateLimiting'
 import { render } from './render'
 
+global.PREBUNDLED_ASSETS ??= {}
+
 const __cached: Record<AssetType, Record<string, any>> = {
   model: {},
   description: {},
   function: {},
   library: {}
 }
+
+export const requireWrapper = (path: string) => {
+  const resolvedPath = path.replace(process.cwd(), '.')
+  if( PREBUNDLED_ASSETS?.[resolvedPath] ) {
+    return PREBUNDLED_ASSETS[resolvedPath]
+  }
+
+  const content = require(resolvedPath)
+  return content.default || content
+}
+
 
 const cacheIfPossible = (assetName: string, assetType: AssetType, fn: () => any) => {
   const repo = __cached[assetType]
@@ -35,11 +48,6 @@ const cacheIfPossible = (assetName: string, assetType: AssetType, fn: () => any)
 
   const asset = repo[assetName] = fn()
   return asset
-}
-
-const requireWrapper = (path: string) => {
-  const content = require(path)
-  return content.default || content
 }
 
 const isInternal = (resourceName: string, resourceType: ResourceType = 'collection'): boolean => {

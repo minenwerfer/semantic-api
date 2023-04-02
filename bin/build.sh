@@ -10,10 +10,9 @@ VERSION_TYPES=(
 )
 
 function publish() {
-  find dist -maxdepth 1 | \
-    xargs -I{} sh -c "cd {} && npm publish --access=public" $npm_arguments
+  ls -1 packages | \
+    xargs -I{} sh -c "cd dist/{} && npm publish --access=public" $npm_arguments
 }
-
 
 function build() {
   tsc

@@ -1,7 +1,7 @@
 {
   "name": "@semantic-api/system",
   "type": "module",
-  "version": "0.0.43",
+  "version": "0.0.47",
   "description": "",
   "main": "index.js",
   "scripts": {
