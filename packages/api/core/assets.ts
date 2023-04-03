@@ -35,7 +35,7 @@ export const requireWrapper = (path: string) => {
     return PREBUNDLED_ASSETS[resolvedPath]
   }
 
-  const content = require(resolvedPath)
+  const content = require(path)
   return content.default || content
 }
 
