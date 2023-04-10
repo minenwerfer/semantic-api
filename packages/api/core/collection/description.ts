@@ -7,7 +7,7 @@ type PropertyDependent =
     | 'form'
     | 'writable'
 
-export const makeDescription = <
+export const defineDescription = <
   T extends _Description,
   A=SchemaProperties<T>,
   AvailableProperties=Array<keyof T['properties'] | 'owner'>,

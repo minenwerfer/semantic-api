@@ -1,4 +1,4 @@
-import { Schema, makeDescription } from '@semantic-api/api'
+import { Schema, defineDescription } from '@semantic-api/api'
 
 export type ApiKey = Schema<typeof schema>
 
@@ -36,7 +36,7 @@ const schema = {
   }
 } as const
 
-export default makeDescription(schema, {
+export default defineDescription(schema, {
   icon: 'brackets-curly',
   presets: [
     'crud'

@@ -1,4 +1,4 @@
-import { makeDescription, Schema, Reference } from '@semantic-api/api'
+import { defineDescription, Schema, Reference } from '@semantic-api/api'
 
 export type User = Omit<Schema<typeof schema>, 'roles'> & {
   roles: Array<string>
@@ -95,7 +95,7 @@ const schema = {
   }
 } as const
 
-export default makeDescription<typeof schema>(schema, {
+export default defineDescription<typeof schema>(schema, {
   presets: [
     'crud',
     'view',

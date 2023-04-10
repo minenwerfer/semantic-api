@@ -1,4 +1,4 @@
-import { makeDescription, Schema } from '@semantic-api/api'
+import { defineDescription, Schema } from '@semantic-api/api'
 
 export type Log = Schema<typeof schema>
 
@@ -25,7 +25,7 @@ const schema = {
   }
 } as const
 
-export default makeDescription<typeof schema>(schema, {
+export default defineDescription<typeof schema>(schema, {
   icon: 'search-alt',
   presets: [
     'view'

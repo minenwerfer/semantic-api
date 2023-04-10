@@ -4,7 +4,7 @@ import { writeLayers } from './layers'
 export const read: AccessControlLayer = async (context, { payload }) => {
   const { token, description } = context
 
-  if( token.user ) {
+  if( token.user && description.owned ) {
     if( !token.user.roles?.includes('root') || description.alwaysOwned ) {
       payload.filters.owner = token.user._id
     }
@@ -14,7 +14,7 @@ export const read: AccessControlLayer = async (context, { payload }) => {
 export const write: AccessControlLayer = async (context, { payload }) => {
   const { token, description } = context
 
-  if( token.user ) {
+  if( token.user && description.owned ) {
     if( !token.user.roles?.includes('root') || description.alwaysOwned ) {
       if( payload.filters ) {
         payload.filters.owner = token.user._id
