@@ -17,8 +17,13 @@ const discoverDescriptions = ({ dynamic, system }: { dynamic?: boolean, system?:
   }
 
   try {
-    return readdirSync(path).reduce((a: Record<string, any>, d) => {
+    return readdirSync(path, { withFileTypes: true }).reduce((a: Record<string, any>, dirent) => {
       try {
+        if( !dirent.isDirectory ) {
+          return a
+        }
+
+        const d = dirent.name
         const description = getResourceAsset(d, 'description')
         if( !system && !description.system && d in SystemCollections  ) {
           throw new Error(

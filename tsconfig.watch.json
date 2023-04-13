@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "/tmp/semantic-api-output",
+    "noEmit": true,
     "target": "esnext",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -10,11 +10,21 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
-      "@semantic-api/api": ["./packages/api"],
-      "@semantic-api/api/*": ["./packages/api/*"],
-      "@semantic-api/common": ["./packages/common"],
-      "@semantic-api/system/*": ["./packages/system/*"],
-      "@semantic-api/types": ["./packages/types"]
+      "@semantic-api/api": [
+        "./packages/api"
+      ],
+      "@semantic-api/api/*": [
+        "./packages/api/*"
+      ],
+      "@semantic-api/common": [
+        "./packages/common"
+      ],
+      "@semantic-api/system/*": [
+        "./packages/system/*"
+      ],
+      "@semantic-api/types": [
+        "./packages/types"
+      ]
     }
   },
   "exclude": [

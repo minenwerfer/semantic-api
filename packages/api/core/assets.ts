@@ -129,14 +129,6 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
         return limitRate(context, ...args)
       },
       hasRoles: (roles: Array<string>|string) => arraysIntersects(roles, context.token.user.roles),
-      hasCategories: (categories: Array<string>|string) => {
-        const description = getResourceAsset(resourceName, 'description')
-        if( !description.categories ) {
-          return false
-        }
-
-        return arraysIntersects(categories, description.categories)
-      },
       log: async (message, details) => {
         return (await useCollection('log', context)).insert({
           what: {
@@ -165,6 +157,13 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
         return validateFromDescription(targetDescription, ...args)
       }
       newContext.collection = await useCollection(resourceName, newContext)
+      newContext.hasCategories = (categories: Array<string>|string) => {
+        if( !description.categories ) {
+          return false
+        }
+
+        return arraysIntersects(categories, description.categories)
+      }
     }
 
     newContext.collections = new Proxy({}, {
