@@ -1,7 +1,7 @@
-import type { default as FileInsert } from '@semantic-api/system/resources/collections/file/functions/file@insert'
-import type { default as FileDelete } from '@semantic-api/system/resources/collections/file/functions/file@delete'
 import type { MongoDocument } from '../../types'
 import type { Model } from 'mongoose'
+import type { default as FileInsert } from '@semantic-api/system/resources/collections/file/functions/insert'
+import type { default as FileDelete } from '@semantic-api/system/resources/collections/file/functions/delete'
 
 type UploadAuxProps = {
   parentId: string

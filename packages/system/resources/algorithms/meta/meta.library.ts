@@ -3,6 +3,7 @@ import type { Description } from '../../../../types'
 import type { ApiContext } from '@semantic-api/api'
 import { preloadDescription, getResourceAsset } from '@semantic-api/api'
 import SystemCollections from '../../collections'
+import { getResources } from '../../..'
 
 const __cachedDescriptions: Record<string, Description> = {}
 export const cachedDescriptions = __cachedDescriptions
@@ -59,26 +60,28 @@ export const getDescriptions = ({
     dynamicCollections
   },
 }: ApiContext<any>): Record<string, Description> => {
-  if( Object.keys(__cachedDescriptions).length > 0 ) {
-    return __cachedDescriptions
-  }
+  const resources = getResources()
+  return Object.fromEntries(Object.entries(resources).map(([key, resource]: [string, any]) => [key, resource.description]))
+  // if( Object.keys(__cachedDescriptions).length > 0 ) {
+  //   return __cachedDescriptions
+  // }
 
-  const target: Record<string, Description> = {
-    ...presetDescriptions||{},
-    ...discoverDescriptions({ dynamic: dynamicCollections }),
-    ...discoverDescriptions({ system: true })
-  }
+  // const target: Record<string, Description> = {
+  //   ...presetDescriptions||{},
+  //   ...discoverDescriptions({ dynamic: dynamicCollections }),
+  //   ...discoverDescriptions({ system: true })
+  // }
 
-  const descriptions = Object.entries(target).reduce((a, [, collectionSchema]) => {
-    return {
-      ...a,
-      [collectionSchema.$id]: preloadDescription(collectionSchema)
-    }
-  }, {})
+  // const descriptions = Object.entries(target).reduce((a, [, collectionSchema]) => {
+  //   return {
+  //     ...a,
+  //     [collectionSchema.$id]: preloadDescription(collectionSchema)
+  //   }
+  // }, {})
 
-  Object.assign(__cachedDescriptions, descriptions)
+  // Object.assign(__cachedDescriptions, descriptions)
 
-  global.descriptions = __cachedDescriptions
-  return descriptions
+  // global.descriptions = __cachedDescriptions
+  // return descriptions
 }
 

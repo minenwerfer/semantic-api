@@ -2,20 +2,40 @@ import type { Model } from 'mongoose'
 import type { Description } from '../../types'
 import type { ApiFunction } from './function'
 
-export type AssetType =
-  'model'
-  | 'description'
-  | 'function'
-  | 'library'
+export const RESOURCE_TYPES = <const>{
+  collection: 'collections',
+  algorithm: 'algorithms'
+}
 
+export const ASSET_TYPES = <const>{
+  description: 'description',
+  model: 'model',
+  library: 'library',
+  function: 'functions'
+}
 
-export type ResourceType =
-  'collection'
-  | 'algorithm'
+export type ResourceType = keyof typeof RESOURCE_TYPES
+export type AssetType = keyof typeof ASSET_TYPES
 
-export type AssetReturnType<Type extends AssetType> = Type extends 'function'
-  ? ApiFunction<any> : Type extends 'description'
-  ? Description : Type extends 'model'
-  ? Model<any> : Type extends 'library'
-  ? Record<string, (...args: any[]) => any> : never
+type _Resource = {
+  functions: Record<string, ApiFunction<any>>
+  library?: Record<string, (...args: any[]) => any>
+}
 
+export type CollectionResource = _Resource & {
+  description?: Description
+  model?: Model<any>
+  library?: Record<string, (...args: any[]) => any>
+}
+
+export type AlgorithmResource = _Resource & {
+}
+
+export type Resource = CollectionResource | AlgorithmResource
+export type Collections = Record<string, CollectionResource>
+export type Algorithms = Record<string, AlgorithmResource>
+
+export type Resources = {
+  collections?: Collections
+  algorithms?: Algorithms
+}

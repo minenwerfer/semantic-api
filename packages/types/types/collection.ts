@@ -38,13 +38,13 @@ export type Condition = {
 export type FormLayout = {
   span: number
   verticalSpacing: number
-  condition: Condition
+  if: Condition
 }
 
 export type TableLayout = {
   actions: Record<string, {
     button: boolean
-    condition: Condition
+    if: Condition
   }>
 }
 
