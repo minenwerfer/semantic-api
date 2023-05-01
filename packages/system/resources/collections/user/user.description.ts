@@ -109,11 +109,11 @@ export default defineDescription<typeof schema>(schema, {
     }
   },
   individualActions: {
-    'ui/spawnEdit': {
+    'ui:spawnEdit': {
       name: 'Editar',
       icon: 'edit',
     },
-    'ui/spawnExtra': {
+    'ui:spawnExtra': {
       name: 'Editar detalhes',
       icon: 'edit'
     },

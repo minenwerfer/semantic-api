@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@semantic-api/system": "latest",
-    "bson": "git+https://github.com/ringeringeraja/js-bson",
+    "bson": "latest",
     "ramda": "^0.28.0"
   },
   "devDependencies": {

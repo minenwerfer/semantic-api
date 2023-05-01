@@ -28,9 +28,7 @@ export default {
         ]
       },
       userExtra: {
-        functions: [
-          'insert'
-        ]
+        grantEverything: true
       }
     }
   },

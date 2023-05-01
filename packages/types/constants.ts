@@ -46,5 +46,6 @@ export const STORE_EFFECTS = {
   'ITEM_INSERT': 'insertItem',
   'ITEMS_SET': 'setItems',
   'ITEMS_UPDATE': 'updateItems',
+  'ITEM_REMOVE': 'removeItem',
 }
 
