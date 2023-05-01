@@ -1,13 +1,13 @@
 {
   "actions": {
-    "ui/spawnAdd": {
+    "ui:spawnAdd": {
       "name": "action.add",
       "icon": "plus",
       "translate": true
     }
   },
   "individualActions": {
-    "ui/spawnEdit": {
+    "ui:spawnEdit": {
       "name": "action.edit",
       "icon": "edit",
       "translate": true
