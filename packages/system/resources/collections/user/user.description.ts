@@ -117,7 +117,7 @@ export default defineDescription<typeof schema>(schema, {
       name: 'Editar detalhes',
       icon: 'edit'
     },
-    'route/dashboard-user-changepass': {
+    'route:dashboard-user-changepass': {
       name: 'Mudar senha',
       icon: 'key-skeleton',
       fetchItem: true
