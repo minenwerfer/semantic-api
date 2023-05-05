@@ -1,7 +1,12 @@
 import type { ApiContext } from '@semantic-api/api'
 import { init } from '@semantic-api/api/server'
 
+import person from './collections/person'
+
 const context: Partial<ApiContext> = {
+  descriptions: {
+    person
+  },
   accessControl: {
     roles: {
       guest: {
