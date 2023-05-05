@@ -3,7 +3,7 @@ import hello from './hello'
 
 export default {
   description,
-  functions: [
+  functions: {
     hello
-  ]
+  }
 }
