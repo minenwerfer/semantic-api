@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "tsc": "latest",
-    "typescript": "^5.0.0-dev.20230224"
+    "typescript": "^5.0.4"
   },
   "version": "0.0.8"
 }

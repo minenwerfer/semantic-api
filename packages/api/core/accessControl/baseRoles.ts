@@ -1,6 +1,6 @@
-import { Role } from '../../types'
+import { Roles } from '../../types'
 
-export default {
+export const baseRoles: Roles = {
   authenticated: {
     capabilities: {
       meta: {
@@ -48,4 +48,4 @@ export default {
       }
     }
   }
-} as Record<string, Role>
+}

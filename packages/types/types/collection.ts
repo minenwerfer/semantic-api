@@ -14,6 +14,8 @@ export type CollectionAction = Readonly<{
   ask?: boolean
   selection?: boolean
   effect?: StoreEffect
+  params?: Record<string, any>
+  query?: Record<string, any>
 
   // route namespace
   fetchItem?: boolean

@@ -7,9 +7,8 @@ import type { limitRate } from '../core/rateLimiting'
 import type { Description } from '../../types'
 import type { CollectionFunctions } from '../core/collection/functions.types'
 import type { RateLimitingParams } from '../core/rateLimiting'
-import type { AccessControlLayer } from '../core/accessControl'
 import type { ApiConfig, DecodedToken } from './server'
-import type { ValidAccessControlLayer } from './accessControl'
+import type { AccessControl } from './accessControl'
 
 export type FunctionPath = `${string}@${string}`
 
@@ -19,23 +18,6 @@ export type ApiFunction<Props=unknown, Library=Record<string, (...args: any) => 
 ) => Return
 
 export type AnyFunctions = CollectionFunctions & Record<string, (props?: any) => any>
-
-export type Role = {
-  grantEverything?: boolean
-  forbidEverything?: boolean
-  capabilities?: Record<string, {
-    grantEverything?: boolean
-    functions?: Array<string>
-    blacklist?: Array<string>
-  }>
-}
-
-export type Roles = Record<string, Role>
-
-export type AccessControl = {
-  roles?: Roles
-  layers?: Partial<Record<ValidAccessControlLayer, AccessControlLayer>>
-}
 
 export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   resourceName: string
@@ -47,7 +29,7 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   token: DecodedToken
 
   validate: <T>(what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
-    limitRate: (params: RateLimitingParams) => ReturnType<typeof limitRate>
+  limitRate: (params: RateLimitingParams) => ReturnType<typeof limitRate>
 
   hasRoles: (roles: Array<string>|string) => boolean
   hasCategories: (categories: Array<string>|string) => boolean

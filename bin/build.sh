@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 version_type=$(echo $@ | grep -oP '(?<=--bump )([^ $]+)')
+packages=$(echo $@ | grep -oP '(?<=--packages )([^ $]+)')
 npm_arguments=$(echo $@ | grep -oP '(?<=--npm-args )([^$]+)')
 
 VERSION_TYPES=(
@@ -9,8 +10,16 @@ VERSION_TYPES=(
   major
 )
 
+function usage() {
+  echo "Usage: $0 [--bump ($(echo ${VERSION_TYPES[*]} | tr ' ' '|'))] [--packages ($(ls -1 packages | tr '\n' '|'))] [--npm-args NPM_ARGS]"
+  echo ""
+  echo "  --bump VERSION_TYPE       bumps package version semver segment and publishes package to npm"
+  echo "  --packages PACKAGES       bumps/publishes only PACKAGES separated by comma"
+  echo "  --npm-args NPM_ARGS       passes additional parameters to npm publish"
+}
+
 function publish() {
-  ls -1 packages | \
+  echo $packages | \
     xargs -I{} sh -c "cd dist/{} && npm publish --access=public" $npm_arguments
 }
 
@@ -18,7 +27,7 @@ function build() {
   tsc
   tsc -p tsconfig.esm.json
 
-  for package in $(ls -1 packages); do
+  for package in $packages; do
     mkdir -p "dist/${package}"
 
     for mode in esm cjs; do
@@ -47,20 +56,29 @@ function cleanup() {
   rm -rf dist
 }
 
-function main() {
-  set -x
-  cleanup
-  build
-  move_assets
+if [ "$1" == "-h" ]; then
+  usage
+  exit
+fi
 
-  if ! [ -z "$version_type" ]; then
-    if ! [[ "${VERSION_TYPES[*]}" =~ "$version_type" ]]; then
-      echo "$0 ${VERSION_TYPES[*]}"
-      exit
-    fi
+if ! test -z $packages; then
+  packages=$(echo ${packages[*]} | tr ',' '\n')
+else
+  packages=$(ls -1 packages)
+fi
 
-    publish
+
+set -x
+cleanup
+build
+move_assets
+
+if ! [ -z "$version_type" ]; then
+  if ! [[ "${VERSION_TYPES[*]}" =~ "$version_type" ]]; then
+    echo "$0 ${VERSION_TYPES[*]}"
+    exit
   fi
-}
 
-main
+  publish
+fi
+
