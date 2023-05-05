@@ -1,5 +1,5 @@
 #!/bin/bash
-#
+
 version_type=$(echo $@ | grep -oP '(?<=--bump )([^ $]+)')
 packages=$(echo $@ | grep -oP '(?<=--packages )([^ $]+)')
 npm_arguments=$(echo $@ | grep -oP '(?<=--npm-args )([^$]+)')

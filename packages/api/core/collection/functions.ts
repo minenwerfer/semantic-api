@@ -3,21 +3,10 @@ import type { Model } from 'mongoose'
 import type { Description } from '../../../types'
 import type { ApiContextWithAC, MongoDocument } from '../../types'
 import type { Projection, CollectionFunctions } from './functions.types'
+import { DEFAULT_SORT, LEAN_OPTIONS } from '../../../types/constants'
 import { checkImmutability } from '../accessControl/layers'
 import { makeException } from '../exceptions'
 import { normalizeProjection, fill, prepareInsert } from './utils'
-
-const DEFAULT_SORT = {
-  date_updated: -1,
-  date_created: -1,
-  created_at: -1,
-}
-
-const LEAN_OPTIONS = {
-  autopopulate: true,
-  getters: true,
-  virtuals: true
-}
 
 export default <T extends MongoDocument>(
   model: Model<T>,
