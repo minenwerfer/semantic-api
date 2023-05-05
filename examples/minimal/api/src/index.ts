@@ -4,7 +4,7 @@ import { init } from '@semantic-api/api/server'
 import person from './collections/person'
 
 const context: Partial<ApiContext> = {
-  descriptions: {
+  collections: {
     person
   },
   accessControl: {
