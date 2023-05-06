@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import { getReferencedCollection, serialize } from '@semantic-api/common'
-import { getResourceAsset, requireWrapper } from '../assets'
+import { getResourceAsset } from '../assets'
 import type { Description } from '../../../types'
 
 export type PreloadOptions = {
@@ -20,12 +20,12 @@ export const applyPreset = (entry: Description | Description['properties'], pres
   )
 }
 
-export const preloadDescription = <Options extends PreloadOptions, Return=Options extends { serialize: true }
+export const preloadDescription = async <Options extends PreloadOptions, Return=Options extends { serialize: true }
   ? Buffer
   : Description
 >(description: Description, options?: Options) => {
   if( description.alias ) {
-    const _aliasedCollection = getResourceAsset(description.alias, 'description')
+    const _aliasedCollection = await getResourceAsset(description.alias, 'description')
 
     const {
       $id: collectionName,
@@ -53,7 +53,7 @@ export const preloadDescription = <Options extends PreloadOptions, Return=Option
   }
 
   if( description.properties ) {
-    description.properties = Object.entries(description.properties).reduce((a, [key, _property]) => {
+    description.properties = await Object.entries(description.properties).reduce(async (a, [key, _property]) => {
       const property = Object.assign({}, _property)
       const reference = getReferencedCollection(property)
 
@@ -63,7 +63,7 @@ export const preloadDescription = <Options extends PreloadOptions, Return=Option
         property.s$referencedCollection = reference.$ref
 
         if( !property.s$indexes && !property.s$inline ) {
-          const referenceDescription = getResourceAsset(reference.$ref!, 'description')
+          const referenceDescription = await getResourceAsset(reference.$ref!, 'description')
           const indexes = property.s$indexes = referenceDescription.indexes?.slice()
 
           if( !indexes ) {
@@ -75,10 +75,10 @@ export const preloadDescription = <Options extends PreloadOptions, Return=Option
       }
 
       return {
-        ...a,
+        ...await a,
         [key]: property
       }
-    }, {})
+    }, {} as Promise<any>)
   }
 
   return (options?.serialize

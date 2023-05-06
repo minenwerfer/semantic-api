@@ -1,0 +1,19 @@
+{
+  "name": "playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && (cd dist && node index.js)"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@semantic-api/api": "file:../dist/staging/api",
+    "@semantic-api/common": "file:../dist/staging/common",
+    "@semantic-api/system": "file:../dist/staging/system",
+    "@semantic-api/types": "file:../dist/staging/types"
+  }
+}

@@ -24,7 +24,7 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   functionPath?: FunctionPath
 
   apiConfig: ApiConfig
-  accessControl: AccessControl
+  accessControl: AccessControl<any>
   injected: Record<string, any>
   token: DecodedToken
 

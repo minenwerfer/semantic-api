@@ -1,25 +1,32 @@
 import type { AccessControlLayer } from '../core/accessControl'
+import type { Collections } from './config'
 
 export type ValidAccessControlLayer =
   'read'
   | 'write'
 
-export type Role = {
+export type Role<_Collections extends Collections> = {
   inherit?: Array<string>
   grantEverything?: boolean
   forbidEverything?: boolean
-  capabilities?: Record<string, {
-    grantEverything?: boolean
-    forbidEverything?: boolean
-    functions?: Array<string>
-    blacklist?: Array<string>
-  }>
+  capabilities: {
+    [P in keyof _Collections]?: {
+      grantEverything?: boolean
+      forbidEverything?: boolean
+      functions?: _Collections[P]['fallbackFunctions'] extends readonly string[]
+        ? Array<keyof _Collections[P]['functions'] | _Collections[P]['fallbackFunctions'][number]>
+        : Array<keyof _Collections[P]['functions']>
+      blacklist?: _Collections[P]['fallbackFunctions'] extends readonly string[]
+        ? Array<keyof _Collections[P]['functions'] | _Collections[P]['fallbackFunctions'][number]>
+        : Array<keyof _Collections[P]['functions']>
+    }
+  }
 }
 
-export type Roles = Record<string, Role>
+export type Roles<_Collections extends Collections> = Record<string, Role<_Collections>>
 
-export type AccessControl = {
-  roles?: Roles
+export type AccessControl<_Collections extends Collections> = {
+  roles?: Roles<_Collections>
   layers?: Partial<Record<ValidAccessControlLayer, AccessControlLayer>>
 }
 

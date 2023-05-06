@@ -24,10 +24,10 @@ type SchemaStructure = Record<string, Record<string, any>>
  */
 const __loadedModels: Array<string> = []
 
-export const descriptionToSchemaObj = (description: Omit<Description, '$id'>) => {
+export const descriptionToSchemaObj = async (description: Omit<Description, '$id'>) => {
   let hasRefs = false
 
-  const convert = (a: any, [propertyName, property]: [string, CollectionProperty]) => {
+  const convert = async (a: any, [propertyName, property]: [string, CollectionProperty]) => {
     if( property.s$meta ) {
       return a
     }
@@ -82,7 +82,7 @@ export const descriptionToSchemaObj = (description: Omit<Description, '$id'>) =>
     }
 
     if( typeof referencedCollection === 'string' ) {
-      const referenceDescription = getResourceAsset(referencedCollection, 'description')
+      const referenceDescription = await getResourceAsset(referencedCollection, 'description')
       hasRefs = true
 
       const actualReferenceName = result.ref = referenceDescription.alias || referenceDescription.$id
@@ -132,7 +132,7 @@ export const descriptionToSchemaObj = (description: Omit<Description, '$id'>) =>
     }, description.properties)
   }
 
-  const schemaStructure = Object.entries(description.properties)
+  const schemaStructure = await Object.entries(description.properties)
     .reduce(convert, {})
 
   return {
@@ -141,7 +141,7 @@ export const descriptionToSchemaObj = (description: Omit<Description, '$id'>) =>
   }
 }
 
-export const descriptionToSchema = <T>(
+export const descriptionToSchema = async <T>(
   description: Omit<Description, '$id'> & {
     $id?: Description['$id']
   },
@@ -152,7 +152,7 @@ export const descriptionToSchema = <T>(
     schemaStructure,
     hasRefs
 
-  } = descriptionToSchemaObj(description)
+  } = await descriptionToSchemaObj(description)
 
   if( cb ) {
     cb(schemaStructure)
@@ -171,7 +171,7 @@ export const descriptionToSchema = <T>(
   return schema
 }
 
-export const createModel = <T=any>(
+export const createModel = async <T=any>(
   _description: Description,
   config?: {
     options?: SchemaOptions|null,
@@ -179,7 +179,7 @@ export const createModel = <T=any>(
     schemaCallback?: (schema: Schema<T>) => void
   }
 ) => {
-  const description = preloadDescription(_description)
+  const description = await preloadDescription(_description)
 
   const {
     options,
@@ -193,7 +193,7 @@ export const createModel = <T=any>(
   }
 
   __loadedModels.push(modelName)
-  const schema = descriptionToSchema<T>(description, options || defaultOptions, modelCallback)
+  const schema = await descriptionToSchema<T>(description, options || defaultOptions, modelCallback)
 
   const cascadingDelete: Array<{
     propertyName: string
@@ -203,7 +203,7 @@ export const createModel = <T=any>(
 
   for( const [propertyName, property] of Object.entries(description.properties) ) {
     if( property.s$isFile || property.s$inline ) {
-      const referenceDescription = getResourceAsset(property.s$referencedCollection!, 'description')
+      const referenceDescription = await getResourceAsset(property.s$referencedCollection!, 'description')
       cascadingDelete.push({
         propertyName,
         collectionName: referenceDescription.alias || referenceDescription.$id,

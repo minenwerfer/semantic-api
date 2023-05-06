@@ -1,7 +1,7 @@
 import type { FunctionPath, ApiContext, Role } from '../../types'
 import { deepMerge } from '@semantic-api/common'
 
-const applyInheritance = (context: ApiContext, targetRole: Role) => {
+const applyInheritance = (context: ApiContext, targetRole: Role<any>) => {
   const role = Object.assign({}, targetRole)
   if( role.inherit ) {
     for( const roleName of role.inherit ) {

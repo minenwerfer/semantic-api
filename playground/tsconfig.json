@@ -1,34 +1,30 @@
 {
   "compilerOptions": {
-    "outDir": "dist/esm",
+    "outDir": "dist",
     "target": "esnext",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "paths": {
       "@semantic-api/api": [
-        "./packages/api"
+        "../dist/staging/api"
       ],
       "@semantic-api/api/*": [
-        "./packages/api/*"
+        "../dist/staging/api/*"
       ],
       "@semantic-api/common": [
-        "./packages/common"
+        "../dist/staging/common"
       ],
       "@semantic-api/system/*": [
-        "./packages/system/*"
+        "../dist/staging/system/*"
       ],
       "@semantic-api/types": [
-        "./packages/types"
+        "../dist/staging/types"
       ]
     }
-  },
-  "exclude": [
-    "examples",
-    "playground",
-    "packages/common"
-  ]
+  }
 }

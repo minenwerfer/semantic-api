@@ -8,7 +8,7 @@ export const useCollection = async <T extends MongoDocument>(collectionName: str
 
   const description = context.description = context.description?.$id === collectionName
     ? context.description
-    : getResourceAsset(collectionName, 'description')
+    : await getResourceAsset(collectionName, 'description')
 
   if( !description ) {
     throw new Error(
