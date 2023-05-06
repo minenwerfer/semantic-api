@@ -36,9 +36,12 @@ export const config = {
 //
 
 const main = async () => {
+  const description = await get('pet', 'description')
+  const { bark, performTrick } = await get('pet', 'functions')
 
-  const { bark } = await get('pet', 'functions')
   console.log(bark('joao'))
+  console.log(performTrick(5))
+  console.log(description.properties.favorite_toy)
 
   // console.log(bark('joao'))
   //resource.functionsa.bark

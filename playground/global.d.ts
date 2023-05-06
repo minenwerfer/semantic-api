@@ -9,7 +9,6 @@ declare module '@semantic-api/api' {
     assetName: AssetName,
     assetType: AssetType,
     resourceType: ResourceType = 'collection',
-    // test?: TesteConfig['collections'][AssetName][AssetType]
   ): Promise<AssetName extends keyof TesteConfig['collections']
     ? AssetType extends keyof TesteConfig['collections'][AssetName]
       ? TesteConfig['collections'][AssetName][AssetType]
