@@ -190,7 +190,7 @@ export default <T extends MongoDocument>(
         ? { $addToSet: { [propertyName]: file._id } }
         : { $set: { [propertyName]: file._id } }
 
-      await (await context.model()).updateOne(
+      await context.model.updateOne(
         { _id: parentId },
         payload
       )

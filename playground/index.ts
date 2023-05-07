@@ -1,4 +1,4 @@
-import { get, AccessControl } from '@semantic-api/api'
+import { get, getFunction, isLeft, unwrapEither } from '@semantic-api/api'
 
 import person from './person'
 import pet from './pet'
@@ -6,11 +6,23 @@ import pet from './pet'
 export const collections = {
   person,
   pet
-} as const
+}
 
-export const accessControl: AccessControl<typeof collections> = {
+export const accessControl = {
   roles: {
+    base: {
+      capabilities: {
+        pet: {
+          functions: [
+            'bark'
+          ]
+        }
+      }
+    },
     guest: {
+      inherit: [
+        'base'
+      ],
       capabilities: {
         person: {
           functions: [
@@ -18,11 +30,6 @@ export const accessControl: AccessControl<typeof collections> = {
             'getAll'
           ]
         },
-        pet: {
-          functions: [
-            'bark'
-          ]
-        }
       }
     }
   }
@@ -30,24 +37,30 @@ export const accessControl: AccessControl<typeof collections> = {
 
 export const config = {
   collections,
-} as const
-
-// const c = defineConfig(config)
-//
+  accessControl
+}
 
 const main = async () => {
   const description = await get('pet', 'description')
-  const { bark, performTrick } = await get('pet', 'functions')
-
-  console.log(bark('joao'))
-  console.log(performTrick(5))
   console.log(description.properties.favorite_toy)
 
-  // console.log(bark('joao'))
-  //resource.functionsa.bark
-  // const { bark } = await get('petx')
+  const barkEither = await getFunction('pet', 'bark', {
+    roles: [
+      'guest'
+    ]
+  })
 
-  // bark(1)
+  if( isLeft(barkEither) ) {
+    const error = unwrapEither(barkEither)
+    switch( error ) {
+      case 'AUTHORIZATION_ERROR': console.log('Erro de autorização')
+    }
+
+    return
+  }
+
+  const bark = unwrapEither(barkEither)
+  bark('joao')
 }
 
 main()

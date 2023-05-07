@@ -21,17 +21,23 @@ const search: ApiFunction<Props, typeof import('../searchable.library')> = async
     throw new Error('no query provided')
   }
 
-  const searchables = Object.entries(context.library.getSearchables(context))
-    .reduce((a, [key, value]) => {
-      if( !isGranted(`${key}@getAll`, context) ) {
+  const searchables = await Object.entries(context.library.getSearchables(context))
+    .reduce(async (a, [resourceName, value]) => {
+
+      // TODO: FIX ME
+      if( !isGranted(resourceName, value, {
+        roles: [
+          'guest'
+        ]
+      }) ) {
         return a
       }
 
       return {
-        ...a,
-        [key]: value
+        ...await a,
+        [resourceName]: value
       }
-  }, {})
+  }, {} as Promise<any>)
 
   const beforeRead = accessControl.layers?.read
     ? (payload: Record<string, any>) => accessControl.layers?.read!(context, { payload })

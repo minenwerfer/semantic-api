@@ -27,17 +27,8 @@
       ]
     }
   },
-  "include": [
-    "packages/api/**/*",
-    "packages/api/package.json",
-    "packages/system/**/*",
-    "packages/system/package.json",
-    "packages/types/**/*",
-    "packages/types/package.json",
-    "packages/common/**/*",
-    "packages/common/package.json"
-  ],
   "exclude": [
+    "dist",
     "examples",
     "playground"
   ]

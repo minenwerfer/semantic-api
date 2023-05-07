@@ -4,12 +4,12 @@ import { getResourceAsset } from '@semantic-api/api'
 
 const __searchable: Record<string, Description> = {}
 
-export const getSearchables = (context: ApiContext) => {
+export const getSearchables = async (context: ApiContext) => {
   if( Object.keys(__searchable).length > 0 ) {
     return __searchable
   }
 
-  const descriptions = getResourceAsset('meta', 'library', 'algorithm').getDescriptions(context)
+  const descriptions = (await getResourceAsset('meta', 'library', 'algorithm')).getDescriptions(context)
 
   const searchable = Object.entries(descriptions)
     .reduce((a, [collectionName, description]: [string, any]) => {

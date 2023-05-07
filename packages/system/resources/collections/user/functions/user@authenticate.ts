@@ -1,7 +1,6 @@
 import { Token, makeException } from '@semantic-api/api'
 import type { ApiFunction } from '@semantic-api/api'
 import type { User } from '../user.description'
-import UserModel from '../user.model'
 
 type Props = {
   email: string
@@ -55,7 +54,7 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
     }
   }
 
-  const user = await UserModel.findOne(
+  const user = await context.model.findOne(
     { email: props.email },
     {
       email: 1,
@@ -78,7 +77,7 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
     }))
   }
 
-  const { password, ...leanUser } = await UserModel
+  const { password, ...leanUser } = await context.model
     .findOne({ email: user.email })
     .lean({
       autopopulate: true,

@@ -14,7 +14,7 @@ import type {
 import { Error as MongooseError } from 'mongoose'
 import { Token } from '../core/token'
 import { makeException } from '../core/exceptions'
-import { checkAC, sanitizeRequest, prependPagination } from './hooks/pre'
+import { sanitizeRequest, prependPagination } from './hooks/pre'
 import {  appendPagination } from './hooks/post'
 
 export type RegularVerb =
@@ -27,7 +27,6 @@ export type RegularVerb =
   | 'upload'
 
 const prePipe = R.pipeWith(R.andThen)([
-  checkAC,
   sanitizeRequest,
   prependPagination
 ])

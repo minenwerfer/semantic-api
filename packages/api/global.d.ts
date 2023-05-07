@@ -1,7 +1,7 @@
 import type { Description } from '../types'
 import type { mongoose } from 'mongoose'
 
-import type { Config } from './types/config'
+import type { Config, AccessControl } from './types'
 
 
 declare global {
@@ -10,14 +10,13 @@ declare global {
   var mongoose: typeof mongoose
 
   var PREBUNDLED_ASSETS: Record<string, any>
-  type TesteConfig = {
-    collections: {
-      pet: {
-        functions: {
-          bark: (person: string) => string
-        }
-      }
-    }
+
+  type TesteConfig = Config<any>
+
+  type UserAccessControl = AccessControl<any>
+  type UserACProfile = {
+    readonly roles: string[]
+    readonly allowed_functions?: string[]
   }
 }
 

@@ -34,7 +34,7 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   hasRoles: (roles: Array<string>|string) => boolean
   hasCategories: (categories: Array<string>|string) => boolean
   collection: CollectionFunctions
-  model: <T>() => Promise<Model<T>>
+  model: Model<any>
 
   resource: AnyFunctions
   library: Library

@@ -4,25 +4,26 @@ import type { Model } from 'mongoose'
 import type {
   ApiFunction ,
   AnyFunctions,
-  AssetType,
   ResourceType,
   FunctionPath,
-  AssetReturnType,
   ApiContext
 
 } from '../types'
 
-import { arraysIntersects } from '@semantic-api/common'
+import { arraysIntersects, Either, left, right, isRight } from '@semantic-api/common'
 import SystemCollections from '@semantic-api/system/resources/collections/index.js'
 import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
+import type { DecodedToken } from '../types/server'
 import type { CollectionFunctions } from './collection/functions.types'
+
+import { isGranted } from './accessControl'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { limitRate } from './rateLimiting'
 import { render } from './render'
 
 // global.PREBUNDLED_ASSETS ??= {}
 
-// const __cached: Record<AssetType, Record<string, any>> = {
+// const __cached: Record<AssetName, Record<string, any>> = {
 //   model: {},
 //   description: {},
 //   function: {},
@@ -40,13 +41,13 @@ export const requireWrapper = (path: string) => {
 }
 
 
-// const cacheIfPossible = (assetName: string, assetType: AssetType, fn: () => any) => {
-//   const repo = __cached[assetType]
-//   if( assetName in repo ) {
-//     return repo[assetName]
+// const cacheIfPossible = (resourceName: string, assetName: AssetName, fn: () => any) => {
+//   const repo = __cached[assetName]
+//   if( resourceName in repo ) {
+//     return repo[resourceName]
 //   }
 
-//   const asset = repo[assetName] = fn()
+//   const asset = repo[resourceName] = fn()
 //   return asset
 // }
 
@@ -108,10 +109,10 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
   const proxyFn = (resourceName: string, context: any, _resourceType?: ResourceType) => {
     return new Proxy({}, {
       get: async (_, resourceFunction: string) => {
-        const asset = await getResourceFunction(`${resourceName}@${resourceFunction}`, _resourceType)
-        return typeof asset === 'function'
-          ? (props?: any) => asset(props, context)
-          : asset
+        // const asset = await getResourceFunction(`${resourceName}@${resourceFunction}`, _resourceType)
+        // return typeof asset === 'function'
+        //   ? (props?: any) => asset(props, context)
+        //   : asset
       }      
     }) as AnyFunctions
   }
@@ -141,13 +142,13 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
       },
       collection: {} as CollectionFunctions,
       resource: proxyFn(resourceName, context, resourceType),
-      library: await getResourceAsset(resourceName, 'library', resourceType),
+      library: await getResourceAsset(resourceName, 'library', resourceType) || {},
       render: (...args: [any, any]) => render.apply({}, [context.h, ...args])
     }
 
     if( resourceType === 'collection' ) {
       const description = await getResourceAsset(resourceName, 'description')
-      newContext.model = async () => getResourceAsset(resourceName, 'model')
+      newContext.model = await getResourceAsset(resourceName, 'model'),
       newContext.description = description
       newContext.validate = (...args: Parameters<ValidateFunction<any>>) => {
         const targetDescription = args.length === 3
@@ -232,84 +233,101 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
 //   }
 // }
 
-// export const getResourceAsset = <Type extends AssetType>(
-//   assetName: Type extends 'function'
+// export const getResourceAsset = <Type extends AssetName>(
+//   resourceName: Type extends 'function'
 //     ? FunctionPath
 //     : string,
-//   assetType: Type,
+//   assetName: Type,
 //   resourceType: ResourceType = 'collection'
 // ): AssetReturnType<Type> => {
 //   return cacheIfPossible(
+//     resourceName,
 //     assetName,
-//     assetType,
 //     () => {
-//       const resourceName = assetType === 'function'
-//         ? assetName.split('@').shift()!
-//         : assetName
+//       const resourceName = assetName === 'function'
+//         ? resourceName.split('@').shift()!
+//         : resourceName
 
 //       const internal = isInternal(resourceName, resourceType)
 
 //       if( resourceName !== 'meta' ) {
 //         const description = global.descriptions?.[resourceName]
 //         if( description ) {
-//           switch( assetType ) {
+//           switch( assetName ) {
 //             case 'description':
 //               return description
 //             case 'model':
 //               return description?.model
-//                 || loadModelWithFallback(assetName, internal)
+//                 || loadModelWithFallback(resourceName, internal)
 //             case 'function': {
-//               const fn = description.functions?.[assetName.split('@').pop()!]
+//               const fn = description.functions?.[resourceName.split('@').pop()!]
 //               return fn
-//                 ? wrapFunction(fn, assetName as FunctionPath, resourceType)
-//                 : loadFunctionWithFallback(assetName as FunctionPath, resourceType, internal)
+//                 ? wrapFunction(fn, resourceName as FunctionPath, resourceType)
+//                 : loadFunctionWithFallback(resourceName as FunctionPath, resourceType, internal)
 //             }
 //           }
 //         }
 //       }
 
-//       switch( assetType ) {
+//       switch( assetName ) {
 //         case 'description':
-//           return loadDescription(assetName, internal)
+//           return loadDescription(resourceName, internal)
 //         case 'model':
-//           return loadModelWithFallback(assetName, internal)
+//           return loadModelWithFallback(resourceName, internal)
 //         case 'function':
-//           return loadFunctionWithFallback(assetName as FunctionPath, resourceType, internal)
+//           return loadFunctionWithFallback(resourceName as FunctionPath, resourceType, internal)
 //         case 'library':
-//           return loadLibrary(assetName, resourceType, internal)
+//           return loadLibrary(resourceName, resourceType, internal)
 //       }
 //     }
 //   )
 // }
 //
 export const getResourceAsset = async <
-  const AssetName extends keyof TesteConfig['collections'],
-  const AssetType extends keyof TesteConfig['collections'][AssetName]
+  const ResourceName extends keyof TesteConfig['collections'],
+  const AssetName extends keyof TesteConfig['collections'][ResourceName]
 >(
+  resourceName: ResourceName,
   assetName: AssetName,
-  assetType: AssetType,
-  resourceType: ResourceType = 'collection',
-  // test?: TesteConfig['collections'][AssetName][AssetType]
-): Promise<AssetName extends keyof TesteConfig['collections']
-  ? AssetType extends keyof TesteConfig['collections'][AssetName]
-    ? TesteConfig['collections'][AssetName][AssetType]
+): Promise<ResourceName extends keyof TesteConfig['collections']
+  ? AssetName extends keyof TesteConfig['collections'][ResourceName]
+    ? TesteConfig['collections'][ResourceName][AssetName]
     : never
-    : never> => {
+    : never
+> => {
 
   const config = await import(process.cwd() + '/index.js')
-  const key = (() => {
-    switch( resourceType ) {
-      case 'collection': return 'collections'
-      case 'algorithm': return 'algorithms'
-    }
-  })()
+  const key = 'collections'
 
-  const resource = config[key][assetName][assetType]
+  const resource = config[key][resourceName][assetName]
   return resource
 }
 
 export const get = getResourceAsset
 
-export const getResourceFunction = (functionPath: FunctionPath, resourceType: ResourceType = 'collection') => {
-  return getResourceAsset(functionPath, 'functions', resourceType)
+export const getFunction = async <
+  const ResourceName extends keyof TesteConfig['collections'],
+  const FunctionName extends keyof TesteConfig['collections'][ResourceName]['functions']
+>(
+  resourceName: ResourceName,
+  functionName: FunctionName,
+  acProfile?: UserACProfile
+): Promise<
+  Either<
+    string,
+    ResourceName extends keyof TesteConfig['collections']
+      ? FunctionName extends keyof TesteConfig['collections'][ResourceName]['functions']
+        ? TesteConfig['collections'][ResourceName]['functions'][FunctionName]
+        : never
+        : never
+  >
+> => {
+  if( acProfile ) {
+    if( !await isGranted(resourceName, functionName, acProfile) ) {
+      return left('AUTHORIZATION_ERROR')
+    }
+  }
+
+  const functions = await getResourceAsset(resourceName, 'functions') as TesteConfig['collections'][ResourceName]['functions'][FunctionName]
+  return right(functions![functionName])
 }

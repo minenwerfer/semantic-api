@@ -36,7 +36,7 @@ const insert: ApiFunction<Props> = async (props, context) => {
     key_name: props.what.name
   }, null, {})
 
-  return (await context.model()).findOneAndUpdate(
+  return context.model.findOneAndUpdate(
     { _id: key_id },
     { $set: { content } },
     {

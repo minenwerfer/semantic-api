@@ -1,53 +1,75 @@
-import type { FunctionPath, ApiContext, Role } from '../../types'
+import type { AccessControl, Role } from '../../types'
 import { deepMerge } from '@semantic-api/common'
 
-const applyInheritance = (context: ApiContext, targetRole: Role<any>) => {
+let __accessControl: AccessControl<any>|null = null
+
+const getAccessControl = async () => {
+  if ( !__accessControl ) {
+    __accessControl = (await import(process.cwd() + '/index.js')).accessControl
+  }
+
+  return __accessControl!
+}
+
+const applyInheritance = async (accessControl: AccessControl<any>, targetRole: Role<any>) => {
   const role = Object.assign({}, targetRole)
+
   if( role.inherit ) {
     for( const roleName of role.inherit ) {
-      const parentRole = context.accessControl.roles?.[roleName]
+      const parentRole = accessControl.roles?.[roleName]
       if( !parentRole ) {
         throw new Error(`inherit: role ${roleName} doesnt exist`)
       }
 
-      deepMerge(role, applyInheritance(context, parentRole))
+      delete parentRole.inherit
+      deepMerge(role, await applyInheritance(accessControl, parentRole))
     }
   }
 
   return role
 }
 
-const internalIsGranted = (functionPath: FunctionPath, context: ApiContext) => {
-  const [resourceName, functionName] = functionPath.split('@')
+export const isGranted = async <
+  const ResourceName extends keyof TesteConfig['collections'],
+  const FunctionName extends string
+>(
+  resourceName: ResourceName,
+  functionName: FunctionName,
+  acProfile: UserACProfile
+) => {
+  const userRoles = acProfile.roles
+  const accessControl = await getAccessControl()
 
-  const userRoles: Array<string> = context.token?.user?.roles || ['guest']
-  return userRoles.some((roleName) => {
-    const currentRole = context.accessControl.roles?.[roleName]
-    if( !currentRole ) {
+  for( const roleName of userRoles ) {
+    const _currentRole = accessControl.roles?.[roleName]
+    if( !_currentRole ) {
       throw new Error(`role ${roleName} doesnt exist`)
     }
 
-    deepMerge(currentRole, applyInheritance(context, currentRole))
+    const currentRole = await applyInheritance(accessControl, _currentRole)
+    console.log(currentRole)
 
     const subject = currentRole?.capabilities?.[resourceName]
     if( subject?.blacklist?.includes(functionName) ) {
       return false
     }
 
-    const allowedInToken = !context.token.allowed_functions || (
-      context.token.allowed_functions.includes(functionPath)
+    const allowedInToken = !acProfile.allowed_functions || (
+      acProfile.allowed_functions.includes(`${resourceName}@${functionName}`)
     )
 
-    return allowedInToken
+    const result = allowedInToken
       && (!currentRole.forbidEverything || subject?.functions?.includes(functionName))
       && (
         currentRole?.grantEverything
         || subject?.grantEverything
         || subject?.functions?.includes(functionName)
       )
-  })
-}
 
-export const isGranted = (functionPath: FunctionPath, context: ApiContext) => {
-  return internalIsGranted(functionPath, context)
+    if( result ) {
+      return true
+    }
+
+    return false
+  }
 }

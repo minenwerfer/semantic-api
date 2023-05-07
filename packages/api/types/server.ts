@@ -26,5 +26,4 @@ export type ApiConfig = {
   }
 
   populateUserExtra?: Array<string>
-  dynamicCollections?: boolean
 }
