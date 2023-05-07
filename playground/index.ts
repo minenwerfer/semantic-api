@@ -1,4 +1,4 @@
-import { get, getFunction, isLeft, unwrapEither } from '@semantic-api/api'
+import { get, getFunction, isLeft, unwrapEither, ACErrors } from '@semantic-api/api'
 
 import person from './person'
 import pet from './pet'
@@ -13,9 +13,9 @@ export const accessControl = {
     base: {
       capabilities: {
         pet: {
-          functions: [
-            'bark'
-          ]
+          // functions: [
+          //   'bark'
+          // ]
         }
       }
     },
@@ -53,7 +53,7 @@ const main = async () => {
   if( isLeft(barkEither) ) {
     const error = unwrapEither(barkEither)
     switch( error ) {
-      case 'AUTHORIZATION_ERROR': console.log('Erro de autorização')
+      case ACErrors.AuthorizationError: console.log('Erro de autorização')
     }
 
     return

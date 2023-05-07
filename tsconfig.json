@@ -19,6 +19,9 @@
       "@semantic-api/common": [
         "./packages/common"
       ],
+      "@semantic-api/common/*": [
+        "./packages/common/*"
+      ],
       "@semantic-api/system/*": [
         "./packages/system/*"
       ],

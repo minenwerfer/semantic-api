@@ -1,5 +1,5 @@
 import { COLLECTION_PRESETS, STORE_EFFECTS, } from '../constants'
-import type { ApiFunction } from '../../api/types'
+import type { ApiFunction } from '../../api/src/types'
 import type { Model } from '../../api/database'
 import type { Property } from './jsonschema'
 
