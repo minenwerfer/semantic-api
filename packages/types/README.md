@@ -1,6 +1,6 @@
 # `@semantic-api/types`
 
-## Instalation
+## Installation
 
 ```sh
 $ yarn add @semantic-api/types

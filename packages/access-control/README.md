@@ -1,6 +1,6 @@
 # `@semantic-api/access-control`
 
-## Instalation
+## Installation
 
 ```sh
 $ yarn add @semantic-api/access-control

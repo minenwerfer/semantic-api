@@ -1,6 +1,6 @@
 # `@semantic-api/common`
 
-## Instalation
+## Installation
 
 ```sh
 $ yarn add @semantic-api/common

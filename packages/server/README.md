@@ -1,6 +1,6 @@
 # `@semantic-api/server`
 
-## Instalation
+## Installation
 
 ```sh
 $ yarn add @semantic-api/server
