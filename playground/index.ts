@@ -13,16 +13,18 @@ export const accessControl = {
     base: {
       capabilities: {
         pet: {
-          // functions: [
-          //   'bark'
-          // ]
+          functions: [
+            'bark'
+          ]
         }
       }
     },
-    guest: {
+    barker: {
       inherit: [
         'base'
-      ],
+      ]
+    },
+    guest: {
       capabilities: {
         person: {
           functions: [
@@ -31,6 +33,11 @@ export const accessControl = {
           ]
         },
       }
+    },
+    root: {
+      inherit: [
+        'barker'
+      ]
     }
   }
 }
@@ -46,7 +53,7 @@ const main = async () => {
 
   const barkEither = await getFunction('pet', 'bark', {
     roles: [
-      'guest'
+      'root'
     ]
   })
 

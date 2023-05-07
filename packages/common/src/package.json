@@ -9,12 +9,12 @@
   },
   "exports": {
     ".": {
-      "import": "./esm/index.js",
-      "require": "./cjs/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     },
     "./either": {
-      "import": "./esm/either.js",
-      "require": "./cjs/either.js"
+      "import": "./dist/esm/either.js",
+      "require": "./dist/cjs/either.js"
     }
   },
   "keywords": [],

@@ -21,7 +21,6 @@ const applyInheritance = async (accessControl: AccessControl<any>, targetRole: R
         throw new Error(`inherit: role ${roleName} doesnt exist`)
       }
 
-      delete parentRole.inherit
       deepMerge(role, await applyInheritance(accessControl, parentRole))
     }
   }

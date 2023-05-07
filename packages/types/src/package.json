@@ -9,12 +9,12 @@
   },
   "exports": {
     ".": {
-      "import": "./esm/index.js",
-      "require": "./cjs/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     },
     "./*": {
-      "import": "./esm/*",
-      "require": "./cjs/*"
+      "import": "./dist/esm/*",
+      "require": "./dist/cjs/*"
     }
   },
   "keywords": [],

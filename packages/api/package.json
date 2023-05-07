@@ -8,24 +8,24 @@
   },
   "exports": {
     ".": {
-      "import": "./esm/index.js",
-      "require": "./cjs/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     },
     "./presets/*": {
-      "import": "./esm/presets/*",
-      "require": "./cjs/presets/*"
+      "import": "./dist/esm/presets/*",
+      "require": "./dist/cjs/presets/*"
     },
     "./server": {
-      "import": "./esm/server/index.js",
-      "require": "./cjs/server/index.js"
+      "import": "./dist/esm/server/index.js",
+      "require": "./dist/cjs/server/index.js"
     },
     "./database": {
-      "import": "./esm/database.js",
-      "require": "./cjs/database.js"
+      "import": "./dist/esm/database.js",
+      "require": "./dist/cjs/database.js"
     },
     "./*": {
-      "import": "./esm/core/*",
-      "require": "./cjs/core/*"
+      "import": "./dist/esm/core/*",
+      "require": "./dist/cjs/core/*"
     }
   },
   "keywords": [],
