@@ -1,0 +1,17 @@
+{
+  "name": "@semantic-api/access-control",
+  "version": "1.0.0",
+  "description": "## Instalation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@semantic-api/common": "latest",
+    "@semantic-api/system": "latest",
+    "@semantic-api/types": "latest"
+  }
+}
