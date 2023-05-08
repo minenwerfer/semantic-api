@@ -3,13 +3,10 @@ import type { mongoose } from 'mongoose'
 
 import type { Config, AccessControl } from './types'
 
-
 declare global {
   var descriptions: Record<string, Description>
   var modules: Record<string, any>
   var mongoose: typeof mongoose
-
-  var PREBUNDLED_ASSETS: Record<string, any>
 
   type TesteConfig = Config<any>
 
