@@ -18,6 +18,8 @@ export type CollectionAction = Readonly<{
   // route namespace
   fetchItem?: boolean
   clearItem?: boolean
+  params?: Record<string, any>
+  query?: Record<string, any>
 
   requires?: Array<string>
 }>
@@ -81,6 +83,8 @@ export type Layout = {
 export type Description = {
   $id: CollectionId
   title?: string
+
+  // unused
   categories?: Array<string>
   system?: boolean
 
@@ -110,6 +114,7 @@ export type Description = {
   tableMeta?: Array<string>
 
   filtersPresets?: Record<string, FiltersPreset>
+  freshItem?: Record<string, any>
 
   form?: ReadonlyArray<string>|Record<string, Array<string>>
   writable?: Array<string>

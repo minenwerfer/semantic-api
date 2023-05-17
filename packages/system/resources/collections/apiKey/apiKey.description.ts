@@ -51,12 +51,6 @@ export default defineDescription(schema, {
     'name',
     'allowed_functions'
   ],
-  actions: {
-    'route/dashboard-documentation': {
-      name: 'Documentação',
-      icon: 'file-alt'
-    }
-  },
   individualActions: {
     copyContent: {
       name: 'Copiar chave',
