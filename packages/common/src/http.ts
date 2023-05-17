@@ -36,8 +36,8 @@ export const request = async <Return=any>(
   }
 ) => {
   params.body = payload
-  if( globalThis.sessionStorage ) {
-    const token = sessionStorage.getItem('auth:token')
+  if( userStorage ) {
+    const token = userStorage.getItem('auth:token')
     if( token ) {
       params.headers['authorization'] ??= `Bearer ${token}`
     }

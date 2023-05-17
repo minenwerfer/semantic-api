@@ -112,6 +112,7 @@ export type Description = {
   tableMeta?: Array<string>
 
   filtersPresets?: Record<string, FiltersPreset>
+  freshItem?: Record<string, any>
 
   form?: ReadonlyArray<string>|Record<string, Array<string>>
   writable?: Array<string>
