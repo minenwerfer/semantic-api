@@ -26,10 +26,7 @@ export const getTypeConstructor = (property: CollectionProperty, recurse: (descr
   }
 
   if( property.properties ) {
-    return [
-      Object,
-      recurse(property as Parameters<typeof recurse>[0])
-    ]
+    return recurse(property as Parameters<typeof recurse>[0])
   }
 
   switch( property.format ) {
