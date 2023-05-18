@@ -1,7 +1,7 @@
 {
   "name": "@semantic-api/common",
   "type": "module",
-  "version": "0.0.53",
+  "version": "0.0.55",
   "description": "",
   "main": "index.js",
   "scripts": {
