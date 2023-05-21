@@ -73,7 +73,7 @@ export const descriptionToSchemaObj = (description: Omit<Description, '$id'>) =>
       result.select = false
     }
 
-    result.type = type[0] instanceof Function
+    result.type = type[0] instanceof Map
       ? type[0]
       : type
 
