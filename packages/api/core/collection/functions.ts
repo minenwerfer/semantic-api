@@ -72,9 +72,9 @@ export default <T extends MongoDocument>(
     const filters = Object.fromEntries(entries) || {}
     const query = await beforeRead({ filters }, context)
 
-    const sort = query.sort
-      ? query.sort
-      : props.sort || DEFAULT_SORT
+    const sort = props.sort
+      ? props.sort
+      : query.sort || DEFAULT_SORT
 
     return model.find(query.filters, normalizeProjection(props.project, description))
       .sort(sort)
