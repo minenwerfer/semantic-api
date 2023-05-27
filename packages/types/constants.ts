@@ -15,7 +15,7 @@ export const PAGINATION_PER_PAGE_DEFAULTS = [
   150
 ]
 
-export const PAGINATION_PER_PAGE_DEFAULT = 35
+export const PAGINATION_PER_PAGE_DEFAULT = 10
 
 export const PROPERTY_TYPES = [
   'string',
