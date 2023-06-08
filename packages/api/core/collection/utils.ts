@@ -15,7 +15,7 @@ export const normalizeProjection = <T>(
     : Object.entries(projection)
 
   return target.reduce((a, [key, value]) => {
-    if( !description.properties[key] || description.properties[key].s$hidden ) {
+    if( description.properties[key]?.s$hidden ) {
       return a
     }
 
