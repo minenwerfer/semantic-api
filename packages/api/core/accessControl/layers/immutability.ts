@@ -28,7 +28,10 @@ const internalCheck: (...args: Parameters<AccessControlLayer>) => Promise<void> 
   }
 
   if( childId ) {
-    if( currentDocument[propertyName] && currentDocument[propertyName]?._id.toString() !== childId ) {
+    if(
+      (Array.isArray(currentDocument[propertyName]) && !currentDocument[propertyName].some((child: { _id: string }) => child?._id?.toString() === childId))
+      || (!Array.isArray(currentDocument[propertyName]) && currentDocument[propertyName] && currentDocument[propertyName]?._id.toString() !== childId)
+    ) {
       throw new TypeError('incorrect child')
     }
   }

@@ -8,11 +8,6 @@ export default {
           'describeAll'
         ]
       },
-      searchable: {
-        functions: [
-          'search'
-        ]
-      },
       file: {
         forbidEverything: true,
         functions: [

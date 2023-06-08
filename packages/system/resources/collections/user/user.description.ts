@@ -145,14 +145,6 @@ export default defineDescription<typeof schema>(schema, {
       ask: true
     }
   },
-  searchable: {
-    picture: 'picture',
-    indexes: [
-      'name',
-      'phone',
-      'email'
-    ]
-  },
   filters: [
     'full_name',
     'roles',

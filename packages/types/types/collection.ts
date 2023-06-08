@@ -131,10 +131,9 @@ export type Description = {
   actions?: CollectionActions
   individualActions?: CollectionActions
 
-  searchable?: {
-    picture?: string
-    indexes: Array<string>
-    actions?: Record<string, CollectionAction>
+  search?: {
+    active: boolean
+    placeholder?: string
   }
 
   properties: Record<string, CollectionProperty>

@@ -13,6 +13,23 @@ const schema = {
     name: {
       type: 'string'
     },
+    members: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          roles: {
+            type: 'array',
+            items: {
+              enum: [],
+            }
+          },
+          user: {
+            $ref: 'user'
+          }
+        }
+      }
+    }
   }
 } as const
 
