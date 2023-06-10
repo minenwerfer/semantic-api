@@ -86,7 +86,9 @@ export type Description = {
 
   // unused
   categories?: Array<string>
+
   system?: boolean
+  inline?: boolean
 
   preferred?: Record<string, Description>
 

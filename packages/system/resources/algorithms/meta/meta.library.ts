@@ -31,6 +31,10 @@ const discoverDescriptions = ({ dynamic, system }: { dynamic?: boolean, system?:
           )
         }
 
+        if( description.inline ) {
+          return a
+        }
+
         return {
           ...a,
           [d]: description
