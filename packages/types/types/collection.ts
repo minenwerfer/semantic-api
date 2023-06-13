@@ -177,6 +177,7 @@ type CollectionPropertyAux = {
 
   /** @see SvFile */
   readonly accept?: ReadonlyArray<string>
+  componentProps?: Record<string, any>
 
   isReference?: boolean
   isFile?: boolean

@@ -76,6 +76,12 @@ export const prepareInsert = (
       return a
     }
 
+    // it's a mongodb operation
+    if( key[0] === '$' && !description.writable ) {
+      a[key] = value
+      return a
+    }
+
     if(
       ( [undefined, null].includes(value) || R.isEmpty(value) )
         && !Array.isArray(value)
