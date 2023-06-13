@@ -8,11 +8,6 @@ export const baseRoles: Roles<any> = {
           'describeAll'
         ]
       },
-      searchable: {
-        functions: [
-          'search'
-        ]
-      },
       file: {
         forbidEverything: true,
         functions: [

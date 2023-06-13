@@ -40,6 +40,23 @@ const schema = {
       type: 'boolean',
       default: true
     },
+    organizations: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          roles: {
+            type: 'array',
+            items: {
+              enum: [],
+            }
+          },
+          organization: {
+            $ref: 'organization'
+          }
+        }
+      }
+    },
     roles: {
       type: 'array',
       items: {
@@ -127,14 +144,6 @@ export default defineDescription<typeof schema>(schema, {
       icon: 'trash-alt',
       ask: true
     }
-  },
-  searchable: {
-    picture: 'picture',
-    indexes: [
-      'name',
-      'phone',
-      'email'
-    ]
   },
   filters: [
     'full_name',

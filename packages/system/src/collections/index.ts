@@ -10,4 +10,5 @@ export default {
   log: {},
   resourceUsage: {},
   user: {},
+  organization: {}
 }

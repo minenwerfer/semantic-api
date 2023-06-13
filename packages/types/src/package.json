@@ -1,7 +1,11 @@
 {
   "name": "@semantic-api/types",
   "type": "module",
+<<<<<<< HEAD:packages/types/src/package.json
   "version": "0.0.51",
+=======
+  "version": "0.0.56",
+>>>>>>> maintenance:packages/types/package.json
   "description": "",
   "main": "index.js",
   "scripts": {

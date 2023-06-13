@@ -1,7 +1,11 @@
 {
   "name": "@semantic-api/api",
   "type": "module",
+<<<<<<< HEAD
   "version": "0.0.14",
+=======
+  "version": "0.0.18",
+>>>>>>> maintenance
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

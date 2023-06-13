@@ -9,8 +9,11 @@ export const options = {
   }
 }
 
+const isDevelopment = process.env.NODE_ENV === 'development'
+
 mongoose.set('strictQuery', true)
 mongoose.set('bufferCommands', false)
+mongoose.set('debug', isDevelopment)
 
 export const connectDatabase = async () => {
   const mongodbUri = await (async () => {

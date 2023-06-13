@@ -10,7 +10,12 @@ type PropertyDependent =
 export const defineDescription = <
   T extends _Description,
   A=SchemaProperties<T>,
-  AvailableProperties=Array<keyof T['properties'] | 'owner'>,
+  AvailableProperties=Array<
+    keyof T['properties']
+    | 'owner'
+    | 'created_at'
+    | 'updated_at'
+  >,
   Description=Omit<_Description, keyof A | PropertyDependent> & {
     [P in PropertyDependent]?: AvailableProperties
   }

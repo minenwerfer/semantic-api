@@ -15,7 +15,7 @@ export const normalizeProjection = <T>(
     : Object.entries(projection)
 
   return target.reduce((a, [key, value]) => {
-    if( !description.properties[key] || description.properties[key].s$hidden ) {
+    if( description.properties[key]?.s$hidden ) {
       return a
     }
 
@@ -73,6 +73,12 @@ export const prepareInsert = (
   }
   const prepareUpdate = () => Object.entries(rest as Record<string, any>).reduce((a: any, [key, value]) => {
     if( forbidden(key) ) {
+      return a
+    }
+
+    // it's a mongodb operation
+    if( key[0] === '$' && !description.writable ) {
+      a[key] = value
       return a
     }
 

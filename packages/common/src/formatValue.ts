@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import type { CollectionProperty } from '../types'
-import { formatDateTime } from './polyfill/string'
+import { formatDateTime } from './string'
 
 export const formatValue = (
   value: any,

@@ -20,6 +20,8 @@ export type CollectionAction = Readonly<{
   // route namespace
   fetchItem?: boolean
   clearItem?: boolean
+  params?: Record<string, any>
+  query?: Record<string, any>
 
   requires?: Array<string>
 }>
@@ -83,8 +85,12 @@ export type Layout = {
 export type Description = {
   $id: CollectionId
   title?: string
+
+  // unused
   categories?: Array<string>
+
   system?: boolean
+  inline?: boolean
 
   preferred?: Record<string, Description>
 
@@ -129,10 +135,9 @@ export type Description = {
   actions?: CollectionActions
   individualActions?: CollectionActions
 
-  searchable?: {
-    picture?: string
-    indexes: Array<string>
-    actions?: Record<string, CollectionAction>
+  search?: {
+    active: boolean
+    placeholder?: string
   }
 
   properties: Record<string, CollectionProperty>
@@ -173,6 +178,7 @@ type CollectionPropertyAux = {
 
   /** @see SvFile */
   readonly accept?: ReadonlyArray<string>
+  componentProps?: Record<string, any>
 
   isReference?: boolean
   isFile?: boolean

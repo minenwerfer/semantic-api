@@ -26,5 +26,12 @@
         "../dist/staging/types"
       ]
     }
+<<<<<<< HEAD:playground/tsconfig.json
   }
+=======
+  },
+  "exclude": [
+    "examples"
+  ]
+>>>>>>> maintenance:tsconfig.json
 }

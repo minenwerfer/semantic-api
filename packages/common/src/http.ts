@@ -36,8 +36,13 @@ export const request = async <Return=any>(
   }
 ) => {
   params.body = payload
+<<<<<<< HEAD:packages/common/src/http.ts
   if( userStorage ) {
     const token = userStorage.getItem('auth:token')
+=======
+  if( globalThis.userStorage ) {
+    const token = globalThis.userStorage.getItem('auth:token')
+>>>>>>> maintenance:packages/common/http.ts
     if( token ) {
       params.headers['authorization'] ??= `Bearer ${token}`
     }
