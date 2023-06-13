@@ -1,4 +1,4 @@
-import { Types } from '@semantic-api/api/database'
+import { Types } from 'mongoose'
 import { getResourceAsset } from '@semantic-api/api'
 import type { ApiFunction } from '@semantic-api/api'
 import type { User } from './user.description'

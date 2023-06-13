@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "dist/cjs",
+    "outDir": "dist",
     "target": "esnext",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -8,6 +8,20 @@
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@semantic-api/api": [
+        "../api/dist"
+      ],
+      "@semantic-api/common": [
+        "../common/dist"
+      ],
+      "@semantic-api/system/*": [
+        "../dist/staging/system/*"
+      ],
+      "@semantic-api/types": [
+        "../types/dist"
+      ]
+    }
   }   
 }

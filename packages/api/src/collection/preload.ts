@@ -1,7 +1,7 @@
 import * as R from 'ramda'
+import type { Description } from '@semantic-api/types'
 import { getReferencedCollection, serialize } from '@semantic-api/common'
 import { getResourceAsset } from '../assets'
-import type { Description } from '../../../types'
 
 export type PreloadOptions = {
   serialize?: boolean

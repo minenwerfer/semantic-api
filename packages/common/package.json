@@ -1,0 +1,21 @@
+{
+  "name": "@semantic-api/common",
+  "type": "module",
+  "version": "0.0.56",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@semantic-api/system": "latest",
+    "bson": "latest",
+    "ramda": "^0.28.0"
+  },
+  "devDependencies": {
+    "@types/ramda": "^0.28.23"
+  }
+}

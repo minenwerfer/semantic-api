@@ -1,5 +1,6 @@
 import type { ResponseToolkit } from '@hapi/hapi'
-import type { HandlerRequest, DecodedToken, FunctionPath, ApiContext } from '../../types'
+import type { DecodedToken, FunctionPath, ApiContext } from '@semantic-api/api'
+import type { HandlerRequest } from '../types'
 import { PAGINATION_PER_PAGE_LIMIT } from '@semantic-api/types'
 
 type PreHookParams = {

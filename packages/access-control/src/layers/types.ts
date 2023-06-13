@@ -1,4 +1,4 @@
-import type { ApiContext } from '../../..'
+import type { ApiContext } from '@semantic-api/api'
 
 export type AccessControlLayer = (context: ApiContext, props: {
   propertyName?: string

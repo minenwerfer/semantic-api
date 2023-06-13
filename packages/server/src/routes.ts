@@ -1,3 +1,4 @@
+import type { ApiContext } from '@semantic-api/api'
 import { ServerRoute } from '@hapi/hapi'
 import {
   safeHandle,
@@ -7,8 +8,6 @@ import {
   fileDownload
 
 } from './handler'
-
-import type { ApiContext } from '../types'
 
 export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
   const defaultHandler = (...args: Parameters<typeof safeHandle>) => {

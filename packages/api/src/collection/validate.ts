@@ -1,5 +1,5 @@
 import { Types } from 'mongoose'
-import type { Description, CollectionProperty } from '../../../types'
+import type { Description, CollectionProperty } from '@semantic-api/types'
 import { makeException } from '../exceptions'
 import { getTypeConstructor } from './typemapping'
 

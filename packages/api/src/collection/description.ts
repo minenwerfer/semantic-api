@@ -1,4 +1,4 @@
-import type { Description as _Description } from '../../../types'
+import type { Description as _Description } from '@semantic-api/types'
 import type { SchemaProperties } from './schema.types'
 
 type PropertyDependent =

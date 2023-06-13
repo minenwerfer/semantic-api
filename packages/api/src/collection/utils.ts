@@ -1,6 +1,6 @@
 import * as R from 'ramda'
-import type { Description } from '../../../types'
-import type { MongoDocument } from '../../types'
+import type { Description } from '@semantic-api/types'
+import type { MongoDocument } from '../types'
 
 export const normalizeProjection = <T>(
   projection: T,

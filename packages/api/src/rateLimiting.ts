@@ -1,4 +1,4 @@
-import type { ApiContext } from '../types/function'
+import type { ApiContext } from './types/function'
 import { makeException } from './exceptions'
 import { mongoose } from './database'
 

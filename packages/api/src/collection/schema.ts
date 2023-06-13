@@ -6,8 +6,8 @@ import {
   SchemaOptions
 } from 'mongoose'
 
+import type { Description, CollectionProperty } from '@semantic-api/types'
 import { getReferencedCollection } from '@semantic-api/common'
-import type { Description, CollectionProperty } from '../../../types'
 
 import { options as defaultOptions } from '../database'
 import { getResourceAsset } from '../assets'

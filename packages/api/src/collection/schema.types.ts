@@ -1,7 +1,5 @@
-import type { CollectionProperty, ValuesOf, JsonSchema } from '../../../types'
-export type { Description } from '../../../types'
-import type { MongoDocument, Reference } from '../../types'
-export { Reference }
+import type { CollectionProperty, ValuesOf, JsonSchema } from '@semantic-api/types'
+import type { MongoDocument, Reference } from '../types'
 
 export type Schema<T extends JsonSchema> = CaseOwned<T>
 

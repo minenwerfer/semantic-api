@@ -1,6 +1,7 @@
 import type { Request } from '@hapi/hapi'
-import type { HandlerRequest, ApiContext, ResourceType } from '../../types'
-import { useCollection } from '../../core/collection'
+import type { ApiContext, ResourceType } from '@semantic-api/api'
+import type { HandlerRequest, } from '../types'
+import { useCollection } from '@semantic-api/api'
 
 type PostHookParams = {
   redirected?: boolean

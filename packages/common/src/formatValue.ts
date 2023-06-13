@@ -1,5 +1,5 @@
+import type { CollectionProperty } from '@semantic-api/types'
 import * as R from 'ramda'
-import type { CollectionProperty } from '../types'
 import { formatDateTime } from './string'
 
 export const formatValue = (

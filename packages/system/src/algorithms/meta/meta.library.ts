@@ -1,7 +1,7 @@
-import type { Description } from '../../../../types'
+import type { Description } from '@semantic-api/types'
 import type { ApiContext } from '@semantic-api/api'
 import { preloadDescription } from '@semantic-api/api'
-import SystemCollections from '../../collections'
+// import SystemCollections from '../../collections'
 
 const __cachedDescriptions: Record<string, Description> = {}
 export const cachedDescriptions = __cachedDescriptions

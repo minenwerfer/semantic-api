@@ -1,6 +1,6 @@
-import { existsSync } from 'fs'
+// import { existsSync } from 'fs'
 
-import type { Model } from 'mongoose'
+// import type { Model } from 'mongoose'
 import type {
   ApiFunction ,
   AnyFunctions,
@@ -8,15 +8,15 @@ import type {
   FunctionPath,
   ApiContext
 
-} from '../types'
+} from './types'
 
 import { arraysIntersects, Either, left, right, isRight } from '@semantic-api/common'
-import SystemCollections from '@semantic-api/system/resources/collections/index.js'
-import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
-import type { DecodedToken } from '../types/server'
+// import SystemCollections from '@semantic-api/system/resources/collections/index.js'
+// import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
+// import type { DecodedToken } from '../types/server'
 import type { CollectionFunctions } from './collection/functions.types'
 
-import { isGranted } from './accessControl'
+import { isGranted } from '@semantic-api/access-control'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { limitRate } from './rateLimiting'
 import { render } from './render'
@@ -31,11 +31,6 @@ import { render } from './render'
 // }
 
 export const requireWrapper = (path: string) => {
-  const resolvedPath = path.replace(process.cwd(), '.')
-  if( PREBUNDLED_ASSETS?.[resolvedPath] ) {
-    return PREBUNDLED_ASSETS[resolvedPath]
-  }
-
   const content = require(path)
   return content.default || content
 }

@@ -1,6 +1,6 @@
-import type { ApiContext, ApiContextWithAC, MongoDocument } from '../../types'
+import type { ApiContext, ApiContextWithAC, MongoDocument } from '../types'
+import { useAccessControl } from '@semantic-api/access-control'
 import { getResourceAsset } from '../assets'
-import { useAccessControl } from '../accessControl/use'
 import useFunctions from './functions'
 
 export const useCollection = async <T extends MongoDocument>(collectionName: string, _context: ApiContext<any>|null = null) => {

@@ -9,7 +9,6 @@ export type MongoDocument = {
   updated_at?: Date
 }
 
-
 export {
   ObjectId
 }

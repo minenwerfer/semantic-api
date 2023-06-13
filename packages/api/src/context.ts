@@ -27,6 +27,6 @@ export const createContext = async () => {
   }
 }
 
-const ctx = createContext()
+// const ctx = createContext()
 
-ctx.collections.ax.name 
+// ctx.collections.ax.name 

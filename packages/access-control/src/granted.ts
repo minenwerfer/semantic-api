@@ -1,4 +1,4 @@
-import type { AccessControl, Role } from '../../types'
+import type { AccessControl, Role } from './types'
 import { deepMerge } from '@semantic-api/common'
 
 let __accessControl: AccessControl<any>|null = null

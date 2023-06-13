@@ -1,10 +1,10 @@
 import * as R from 'ramda'
 import type { Model } from 'mongoose'
-import type { Description } from '../../../types'
-import type { ApiContextWithAC, MongoDocument } from '../../types'
+import type { Description } from '@semantic-api/types'
+import type { ApiContextWithAC, MongoDocument } from '../types'
 import type { Projection, CollectionFunctions } from './functions.types'
 import { DEFAULT_SORT, LEAN_OPTIONS } from '@semantic-api/types'
-import { checkImmutability } from '../accessControl/layers'
+import { checkImmutability } from '@semantic-api/access-control'
 import { makeException } from '../exceptions'
 import { normalizeProjection, fill, prepareInsert } from './utils'
 

@@ -1,5 +1,5 @@
-import type { AccessControlLayer } from '../core/accessControl'
-import type { Collections } from './config'
+import type { Collections } from '@semantic-api/api'
+import type { AccessControlLayer } from './layers/types'
 
 export type ValidAccessControlLayer =
   'read'

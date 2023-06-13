@@ -1,6 +1,6 @@
 import { deepMerge } from '@semantic-api/common'
-import type { ApiFunction, ApiContext } from '../../types'
-import type { Description } from '../../../types'
+import type { ApiFunction, ApiContext } from '@semantic-api/server'
+import type { Description } from '@semantic-api/types'
 import * as baseControl from './baseLayers'
 
 type ReadPayload = {

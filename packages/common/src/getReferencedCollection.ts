@@ -1,4 +1,4 @@
-import type { CollectionProperty } from '../types'
+import type { CollectionProperty } from '@semantic-api/types'
 
 export const getReferencedCollection = (property?: CollectionProperty) => {
   const search = [

@@ -1,6 +1,5 @@
 import { COLLECTION_PRESETS, STORE_EFFECTS, } from '../constants'
-import type { ApiFunction } from '../../api/src/types'
-import type { Model } from '../../api/src/database'
+import type { ApiFunction, Model } from '@semantic-api/api'
 import type { Property } from './jsonschema'
 
 export type CollectionPresets = typeof COLLECTION_PRESETS[number]
@@ -14,8 +13,6 @@ export type CollectionAction = Readonly<{
   ask?: boolean
   selection?: boolean
   effect?: StoreEffect
-  params?: Record<string, any>
-  query?: Record<string, any>
 
   // route namespace
   fetchItem?: boolean

@@ -1,5 +1,5 @@
 import { Types } from 'mongoose'
-import { Description, CollectionProperty } from '../../../types'
+import { Description, CollectionProperty } from '@semantic-api/types'
 
 export const getTypeConstructor = (property: CollectionProperty, recurse: (description: Pick<Description, 'properties'>) => any): any => {
   if( property.type === 'array' ) {

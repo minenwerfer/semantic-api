@@ -10,8 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semantic-api/common": "latest",
-    "@semantic-api/system": "latest",
-    "@semantic-api/types": "latest"
+    "@semantic-api/common": "file:../common/dist",
+    "@semantic-api/server": "file:../server/dist",
+    "@semantic-api/system": "file:../system/dist",
+    "@semantic-api/types": "file:../types/dist"
   }
 }

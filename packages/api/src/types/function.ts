@@ -1,14 +1,13 @@
 import type { Model } from 'mongoose'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { Log } from '@semantic-api/system/resources/collections/log/log.description'
-import type { useAccessControl } from '../core/accessControl/use'
-import type { render } from '../core/render'
-import type { limitRate } from '../core/rateLimiting'
-import type { Description } from '../../types'
-import type { CollectionFunctions } from '../core/collection/functions.types'
-import type { RateLimitingParams } from '../core/rateLimiting'
-import type { ApiConfig, DecodedToken } from './server'
-import type { AccessControl } from './accessControl'
+import type { Description } from '@semantic-api/types'
+import type { useAccessControl, AccessControl } from '@semantic-api/access-control'
+import type { ApiConfig, DecodedToken } from './config'
+import type { render } from '../render'
+import type { limitRate } from '../rateLimiting'
+import type { CollectionFunctions } from '../collection/functions.types'
+import type { RateLimitingParams } from '../rateLimiting'
 
 export type FunctionPath = `${string}@${string}`
 
