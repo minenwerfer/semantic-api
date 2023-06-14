@@ -1,36 +1,16 @@
 {
   "name": "@semantic-api/api",
   "type": "module",
-<<<<<<< HEAD
-  "version": "0.0.14",
-=======
   "version": "0.0.18",
->>>>>>> maintenance
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "exports": {
-    ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
-    },
-    "./presets/*": {
-      "import": "./dist/esm/presets/*",
-      "require": "./dist/cjs/presets/*"
-    },
-    "./server": {
-      "import": "./dist/esm/server/index.js",
-      "require": "./dist/cjs/server/index.js"
-    },
-    "./database": {
-      "import": "./dist/esm/database.js",
-      "require": "./dist/cjs/database.js"
-    },
-    "./*": {
-      "import": "./dist/esm/core/*",
-      "require": "./dist/cjs/core/*"
-    }
+    ".": "./dist/index.js",
+    "./presets/*": "./dist/presets/*",
+    "./database": "./dist/database.js",
+    "./*": "./dist/*"
   },
   "keywords": [],
   "author": "",
@@ -46,9 +26,9 @@
   "dependencies": {
     "@hapi/hapi": "^21.1.0",
     "@hapi/inert": "^7.0.0",
-    "@semantic-api/common": "latest",
-    "@semantic-api/system": "latest",
-    "@semantic-api/types": "latest",
+    "@semantic-api/common": "file:../common",
+    "@semantic-api/system": "file:../system",
+    "@semantic-api/types": "file:../types",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.8",
     "jsonwebtoken": "^8.5.1",
@@ -56,8 +36,7 @@
     "mongoose-autopopulate": "^0.16.0",
     "mongoose-lean-getters": "^0.3.5",
     "mongoose-lean-virtuals": "^0.9.1",
-    "sharp": "^0.31.3",
-    "ts-node": "^10.4.0"
+    "sharp": "^0.31.3"
   },
   "optionalDependencies": {
     "mongodb-memory-server": "^8.10.2"

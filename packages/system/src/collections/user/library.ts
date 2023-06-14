@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import { getResourceAsset } from '@semantic-api/api'
 import type { ApiFunction } from '@semantic-api/api'
-import type { User } from './user.description'
+import type { User } from './description'
 
 type SaveWithExtraProps = {
   what: Partial<User> & {

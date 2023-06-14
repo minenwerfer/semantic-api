@@ -11,14 +11,14 @@ import type { RateLimitingParams } from '../rateLimiting'
 
 export type FunctionPath = `${string}@${string}`
 
-export type ApiFunction<Props=unknown, Library=Record<string, (...args: any) => any>, Return=any> = (
+export type ApiFunction<Props=unknown, Return=any> = (
   props: Props,
-  context: ApiContext<Library>
+  context: ApiContext
 ) => Return
 
 export type AnyFunctions = CollectionFunctions & Record<string, (props?: any) => any>
 
-export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
+export type ApiContext = {
   resourceName: string
   functionPath?: FunctionPath
 
@@ -36,7 +36,6 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   model: Model<any>
 
   resource: AnyFunctions
-  library: Library
   log: (message: string, details?: Record<string, any>) => Promise<Log>
   algorithms: Record<string, AnyFunctions>
   collections: Record<string, AnyFunctions & {
@@ -53,7 +52,7 @@ export type ApiContext<Library=Record<string, (...args: any[]) => any>> = {
   render: <T extends Record<string, any>>(path: string, options?: T) => ReturnType<typeof render>
 }
 
-export type ApiContextWithAC<T=any> = ApiContext<T> & {
+export type ApiContextWithAC = ApiContext & {
   acFunctions: ReturnType<typeof useAccessControl>
 }
 

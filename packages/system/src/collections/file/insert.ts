@@ -1,7 +1,7 @@
 import { createHash } from 'crypto'
 import { writeFile, unlink } from 'fs/promises'
-import type { ApiFunction } from '@semantic-api/api'
-import { File } from '../file.description'
+import type { ApiContext } from '@semantic-api/api'
+import { File } from './description'
 
 const { STORAGE_PATH } = process.env
 
@@ -14,7 +14,7 @@ type Props = {
   >
 }
 
-const insert: ApiFunction<Props> = async (props, { token, collection }) => {
+const insert = async (props: Props, { token, collection }: ApiContext) => {
   const what = Object.assign({}, props.what)
   what.owner = token?.user._id
 

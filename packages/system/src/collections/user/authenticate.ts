@@ -1,6 +1,8 @@
 import { Token, makeException } from '@semantic-api/api'
-import type { ApiFunction } from '@semantic-api/api'
-import type { User } from '../user.description'
+import type { ApiContext } from '@semantic-api/api'
+import type { User } from './description'
+
+import { userExtraModel } from './library'
 
 type Props = {
   email: string
@@ -22,7 +24,7 @@ type Return = Promise<{
   }
 }>
 
-const authenticate: ApiFunction<Props, typeof import ('../user.library')> = async (props, context): Return => {
+const authenticate = async (props: Props, context: ApiContext): Return => {
   if( !props?.email ) {
     throw new Error('Empty email or password')
   }
@@ -104,7 +106,7 @@ const authenticate: ApiFunction<Props, typeof import ('../user.library')> = asyn
   }
 
   if( context.apiConfig.populateUserExtra ) {
-    const UserExtra = await context.library.userExtraModel()
+    const UserExtra = await userExtraModel()
     const projection = context.apiConfig.populateUserExtra
       .reduce((a, f) => ({ ...a, [f]: 1 }), {})
 

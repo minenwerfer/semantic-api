@@ -1,7 +1,7 @@
-import type { ApiFunction } from '@semantic-api/api'
+import type { ApiContext } from '@semantic-api/api'
 import { makeException } from '@semantic-api/api'
 
-const ping: ApiFunction = async (_props, { token, limitRate }) => {
+const ping = async (_props: null, { token }: ApiContext) => {
   if( !token.user?.roles?.length ) {
     throw new (makeException({
       name: 'AuthorizationError',

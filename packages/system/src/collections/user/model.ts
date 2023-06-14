@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 import { createModel } from '@semantic-api/api'
-import UserDescription from './user.description'
+import UserDescription from './description'
 
 export default createModel(UserDescription, {
   schemaCallback: (schema) => { 

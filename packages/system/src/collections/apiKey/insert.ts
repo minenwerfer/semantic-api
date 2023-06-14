@@ -1,12 +1,12 @@
-import type { ApiFunction } from '@semantic-api/api'
-import type { ApiKey } from '../apiKey.description'
+import type { ApiContext } from '@semantic-api/api'
+import type { ApiKey } from './description'
 import { Token } from '@semantic-api/api'
 
 type Props = {
   what: Partial<ApiKey>
 }
 
-const insert: ApiFunction<Props> = async (props, context) => {
+const insert = async (props: Props, context: ApiContext) => {
   if( props.what._id ) {
     return context.collection.insert(props)
   }
