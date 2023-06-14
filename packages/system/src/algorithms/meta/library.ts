@@ -3,9 +3,6 @@ import type { ApiContext } from '@semantic-api/api'
 import { preloadDescription } from '@semantic-api/api'
 // import SystemCollections from '../../collections'
 
-const __cachedDescriptions: Record<string, Description> = {}
-export const cachedDescriptions = __cachedDescriptions
-
 // const discoverDescriptions = ({ dynamic, system }: { dynamic?: boolean, system?: boolean }) => {
 //   const path = system
 //     ? `${__dirname}/../../collections`
@@ -52,13 +49,7 @@ export const cachedDescriptions = __cachedDescriptions
 //   }
 // }
 
-export const getDescriptions = ({
-  descriptions: presetDescriptions,
-}: ApiContext<any>): Record<string, Description> => {
-  if( Object.keys(__cachedDescriptions).length > 0 ) {
-    return __cachedDescriptions
-  }
-
+export const getDescriptions = ({ descriptions: presetDescriptions, }: ApiContext): Record<string, Description> => {
   const target: Record<string, Description> = {
     ...presetDescriptions||{},
     // ...discoverDescriptions({ dynamic: dynamicCollections }),
@@ -72,9 +63,6 @@ export const getDescriptions = ({
     }
   }, {})
 
-  Object.assign(__cachedDescriptions, descriptions)
-
-  global.descriptions = __cachedDescriptions
   return descriptions
 }
 

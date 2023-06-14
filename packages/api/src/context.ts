@@ -1,13 +1,13 @@
 import type { Model } from 'mongoose'
 
-type CollectionNames = keyof TesteConfig['collections']
+type CollectionNames = keyof UserConfig['collections']
 
 type Collections = {
-  [Coll in CollectionNames]: TesteConfig['collections'][Coll]['functions']
+  [Coll in CollectionNames]: UserConfig['collections'][Coll]['functions']
 }
 
 type Models = {
-  [Coll in CollectionNames]: Model<TesteConfig['collections'][Coll]['description']>
+  [Coll in CollectionNames]: Model<UserConfig['collections'][Coll]['description']>
 }
 
 export const createContext = async () => {
@@ -21,7 +21,7 @@ export const createContext = async () => {
     }),
     models: new Proxy<Models>({}, {
       get: (_, key) => {
-        return getResourceAsset(key, 'model')
+        return getResourceAsset(String(key), 'model')
       }
     })
   }

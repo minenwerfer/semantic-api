@@ -1,13 +1,12 @@
-import type { default as FileInsert } from '@semantic-api/system/resources/collections/file/functions/file@insert'
-import type { default as FileDelete } from '@semantic-api/system/resources/collections/file/functions/file@delete'
+import type { file } from '@semantic-api/system'
 
 type UploadAuxProps = {
   parentId: string
   propertyName: string
 }
 
-export type UploadProps = UploadAuxProps & Parameters<typeof FileInsert>[0]
-export type FileDeleteProps = UploadAuxProps & Parameters<typeof FileDelete>[0]
+export type UploadProps = UploadAuxProps & Parameters<typeof file['functions']['insert']>[0]
+export type FileDeleteProps = UploadAuxProps & Parameters<typeof file['functions']['delete']>[0]
 
 export type Filters<T> = Record<`$${string}`, any> & {
   [P in keyof T]?: T[P] | Record<`$${string}`, any>

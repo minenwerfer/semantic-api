@@ -14,7 +14,7 @@ import { arraysIntersects, Either, left, right, isRight } from '@semantic-api/co
 // import SystemCollections from '@semantic-api/system/resources/collections/index.js'
 // import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
 // import type { DecodedToken } from '../types/server'
-import type { CollectionFunctions } from './collection/functions.types'
+import * as CollectionFunctions from './functions'
 
 import { isGranted } from '@semantic-api/access-control'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
@@ -27,7 +27,6 @@ import { render } from './render'
 //   model: {},
 //   description: {},
 //   function: {},
-//   library: {}
 // }
 
 export const requireWrapper = (path: string) => {
@@ -135,9 +134,8 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
           }
         })
       },
-      collection: {} as CollectionFunctions,
+      collection: {} as typeof CollectionFunctions,
       resource: proxyFn(resourceName, context, resourceType),
-      library: await getResourceAsset(resourceName, 'library', resourceType) || {},
       render: (...args: [any, any]) => render.apply({}, [context.h, ...args])
     }
 
@@ -279,14 +277,14 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
 // }
 //
 export const getResourceAsset = async <
-  const ResourceName extends keyof TesteConfig['collections'],
-  const AssetName extends keyof TesteConfig['collections'][ResourceName]
+  const ResourceName extends keyof UserConfig['collections'],
+  const AssetName extends keyof UserConfig['collections'][ResourceName]
 >(
   resourceName: ResourceName,
   assetName: AssetName,
-): Promise<ResourceName extends keyof TesteConfig['collections']
-  ? AssetName extends keyof TesteConfig['collections'][ResourceName]
-    ? TesteConfig['collections'][ResourceName][AssetName]
+): Promise<ResourceName extends keyof UserConfig['collections']
+  ? AssetName extends keyof UserConfig['collections'][ResourceName]
+    ? UserConfig['collections'][ResourceName][AssetName]
     : never
     : never
 > => {
@@ -301,8 +299,8 @@ export const getResourceAsset = async <
 export const get = getResourceAsset
 
 export const getFunction = async <
-  const ResourceName extends keyof TesteConfig['collections'],
-  const FunctionName extends keyof TesteConfig['collections'][ResourceName]['functions']
+  const ResourceName extends keyof UserConfig['collections'],
+  const FunctionName extends keyof UserConfig['collections'][ResourceName]['functions']
 >(
   resourceName: ResourceName,
   functionName: FunctionName,
@@ -310,9 +308,9 @@ export const getFunction = async <
 ): Promise<
   Either<
     string,
-    ResourceName extends keyof TesteConfig['collections']
-      ? FunctionName extends keyof TesteConfig['collections'][ResourceName]['functions']
-        ? TesteConfig['collections'][ResourceName]['functions'][FunctionName]
+    ResourceName extends keyof UserConfig['collections']
+      ? FunctionName extends keyof UserConfig['collections'][ResourceName]['functions']
+        ? UserConfig['collections'][ResourceName]['functions'][FunctionName]
         : never
         : never
   >
@@ -323,6 +321,6 @@ export const getFunction = async <
     }
   }
 
-  const functions = await getResourceAsset(resourceName, 'functions') as TesteConfig['collections'][ResourceName]['functions'][FunctionName]
+  const functions = await getResourceAsset(resourceName, 'functions') as UserConfig['collections'][ResourceName]['functions'][FunctionName]
   return right(functions![functionName])
 }

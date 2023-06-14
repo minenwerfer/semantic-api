@@ -1,14 +1,22 @@
-// export * from './apiKey/apiKey.description'
-// export * from './file/file.description'
-// export * from './log/log.description'
-// export * from './resourceUsage/resourceUsage.description'
-// export * from './apiKey/apiKey.description'
+import apiKey from './apiKey'
+import file from './file'
+import log from './log'
+import organization from './organization'
+import resourceUsage from './resourceUsage'
+import user from './user'
 
-export default {
-  apiKey: {},
-  file: {},
-  log: {},
-  resourceUsage: {},
-  user: {},
-  organization: {}
+export type { ApiKey } from './apiKey/description'
+export type { File } from './file/description'
+export type { Log } from './log/description'
+export type { Organization } from './organization/description'
+export type { ResourceUsage } from './resourceUsage/description'
+export type { User } from './user/description'
+
+export {
+  apiKey,
+  file,
+  log,
+  organization,
+  resourceUsage,
+  user
 }

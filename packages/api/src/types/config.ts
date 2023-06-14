@@ -1,16 +1,16 @@
 import { Description } from '@semantic-api/types'
-import type { User } from '@semantic-api/system/resources/collections/user/user.description'
+import type { User } from '@semantic-api/system'
 import type { AccessControl } from '@semantic-api/access-control'
-import type { CollectionFunctions } from '../collection/functions.types'
 import type { createModel } from '../collection/schema'
 import type { FunctionPath } from './function'
+import * as CollectionFunctions  from '../functions'
 
 export type Collection = {
   description: Description
   model?: ReturnType<typeof createModel>
   library?: Record<string, (...args: any[]) => any>
   functions?: Record<string, (...args: any[]) => any>
-  fallbackFunctions?: ReadonlyArray<keyof CollectionFunctions>
+  fallbackFunctions?: ReadonlyArray<keyof typeof CollectionFunctions>
 }
 
 export type Collections = Record<string, Collection>

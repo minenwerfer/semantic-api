@@ -1,12 +1,13 @@
-import type { ApiFunction } from '@semantic-api/api'
+import type { ApiContext } from '@semantic-api/api'
 import { serialize } from '@semantic-api/common'
+import { getDescriptions } from './library'
 
 type Props = {
   noSerialize?: boolean
 }
 
-const describeAll: ApiFunction<Props, typeof import('../meta.library')> = (props, context) => {
-  const descriptions = context.library.getDescriptions(context)
+const describeAll = (props: Props, context: ApiContext): any => {
+  const descriptions = getDescriptions(context)
   const result =  {
     descriptions,
     roles: context.accessControl.roles

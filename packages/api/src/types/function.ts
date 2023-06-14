@@ -1,13 +1,17 @@
 import type { Model } from 'mongoose'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
-import type { Log } from '@semantic-api/system/resources/collections/log/log.description'
+import type { Log } from '@semantic-api/system'
 import type { Description } from '@semantic-api/types'
 import type { useAccessControl, AccessControl } from '@semantic-api/access-control'
 import type { ApiConfig, DecodedToken } from './config'
 import type { render } from '../render'
 import type { limitRate } from '../rateLimiting'
-import type { CollectionFunctions } from '../collection/functions.types'
 import type { RateLimitingParams } from '../rateLimiting'
+
+/**
+ * TODO: improve
+ */
+type CollectionFunctions = any
 
 export type FunctionPath = `${string}@${string}`
 

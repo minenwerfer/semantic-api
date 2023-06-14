@@ -22,8 +22,8 @@
       "@semantic-api/common/*": [
         "../common/dist/*"
       ],
-      "@semantic-api/system/*": [
-        "../dist/staging/system/*"
+      "@semantic-api/system": [
+        "../system/dist"
       ],
       "@semantic-api/types": [
         "../types/dist"

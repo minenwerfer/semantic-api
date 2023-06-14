@@ -8,7 +8,7 @@ declare global {
   var modules: Record<string, any>
   var mongoose: typeof mongoose
 
-  type TesteConfig = Config<any>
+  type UserConfig = Config<any>
 
   type UserAccessControl = AccessControl<any>
   type UserACProfile = {
