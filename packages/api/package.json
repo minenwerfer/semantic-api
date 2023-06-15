@@ -8,7 +8,7 @@
   },
   "exports": {
     ".": "./dist/index.js",
-    "./presets/*": "./dist/presets/*",
+    "./presets/*": "./presets/*",
     "./database": "./dist/database.js",
     "./*": "./dist/*"
   },
