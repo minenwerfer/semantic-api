@@ -3,15 +3,10 @@ import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { Log } from '@semantic-api/system'
 import type { Description } from '@semantic-api/types'
 import type { useAccessControl, AccessControl } from '@semantic-api/access-control'
-import type { ApiConfig, DecodedToken } from './config'
 import type { render } from '../render'
 import type { limitRate } from '../rateLimiting'
 import type { RateLimitingParams } from '../rateLimiting'
-
-/**
- * TODO: improve
- */
-type CollectionFunctions = any
+import type { Algorithm, Collection, ApiConfig, DecodedToken } from './config'
 
 export type FunctionPath = `${string}@${string}`
 
@@ -19,8 +14,6 @@ export type ApiFunction<Props=unknown, Return=any> = (
   props: Props,
   context: ApiContext
 ) => Return
-
-export type AnyFunctions = CollectionFunctions & Record<string, (props?: any) => any>
 
 export type ApiContext = {
   resourceName: string
@@ -36,16 +29,12 @@ export type ApiContext = {
 
   hasRoles: (roles: Array<string>|string) => boolean
   hasCategories: (categories: Array<string>|string) => boolean
-  collection: CollectionFunctions
+  collection: Collection
   model: Model<any>
 
-  resource: AnyFunctions
   log: (message: string, details?: Record<string, any>) => Promise<Log>
-  algorithms: Record<string, AnyFunctions>
-  collections: Record<string, AnyFunctions & {
-    model: <T>() => Promise<Model<T>>
-  }>
-
+  algorithms: Record<string, Algorithm>
+  collections: Record<string, Collection>
   descriptions: Record<string, Description>
   description: Description
   request: Request & {

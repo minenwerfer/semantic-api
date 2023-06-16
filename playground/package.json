@@ -11,9 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semantic-api/api": "file:../dist/staging/api",
-    "@semantic-api/common": "file:../dist/staging/common",
-    "@semantic-api/system": "file:../dist/staging/system",
-    "@semantic-api/types": "file:../dist/staging/types"
+    "@semantic-api/access-control": "file:../packages/access-control/dist",
+    "@semantic-api/api": "file:../packages/api/dist",
+    "@semantic-api/common": "file:../packages/common/dist",
+    "@semantic-api/system": "file:../packages/system/dist",
+    "@semantic-api/types": "file:../packages/types/dist"
   }
 }

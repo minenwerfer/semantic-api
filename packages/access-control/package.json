@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "dependencies": {
     "@semantic-api/common": "file:../common/dist",
     "@semantic-api/server": "file:../server/dist",

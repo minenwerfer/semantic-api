@@ -1,7 +1,9 @@
-import { get, getFunction, isLeft, unwrapEither, ACErrors } from '@semantic-api/api'
-import { initWithDatabase as init } from '@semantic-api/api/server'
+import { get, getFunction } from '@semantic-api/api'
+import { isLeft, unwrapEither } from '@semantic-api/common'
+import { ACErrors } from '@semantic-api/access-control'
+// import { initWithDatabase as init } from '@semantic-api/api/server'
 
-init()
+// init()
 
 // import person from './person'
 // import pet from './pet'
@@ -50,9 +52,9 @@ init()
 //   accessControl
 // }
 
-// const main = async () => {
-//   const description = await get('pet', 'description')
-//   console.log(description.properties.favorite_toy)
+const main = async () => {
+  const description = await get('pet', 'description')
+  console.log(description.properties.favorite_toy)
 
   const barkEither = await getFunction('pet', 'bark', {
     roles: [

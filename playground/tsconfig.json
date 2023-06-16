@@ -11,27 +11,26 @@
     "resolveJsonModule": true,
     "paths": {
       "@semantic-api/api": [
-        "../dist/staging/api"
+        "../packages/api/dist"
+      ],
+      "@semantic-api/access-control": [
+        "../packages/access-control/dist"
       ],
       "@semantic-api/api/*": [
-        "../dist/staging/api/*"
+        "../packages/api/dist/*"
       ],
       "@semantic-api/common": [
-        "../dist/staging/common"
+        "../packages/common/dist"
+      ],
+      "@semantic-api/system": [
+        "../packages/system/dist"
       ],
       "@semantic-api/system/*": [
-        "../dist/staging/system/*"
+        "../packages/system/dist/*"
       ],
       "@semantic-api/types": [
-        "../dist/staging/types"
+        "../packages/types/dist"
       ]
     }
-<<<<<<< HEAD:playground/tsconfig.json
   }
-=======
-  },
-  "exclude": [
-    "examples"
-  ]
->>>>>>> maintenance:tsconfig.json
 }

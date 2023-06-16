@@ -1,6 +1,5 @@
 {
   "name": "@semantic-api/api",
-  "type": "module",
   "version": "0.0.18",
   "description": "",
   "scripts": {
@@ -26,6 +25,7 @@
   "dependencies": {
     "@hapi/hapi": "^21.1.0",
     "@hapi/inert": "^7.0.0",
+    "@semantic-api/access-control": "file:../access-control",
     "@semantic-api/common": "file:../common",
     "@semantic-api/system": "file:../system",
     "@semantic-api/types": "file:../types",

@@ -1,3 +1,5 @@
-export default {
-  meta: {},
+import meta from './meta'
+
+export {
+  meta
 }

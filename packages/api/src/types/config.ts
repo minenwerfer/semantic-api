@@ -8,16 +8,17 @@ import * as CollectionFunctions  from '../functions'
 export type Collection = {
   description: Description
   model?: ReturnType<typeof createModel>
-  library?: Record<string, (...args: any[]) => any>
   functions?: Record<string, (...args: any[]) => any>
   fallbackFunctions?: ReadonlyArray<keyof typeof CollectionFunctions>
 }
 
-export type Collections = Record<string, Collection>
+export type Algorithm = {
+  functions?: Record<string, (...args: any[]) => any>
+}
 
-export type Config<_Collections extends Collections> = {
+export type Config<Collections extends Record<string, Collection>> = {
   collections: Collections
-  accessControl: AccessControl<_Collections>
+  accessControl: AccessControl<Collections>
 }
 
 export type DecodedToken = {

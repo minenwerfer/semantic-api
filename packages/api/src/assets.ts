@@ -1,21 +1,18 @@
 // import { existsSync } from 'fs'
-
 // import type { Model } from 'mongoose'
 import type {
   ApiFunction ,
-  AnyFunctions,
   ResourceType,
   FunctionPath,
   ApiContext
 
 } from './types'
 
-import { arraysIntersects, Either, left, right, isRight } from '@semantic-api/common'
+import { arraysIntersects, Either, left, right } from '@semantic-api/common'
 // import SystemCollections from '@semantic-api/system/resources/collections/index.js'
 // import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
 // import type { DecodedToken } from '../types/server'
-import * as CollectionFunctions from './functions'
-
+//
 import { isGranted } from '@semantic-api/access-control'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { limitRate } from './rateLimiting'
@@ -100,16 +97,16 @@ export const requireWrapper = (path: string) => {
 
 const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType: ResourceType) => {
   const [resourceName] = functionPath.split('@')
-  const proxyFn = (resourceName: string, context: any, _resourceType?: ResourceType) => {
-    return new Proxy({}, {
-      get: async (_, resourceFunction: string) => {
-        // const asset = await getResourceFunction(`${resourceName}@${resourceFunction}`, _resourceType)
-        // return typeof asset === 'function'
-        //   ? (props?: any) => asset(props, context)
-        //   : asset
-      }      
-    }) as AnyFunctions
-  }
+  // const proxyFn = (resourceName: string, context: any, _resourceType?: ResourceType) => {
+  //   return new Proxy({}, {
+  //     get: async (_, resourceFunction: string) => {
+  //       // const asset = await getResourceFunction(`${resourceName}@${resourceFunction}`, _resourceType)
+  //       // return typeof asset === 'function'
+  //       //   ? (props?: any) => asset(props, context)
+  //       //   : asset
+  //     }      
+  //   }) as AnyFunctions
+  // }
 
   const wrapper: ApiFunction = async (props, context) => {
     const { useCollection } = require(`@semantic-api/api/collection/use.js`)
@@ -134,8 +131,6 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
           }
         })
       },
-      collection: {} as typeof CollectionFunctions,
-      resource: proxyFn(resourceName, context, resourceType),
       render: (...args: [any, any]) => render.apply({}, [context.h, ...args])
     }
 
@@ -160,17 +155,17 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
       }
     }
 
-    newContext.collections = new Proxy({}, {
-      get: (_, resourceName: string) => {
-        return proxyFn(resourceName, newContext)
-      }
-    })
+    // newContext.collections = new Proxy({}, {
+    //   get: (_, resourceName: string) => {
+    //     return proxyFn(resourceName, newContext)
+    //   }
+    // })
 
-    newContext.algorithms = new Proxy({}, {
-      get: (_, resourceName: string) => {
-        return proxyFn(resourceName, newContext, 'algorithm')
-      }
-    })
+    // newContext.algorithms = new Proxy({}, {
+    //   get: (_, resourceName: string) => {
+    //     return proxyFn(resourceName, newContext, 'algorithm')
+    //   }
+    // })
 
     return fn(props, newContext)
   }
@@ -316,7 +311,7 @@ export const getFunction = async <
   >
 > => {
   if( acProfile ) {
-    if( !await isGranted(resourceName, functionName, acProfile) ) {
+    if( !await isGranted(resourceName, String(functionName), acProfile) ) {
       return left('AUTHORIZATION_ERROR')
     }
   }
