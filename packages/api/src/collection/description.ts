@@ -1,4 +1,4 @@
-import type { Description as _Description } from '@semantic-api/types'
+import type { Description } from '@semantic-api/types'
 import type { SchemaProperties } from './schema.types'
 
 type PropertyDependent =
@@ -8,7 +8,7 @@ type PropertyDependent =
     | 'writable'
 
 export const defineDescription = <
-  T extends _Description,
+  T extends Description,
   A=SchemaProperties<T>,
   AvailableProperties=Array<
     keyof T['properties']
@@ -16,10 +16,10 @@ export const defineDescription = <
     | 'created_at'
     | 'updated_at'
   >,
-  Description=Omit<_Description, keyof A | PropertyDependent> & {
+  TDescription=Omit<Description, keyof A | PropertyDependent> & {
     [P in PropertyDependent]?: AvailableProperties
   }
->(schema: A, description?: Description): A & Description => ({
+>(schema: A, description?: TDescription): A & TDescription => ({
   ...schema,
-  ...description||{} as Description
+  ...description||{} as TDescription
 })
