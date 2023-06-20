@@ -21,7 +21,9 @@ const schema = {
           roles: {
             type: 'array',
             items: {
-              enum: [],
+              enum: [
+                'root',
+              ],
             }
           },
           user: {
@@ -33,7 +35,7 @@ const schema = {
   }
 } as const
 
-export default defineDescription(schema, {
+export default defineDescription<typeof schema>(schema, {
   icon: 'building',
   presets: [
     'crud'

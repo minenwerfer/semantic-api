@@ -8,7 +8,7 @@ type PropertyDependent =
     | 'writable'
 
 export const defineDescription = <
-  T extends _Description,
+  const T extends _Description,
   A=SchemaProperties<T>,
   AvailableProperties=Array<
     keyof T['properties']

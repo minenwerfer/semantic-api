@@ -23,7 +23,7 @@ export const applyPreset = (entry: Description | Description['properties'], pres
 export const preloadDescription = <Options extends PreloadOptions, Return=Options extends { serialize: true }
   ? Buffer
   : Description
->(description: Description, options?: Options) => {
+>(description: Partial<Description>, options?: Options) => {
   if( description.alias ) {
     const _aliasedCollection = getResourceAsset(description.alias, 'description')
 
@@ -71,6 +71,17 @@ export const preloadDescription = <Options extends PreloadOptions, Return=Option
               `neither s$indexes or s$inline are present on reference property or indexes is set on target description on ${description.$id}.${key}`
             )
           }
+        }
+      }
+
+      if( property.type === 'array' && property.items?.properties ) {
+        property.items = preloadDescription(property.items)
+      }
+
+      if( property.properties ) {
+        return {
+          ...a,
+          [key]: preloadDescription(property)
         }
       }
 

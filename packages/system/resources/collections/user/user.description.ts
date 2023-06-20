@@ -40,23 +40,6 @@ const schema = {
       type: 'boolean',
       default: true
     },
-    organizations: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          roles: {
-            type: 'array',
-            items: {
-              enum: [],
-            }
-          },
-          organization: {
-            $ref: 'organization'
-          }
-        }
-      }
-    },
     roles: {
       type: 'array',
       items: {
@@ -90,12 +73,6 @@ const schema = {
     self_registered: {
       type: 'boolean',
       readOnly: true
-    },
-    wizard_versions: {
-      type: 'array',
-      items: {
-        type: 'string'
-      },
     },
     resources_usage: {
       type: 'object',
