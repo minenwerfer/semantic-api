@@ -40,23 +40,6 @@ const schema = {
       type: 'boolean',
       default: true
     },
-    organizations: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          roles: {
-            type: 'array',
-            items: {
-              enum: [],
-            }
-          },
-          organization: {
-            $ref: 'organization'
-          }
-        }
-      }
-    },
     roles: {
       type: 'array',
       items: {

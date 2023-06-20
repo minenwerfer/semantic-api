@@ -36,6 +36,7 @@
     "mongoose-autopopulate": "^0.16.0",
     "mongoose-lean-getters": "^0.3.5",
     "mongoose-lean-virtuals": "^0.9.1",
+    "ramda": "^0.29.0",
     "sharp": "^0.31.3"
   },
   "optionalDependencies": {
