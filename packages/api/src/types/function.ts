@@ -1,9 +1,7 @@
 import type { Model } from 'mongoose'
-import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { Log } from '@semantic-api/system'
 import type { Description } from '@semantic-api/types'
 import type { useAccessControl, AccessControl } from '@semantic-api/access-control'
-import type { render } from '../render'
 import type { limitRate } from '../rateLimiting'
 import type { RateLimitingParams } from '../rateLimiting'
 import type { Algorithm, Collection, ApiConfig, DecodedToken } from './config'
@@ -41,8 +39,7 @@ export type ApiContext = {
     payload: Record<string, any>
   }
 
-  h: ResponseToolkit
-  render: <T extends Record<string, any>>(path: string, options?: T) => ReturnType<typeof render>
+  h: unknown
 }
 
 export type ApiContextWithAC = ApiContext & {

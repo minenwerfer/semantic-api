@@ -16,7 +16,6 @@ import { arraysIntersects, Either, left, right } from '@semantic-api/common'
 import { isGranted } from '@semantic-api/access-control'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { limitRate } from './rateLimiting'
-import { render } from './render'
 
 // global.PREBUNDLED_ASSETS ??= {}
 
@@ -131,7 +130,6 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
           }
         })
       },
-      render: (...args: [any, any]) => render.apply({}, [context.h, ...args])
     }
 
     if( resourceType === 'collection' ) {
@@ -294,28 +292,28 @@ export const getResourceAsset = async <
 export const get = getResourceAsset
 
 export const getFunction = async <
-  const ResourceName extends keyof UserConfig['collections'],
-  const FunctionName extends keyof UserConfig['collections'][ResourceName]['functions']
->(
-  resourceName: ResourceName,
-  functionName: FunctionName,
-  acProfile?: UserACProfile
-): Promise<
-  Either<
-    string,
-    ResourceName extends keyof UserConfig['collections']
+  ResourceName extends keyof UserConfig['collections'],
+  FunctionName extends keyof UserConfig['collections'][ResourceName]['functions'],
+  ReturnedFunction=ResourceName extends keyof UserConfig['collections']
       ? FunctionName extends keyof UserConfig['collections'][ResourceName]['functions']
         ? UserConfig['collections'][ResourceName]['functions'][FunctionName]
         : never
         : never
-  >
-> => {
+>(
+  resourceName: ResourceName,
+  functionName: FunctionName,
+  acProfile?: UserACProfile
+) => {
+  if( resourceName === 'a' ) {
+    return left('oi')
+  }
+
   if( acProfile ) {
     if( !await isGranted(resourceName, String(functionName), acProfile) ) {
       return left('AUTHORIZATION_ERROR')
     }
   }
 
-  const functions = await getResourceAsset(resourceName, 'functions') as UserConfig['collections'][ResourceName]['functions'][FunctionName]
-  return right(functions![functionName])
+  const functions = await getResourceAsset(resourceName, 'functions') as UserConfig['collections'][ResourceName]['functions']
+  return right(functions![functionName] as ReturnedFunction)
 }

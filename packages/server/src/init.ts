@@ -2,8 +2,9 @@ import Hapi from '@hapi/hapi'
 import Inert from '@hapi/inert'
 
 import type { ApiContext } from '@semantic-api/api'
-import { warmup, connectDatabase } from '@semantic-api/api'
+import { connectDatabase } from '@semantic-api/api'
 import { defaultApiConfig, defaultAccessControl } from './constants'
+import { warmup } from './warmup'
 import getRoutes from './routes'
 
 export const init = async (_context?: Partial<ApiContext>|null): Promise<Hapi.Server> => {

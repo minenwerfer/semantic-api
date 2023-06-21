@@ -1,9 +1,10 @@
-import type { ApiContext, ApiContextWithAC, MongoDocument } from '../types'
+import type { ApiContext, ApiContextWithAC, } from '../types'
 import { useAccessControl } from '@semantic-api/access-control'
 import { getResourceAsset } from '../assets'
+import * as CollectionFunctions from '../functions'
 // import useFunctions from './functions'
 
-export const useCollection = async <T extends MongoDocument>(collectionName: string, _context: ApiContext|null = null) => {
+export const useCollection = async (collectionName: string, _context: ApiContext|null = null) => {
   const context = _context || {} as ApiContext
 
   const description = context.description = context.description?.$id === collectionName
@@ -33,7 +34,7 @@ export const useCollection = async <T extends MongoDocument>(collectionName: str
   // )
   //
   const functions = {
-    empty: 'nothing to be seen here'
+    ...CollectionFunctions
   }
 
   return {

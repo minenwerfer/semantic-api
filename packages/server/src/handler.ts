@@ -1,13 +1,12 @@
 import * as R from 'ramda'
-import sharp from 'sharp'
-import { getResourceFunction, Token, makeException } from '@semantic-api/api'
+import { getFunction, Token, makeException } from '@semantic-api/api'
+import { isLeft, unwrapEither } from '@semantic-api/common'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest } from './types'
 import type {
   DecodedToken,
   ApiContext,
   ResourceType,
-  FunctionPath
 
 } from '@semantic-api/api'
 
@@ -46,11 +45,11 @@ export const getToken = async (request: Request) => {
       ? Token.decode(request.headers.authorization.split('Bearer ').pop() || '')
       : {} as object
   } catch( e: any ) {
-    throw new (makeException({
+    throw makeException({
       name: 'AuthenticationError',
       message: e.message,
       logout: true
-    }))
+    })
   }
 }
 
@@ -128,26 +127,30 @@ export const customVerbs = (resourceType: ResourceType) =>
     }
   } = request
 
-  const functionPath: FunctionPath = `${resourceName}@${functionName}`
 
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
   context.token = token
   context.resourceName = resourceName
   context.h = h
-  context.request = request
+  context.request = request as any
 
   await Promise.all([
     prePipe({
       request,
       token,
       response: h,
-      functionPath,
       context
     })
   ])
 
-  const result = await getResourceFunction(functionPath, resourceType)(request.payload, context)
+  const fnEither = await getFunction(resourceName, functionName)
+  if( isLeft(fnEither) ) {
+    throw new Error('no such function')
+  }
+
+  const fn = unwrapEither(fnEither)
+  const result = await fn(request.payload, context)
 
   return postPipe({
     request,
@@ -171,20 +174,17 @@ export const regularVerb = (functionName: RegularVerb) =>
     }
   } = request
 
-  const functionPath: FunctionPath = `${resourceName}@${functionName}`
-
   const token = await getToken(request) as DecodedToken
   const context = _context||fallbackContext
   context.resourceName = resourceName
   context.token = token
-  context.request = request
+  context.request = request as any
 
   await Promise.all([
     prePipe({
       request,
       token,
       response: h,
-      functionPath,
       context
     })
   ])
@@ -203,7 +203,17 @@ export const regularVerb = (functionName: RegularVerb) =>
     }
   }
 
-  const result = await getResourceFunction(functionPath)(request.payload, context)
+  const fnEither = await getFunction(resourceName, functionName)
+  if( isLeft(fnEither) ) {
+    const error = unwrapEither(fnEither)
+    return {
+      error
+    }
+  }
+
+  const fn = unwrapEither(fnEither)
+  const result = await fn(request.payload, context)
+
   return postPipe({
     request,
     result,
@@ -222,16 +232,12 @@ export const fileDownload = async (
   const context = _context||fallbackContext
   context.token = token
 
-  const { hash, options } = request.params
-  const { filename, content, mime } = await getResourceFunction('file@download')(hash, context)
+  // const { hash, options } = request.params
+  // const { filename, content, mime } = await getResourceFunction('file@download')(hash, context)
 
-  const has = (opt: string) => options?.split('/').includes(opt)
+  // const has = (opt: string) => options?.split('/').includes(opt)
 
-  const processedContent = !has('nowebp') && mime.startsWith('image/') && mime !== 'image/webp'
-    ? ['image/webp', sharp(content).webp()]
-    : [mime, content]
-
-  return h.response(processedContent[1])
-    .header('content-type', processedContent[0])
-    .header('content-disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
+  // return h.response(mime)
+  //   .header('content-type', content)
+  //   .header('content-disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
 }

@@ -1,9 +1,9 @@
 import { get, getFunction } from '@semantic-api/api'
 import { isLeft, unwrapEither } from '@semantic-api/common'
 import { ACErrors } from '@semantic-api/access-control'
-// import { initWithDatabase as init } from '@semantic-api/api/server'
+import { initWithDatabase as init } from '@semantic-api/server'
 
-// init()
+init()
 
 // import person from './person'
 // import pet from './pet'

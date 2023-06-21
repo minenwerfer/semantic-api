@@ -10,12 +10,12 @@ export type Right<T> = {
 
 export type Either<L, R> = Left<L> | Right<R>
 
-export const left = <T>(value: T): Left<T> => <const>({
+export const left = <const T>(value: T): Left<T> => <const>({
   _tag: 'Left',
   value
 })
 
-export const right = <T>(value: T): Right<T> => <const>({
+export const right = <const T>(value: T): Right<T> => <const>({
   _tag: 'Right',
   value
 })

@@ -12,10 +12,14 @@
   "exports": {
     ".": "./dist/index.js"
   },
+  "devDependencies": {
+    "@types/ramda": "^0.28.23"
+  },
   "dependencies": {
-    "@semantic-api/common": "file:../common/dist",
-    "@semantic-api/server": "file:../server/dist",
-    "@semantic-api/system": "file:../system/dist",
-    "@semantic-api/types": "file:../types/dist"
+    "@semantic-api/common": "file:../common",
+    "@semantic-api/server": "file:../server",
+    "@semantic-api/system": "file:../system",
+    "@semantic-api/types": "file:../types",
+    "ramda": "^0.29.0"
   }
 }

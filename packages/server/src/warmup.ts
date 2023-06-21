@@ -1,4 +1,4 @@
-import type { ApiContext } from './types'
+import type { ApiContext } from '@semantic-api/api'
 import { meta } from '@semantic-api/system'
 
 if( process.env.MODE !== 'PRODUCTION' ) {

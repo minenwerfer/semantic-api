@@ -13,14 +13,17 @@
       "@semantic-api/api": [
         "../packages/api/dist"
       ],
-      "@semantic-api/access-control": [
-        "../packages/access-control/dist"
-      ],
       "@semantic-api/api/*": [
         "../packages/api/dist/*"
       ],
+      "@semantic-api/access-control": [
+        "../packages/access-control/dist"
+      ],
       "@semantic-api/common": [
         "../packages/common/dist"
+      ],
+      "@semantic-api/server": [
+        "../packages/server/dist"
       ],
       "@semantic-api/system": [
         "../packages/system/dist"

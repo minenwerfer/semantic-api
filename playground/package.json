@@ -11,10 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semantic-api/access-control": "file:../packages/access-control/dist",
-    "@semantic-api/api": "file:../packages/api/dist",
-    "@semantic-api/common": "file:../packages/common/dist",
-    "@semantic-api/system": "file:../packages/system/dist",
-    "@semantic-api/types": "file:../packages/types/dist"
+    "@semantic-api/access-control": "file:../packages/access-control",
+    "@semantic-api/api": "file:../packages/api",
+    "@semantic-api/common": "file:../packages/common",
+    "@semantic-api/server": "file:../packages/server",
+    "@semantic-api/system": "file:../packages/system",
+    "@semantic-api/types": "file:../packages/types",
+    "typescript": "^5.1.3"
   }
 }
