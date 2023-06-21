@@ -1,15 +1,14 @@
-import { Types } from 'mongoose'
 import type { Description, CollectionProperty } from '@semantic-api/types'
-import { makeException } from '../exceptions'
+import { left } from '@semantic-api/common'
+import { Types } from 'mongoose'
 import { getTypeConstructor } from './typemapping'
 
 export type ValidateFunction<T> = (what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
 
-const runtimeValidationError = (message: string, details?: Record<string, any>) => makeException({
-  name: 'RuntimeValidationError',
-  message,
-  details
-})
+export enum ValidationErrors {
+  EmptyTarget = 'EMPTY_TARGET',
+  InvalidProperties = 'INVALID_PROPERTIES'
+}
 
 const isValidReference = (property: CollectionProperty, value: any) => {
   if( !property.s$isReference ) {
@@ -31,7 +30,9 @@ export const validateFromDescription = <T>(
   ..._: any[]
 ) => {
   if( !what ) {
-    throw runtimeValidationError('target is empty')
+    return left({
+      code: ValidationErrors.EmptyTarget
+    })
   }
 
   const propsSet = required
@@ -147,6 +148,9 @@ export const validateFromDescription = <T>(
   })
 
   if( Object.keys(errors).length > 0 ) {
-    throw runtimeValidationError('some properties failed to validate', errors)
+    return left({
+      code: ValidationErrors.InvalidProperties,
+      errors
+    })
   }
 }

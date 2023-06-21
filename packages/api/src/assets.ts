@@ -8,12 +8,12 @@ import type {
 
 } from './types'
 
-import { arraysIntersects, Either, left, right } from '@semantic-api/common'
+import { arraysIntersects, left, right } from '@semantic-api/common'
 // import SystemCollections from '@semantic-api/system/resources/collections/index.js'
 // import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
 // import type { DecodedToken } from '../types/server'
 //
-import { isGranted } from '@semantic-api/access-control'
+import { isGranted, ACErrors } from '@semantic-api/access-control'
 import { validateFromDescription, ValidateFunction } from './collection/validate'
 import { limitRate } from './rateLimiting'
 
@@ -306,7 +306,7 @@ export const getFunction = async <
 ) => {
   if( acProfile ) {
     if( !await isGranted(resourceName, String(functionName), acProfile) ) {
-      return left('AUTHORIZATION_ERROR')
+      return left(ACErrors.AuthorizationError)
     }
   }
 
