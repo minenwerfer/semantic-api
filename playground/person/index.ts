@@ -1,6 +1,6 @@
 import description from './person.description'
 
-export default {
+export default <const>{
   description,
   functions: {
     hello: () => 'world!'
@@ -8,4 +8,4 @@ export default {
   fallbackFunctions: [
     'getAll'
   ]
-} as const
+}

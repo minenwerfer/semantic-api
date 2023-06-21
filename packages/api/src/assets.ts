@@ -304,10 +304,6 @@ export const getFunction = async <
   functionName: FunctionName,
   acProfile?: UserACProfile
 ) => {
-  if( resourceName === 'a' ) {
-    return left('oi')
-  }
-
   if( acProfile ) {
     if( !await isGranted(resourceName, String(functionName), acProfile) ) {
       return left('AUTHORIZATION_ERROR')
