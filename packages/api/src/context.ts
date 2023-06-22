@@ -1,10 +1,8 @@
 import type { Model } from 'mongoose'
 import { algorithms, collections } from '@semantic-api/system'
 
-type CollectionNames = keyof UserConfig['collections']
-
 type Models = {
-  [Coll in CollectionNames]: Model<UserConfig['collections'][Coll]['description']>
+  [K in keyof Collections]: Model<Collections[K]['description']>
 }
 
 export const createContext = async () => {
@@ -15,7 +13,7 @@ export const createContext = async () => {
     collections,
     models: new Proxy<Models>({}, {
       get: (_, key) => {
-        return getResourceAsset(String(key), 'model')
+        return getResourceAsset(String(key) as keyof Collections, 'model')
       }
     })
   }

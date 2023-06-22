@@ -1,5 +1,5 @@
-// import { get, getFunction } from '@semantic-api/api'
-// import { isLeft, unwrapEither } from '@semantic-api/common'
+import { get, getFunction, getResourceAsset, ResourceErrors } from '@semantic-api/api'
+import { isLeft, unwrapEither } from '@semantic-api/common'
 // import { ACErrors } from '@semantic-api/access-control'
 import { initWithDatabase as init } from '@semantic-api/server'
 
@@ -7,13 +7,13 @@ init().then((server) => {
   server.start()
 })
 
-// import person from './person'
-// import pet from './pet'
+import person from './person'
+import pet from './pet'
 
-// export const collections = {
-//   person,
-//   pet
-// }
+export const collections = {
+  person,
+  pet
+}
 
 // export const accessControl = {
 //   roles: {

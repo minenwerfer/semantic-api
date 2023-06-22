@@ -10,7 +10,7 @@ declare global {
 
   type UserConfig = Config<Record<string, Collection>>
   type Collections = {
-    [K in keyof UserConfig['collections'] & typeof SystemCollections]: Awaited<ReturnType<(UserConfig['collections'] & typeof SystemCollections)[K]>>
+    [K in keyof (UserCollections | typeof SystemCollections)]: Awaited<ReturnType<(UserCollections | typeof SystemCollections)[K]>>
   }
 
   type UserAccessControl = AccessControl<any>

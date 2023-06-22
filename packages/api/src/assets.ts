@@ -25,6 +25,11 @@ import { limitRate } from './rateLimiting'
 //   description: {},
 //   function: {},
 // }
+//
+export enum ResourceErrors {
+  ResourceNotFound = 'RESOURCE_NOT_FOUND',
+  AssetNotFound = 'AssetNotFound'
+}
 
 export const requireWrapper = (path: string) => {
   const content = require(path)
@@ -285,8 +290,8 @@ export const getResourceAsset = async <
   Object.assign(config, { collections })
 
   const key = 'collections'
-  if( !(resourceName in config[key]) ) return left('RESOURCE_NOT_FOUND')
-  if( !(assetName in config[key][resourceName]()) ) return left('ASSET_NOT_FOUND')
+  if( !(resourceName in config[key]) ) return left(ResourceErrors.ResourceNotFound)
+  if( !(assetName in config[key][resourceName]()) ) return left(ResourceErrors.AssetNotFound)
 
   const asset = (await config[key][resourceName]())[assetName] as Collections[ResourceName][AssetName]
 

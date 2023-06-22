@@ -1,4 +1,4 @@
-export default () => ({
+export default {
   $id: 'pet',
   properties: {
     name: {
@@ -8,4 +8,4 @@ export default () => ({
       type: 'string'
     }
   }
-})
+}
