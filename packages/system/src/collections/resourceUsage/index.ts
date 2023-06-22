@@ -1,5 +1,5 @@
 import description from './description'
 
-export default {
+export default () => ({
   description
-}
+})

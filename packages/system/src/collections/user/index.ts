@@ -4,7 +4,7 @@ import authenticate from './authenticate'
 import insert from './insert'
 import ping from './ping'
 
-export default {
+export default () => ({
   description,
   model,
   functions: {
@@ -12,4 +12,4 @@ export default {
     insert,
     ping
   }
-}
+})

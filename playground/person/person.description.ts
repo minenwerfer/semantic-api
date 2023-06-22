@@ -1,8 +1,8 @@
-export default <const>{
+export default () => ({
   $id: 'person',
   properties: {
     name: {
       type: 'string'
     }
   }
-}
+})

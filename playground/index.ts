@@ -1,9 +1,11 @@
-import { get, getFunction } from '@semantic-api/api'
-import { isLeft, unwrapEither } from '@semantic-api/common'
-import { ACErrors } from '@semantic-api/access-control'
+// import { get, getFunction } from '@semantic-api/api'
+// import { isLeft, unwrapEither } from '@semantic-api/common'
+// import { ACErrors } from '@semantic-api/access-control'
 import { initWithDatabase as init } from '@semantic-api/server'
 
-init()
+init().then((server) => {
+  server.start()
+})
 
 // import person from './person'
 // import pet from './pet'
@@ -52,27 +54,27 @@ init()
 //   accessControl
 // }
 
-const main = async () => {
-  const description = await get('pet', 'description')
-  console.log(description.properties.favorite_toy)
+// const main = async () => {
+//   const description = await get('pet', 'description')
+//   console.log(description.properties.favorite_toy)
 
-  const barkEither = await getFunction('pet', 'bark', {
-    roles: [
-      'root'
-    ]
-  })
+//   const barkEither = await getFunction('pet', 'bark', {
+//     roles: [
+//       'root'
+//     ]
+//   })
 
-  if( isLeft(barkEither) ) {
-    const error = unwrapEither(barkEither)
-    switch( error ) {
-      case ACErrors.AuthorizationError: console.log('Erro de autorização')
-    }
+//   if( isLeft(barkEither) ) {
+//     const error = unwrapEither(barkEither)
+//     switch( error ) {
+//       case ACErrors.AuthorizationError: console.log('Erro de autorização')
+//     }
 
-    return
-  }
+//     return
+//   }
 
-  const bark = unwrapEither(barkEither)
-  bark('joao')
-}
+//   const bark = unwrapEither(barkEither)
+//   bark('joao')
+// }
 
-main()
+// main()

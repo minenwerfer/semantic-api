@@ -7,9 +7,9 @@ import {
 } from 'mongoose'
 
 import type { Description, CollectionProperty } from '@semantic-api/types'
-import { getReferencedCollection } from '@semantic-api/common'
+import { getReferencedCollection, isLeft, unwrapEither } from '@semantic-api/common'
 
-import { options as defaultOptions } from '../database'
+import { options as defaultOptions, connections } from '../database'
 import { getResourceAsset } from '../assets'
 import { preloadDescription, applyPreset } from './preload'
 import { getTypeConstructor } from './typemapping'
@@ -82,12 +82,17 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
     }
 
     if( typeof referencedCollection === 'string' ) {
-      const referenceDescription = await getResourceAsset(referencedCollection, 'description')
+      const referenceEither = await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description')
+      if( isLeft(referenceEither) ) {
+        throw referenceEither
+      }
+
+      const referenceDescription = unwrapEither(referenceEither)
       hasRefs = true
 
       const actualReferenceName = result.ref = referenceDescription.alias || referenceDescription.$id
       if( !__loadedModels.includes(actualReferenceName) ) {
-        getResourceAsset(actualReferenceName, 'model')
+        getResourceAsset(actualReferenceName as keyof Collections, 'model')
         __loadedModels.push(actualReferenceName)
       }
 
@@ -158,7 +163,10 @@ export const descriptionToSchema = async <T>(
     cb(schemaStructure)
   }
 
-  const schema = new Schema<T>(schemaStructure, options)
+  // SchemaOptions type is broken in Mongoose 7
+  // will remove "as any" when possible
+  const schema = new Schema<T>(schemaStructure, options as any)
+
   if( description.$id ) {
     if( hasRefs ) {
       schema.plugin(require('mongoose-autopopulate'))
@@ -203,7 +211,13 @@ export const createModel = async <T=any>(
 
   for( const [propertyName, property] of Object.entries(description.properties) ) {
     if( property.s$isFile || property.s$inline ) {
-      const referenceDescription = await getResourceAsset(property.s$referencedCollection!, 'description')
+      const referenceEither = await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description')
+      if( isLeft(referenceEither) ) {
+        throw referenceEither
+      }
+
+      const referenceDescription = unwrapEither(referenceEither)
+
       cascadingDelete.push({
         propertyName,
         collectionName: referenceDescription.alias || referenceDescription.$id,
@@ -263,5 +277,5 @@ export const createModel = async <T=any>(
     schemaCallback(schema)
   }
 
-  return global.mongoose.model<T>(modelName, schema)
+  return connections.default.model<T>(modelName, schema)
 }

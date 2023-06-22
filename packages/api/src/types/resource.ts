@@ -1,7 +1,7 @@
 export type AssetType =
   'model'
   | 'description'
-  | 'function'
+  | 'functions'
   | 'library'
 
 export type ResourceType =

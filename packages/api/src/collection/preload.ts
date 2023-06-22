@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import type { Description } from '@semantic-api/types'
-import { getReferencedCollection, serialize } from '@semantic-api/common'
+import { getReferencedCollection, serialize, isLeft, unwrapEither } from '@semantic-api/common'
 import { getResourceAsset } from '../assets'
 
 export type PreloadOptions = {
@@ -25,14 +25,19 @@ export const preloadDescription = async <Options extends PreloadOptions, Return=
   : Description
 >(description: Partial<Description>, options?: Options) => {
   if( description.alias ) {
-    const _aliasedCollection = await getResourceAsset(description.alias, 'description')
+    const aliasedCollectionEither = await getResourceAsset(description.alias as keyof Collections, 'description')
+    if( isLeft(aliasedCollectionEither) ) {
+      throw new Error(`description of ${description.alias} not found`)
+    }
+
+    const aliasedCollDescription = unwrapEither(aliasedCollectionEither)
 
     const {
       $id: collectionName,
       strict,
       ...aliasedCollection
 
-    } = _aliasedCollection
+    } = aliasedCollDescription
 
     const temp = Object.assign(aliasedCollection, description)
     Object.assign(description, temp)
@@ -63,7 +68,12 @@ export const preloadDescription = async <Options extends PreloadOptions, Return=
         property.s$referencedCollection = reference.$ref
 
         if( !property.s$indexes && !property.s$inline ) {
-          const referenceDescription = await getResourceAsset(reference.$ref!, 'description')
+          const referenceDescriptionEither = await getResourceAsset(reference.$ref! as keyof Collections, 'description')
+          if( isLeft(referenceDescriptionEither) ) {
+            throw new Error(`description of ${reference.$ref} not found`)
+          }
+
+          const referenceDescription = unwrapEither(referenceDescriptionEither)
           const indexes = property.s$indexes = referenceDescription.indexes?.slice()
 
           if( !indexes ) {

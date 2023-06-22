@@ -5,7 +5,7 @@ import type { createModel } from '../collection/schema'
 import type { FunctionPath } from './function'
 import * as CollectionFunctions  from '../functions'
 
-export type Collection = {
+export type Collection = () => {
   description: Description
   model?: ReturnType<typeof createModel>
   functions?: Record<string, (...args: any[]) => any>

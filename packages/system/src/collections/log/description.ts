@@ -2,7 +2,7 @@ import { defineDescription, Schema } from '@semantic-api/api'
 
 export type Log = Schema<typeof schema>
 
-const schema = {
+const schema = <const>{
   $id: 'log',
   properties: {
     owner: {
@@ -23,7 +23,7 @@ const schema = {
       format: 'date-time'
     }
   }
-} as const
+}
 
 export default defineDescription<typeof schema>(schema, {
   icon: 'search-alt',

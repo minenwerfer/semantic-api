@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt'
 import { createModel } from '@semantic-api/api'
 import UserDescription from './description'
 
-export default createModel(UserDescription, {
+export default () => createModel(UserDescription, {
   schemaCallback: (schema) => { 
     schema.virtual('first_name').get(function() {
       return this.full_name?.split(' ')[0] || 'N/A'

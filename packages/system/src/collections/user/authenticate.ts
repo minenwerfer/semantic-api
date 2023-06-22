@@ -9,7 +9,7 @@ type Props = {
   password: string
 }
 
-type Return = Promise<{
+type Return = {
   user: Pick<User,
     'first_name'
     | 'last_name'
@@ -22,9 +22,9 @@ type Return = Promise<{
     type: 'bearer'
     token: string
   }
-}>
+}
 
-const authenticate = async (props: Props, context: ApiContext): Return => {
+const authenticate = async (props: Props, context: ApiContext) => {
   if( !props?.email ) {
     throw new Error('Empty email or password')
   }
@@ -66,17 +66,17 @@ const authenticate = async (props: Props, context: ApiContext): Return => {
   )
 
   if( !user || !await user.testPassword!(props.password) ) {
-    throw new (makeException({
+    return makeException({
       name: 'AuthenticationError',
       message: 'AuthenticationError.invalid_credentials'
-    }))
+    })
   }
 
   if( !user.active ) {
-    throw new (makeException({
+    return makeException({
       name: 'AuthenticationError',
       message: 'AuthenticationError.inactive_user'
-    }))
+    })
   }
 
   const { password, ...leanUser } = await context.model
@@ -127,7 +127,7 @@ const authenticate = async (props: Props, context: ApiContext): Return => {
       type: 'bearer',
       token
     }
-  }
+  } as Return
 }
 
 export default authenticate

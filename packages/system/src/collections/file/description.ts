@@ -2,7 +2,7 @@ import { defineDescription, Schema } from '@semantic-api/api'
 
 export type File = Schema<typeof schema>
 
-const schema = {
+const schema = <const>{
   $id: 'file',
   owned: true,
   alwaysOwned: true,
@@ -52,7 +52,7 @@ const schema = {
       s$meta: true
     }
   },
-} as const
+}
 
 export default defineDescription<typeof schema>(schema, {
   actions: {

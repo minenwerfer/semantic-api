@@ -2,7 +2,7 @@ import { Schema, defineDescription } from '@semantic-api/api'
 
 export type Organization = Schema<typeof schema>
 
-const schema = {
+const schema = <const>{
   $id: 'organization',
   owned: true,
   strict: true,
@@ -31,7 +31,7 @@ const schema = {
       }
     }
   }
-} as const
+}
 
 export default defineDescription(schema, {
   icon: 'building',

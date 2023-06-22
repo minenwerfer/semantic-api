@@ -6,7 +6,7 @@ export type User = Omit<Schema<typeof schema>, 'roles'> & {
   owner: Reference
 }
 
-const schema = {
+const schema = <const>{
   $id: 'user',
   required: [
     'full_name',
@@ -93,7 +93,7 @@ const schema = {
       s$meta: true
     },
   }
-} as const
+}
 
 export default defineDescription<typeof schema>(schema, {
   presets: [

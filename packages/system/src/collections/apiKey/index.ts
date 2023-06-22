@@ -1,9 +1,9 @@
 import description from './description'
 import insert from './insert'
 
-export default {
+export default () => ({
   description,
   functions: {
     insert
   }
-}
+})

@@ -2,7 +2,7 @@ import { Schema, defineDescription } from '@semantic-api/api'
 
 export type ApiKey = Schema<typeof schema>
 
-const schema = {
+const schema = <const>{
   $id: 'apiKey',
   owned: true,
   strict: true,
@@ -34,7 +34,7 @@ const schema = {
       s$meta: true
     }
   }
-} as const
+}
 
 export default defineDescription(schema, {
   icon: 'brackets-curly',

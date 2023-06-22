@@ -2,7 +2,7 @@ import { defineDescription, Schema } from '@semantic-api/api'
 
 export type ResourceUsage = Schema<typeof schema>
 
-const schema = {
+const schema = <const>{
   $id: 'resourceUsage',
   properties: {
     hits: {
@@ -13,6 +13,6 @@ const schema = {
       format: 'date-time'
     }
   }
-} as const
+}
 
 export default defineDescription<typeof schema>(schema)

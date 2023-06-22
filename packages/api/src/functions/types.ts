@@ -1,12 +1,13 @@
 import type { file } from '@semantic-api/system'
+type File = ReturnType<typeof file>
 
 type UploadAuxProps = {
   parentId: string
   propertyName: string
 }
 
-export type UploadProps = UploadAuxProps & Parameters<typeof file['functions']['insert']>[0]
-export type FileDeleteProps = UploadAuxProps & Parameters<typeof file['functions']['delete']>[0]
+export type UploadProps = UploadAuxProps & Parameters<File['functions']['insert']>[0]
+export type FileDeleteProps = UploadAuxProps & Parameters<File['functions']['delete']>[0]
 
 export type Filters<T> = Record<`$${string}`, any> & {
   [P in keyof T]?: T[P] | Record<`$${string}`, any>

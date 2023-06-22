@@ -3,12 +3,13 @@
 import type {
   ApiFunction ,
   ResourceType,
+  AssetType,
   FunctionPath,
   ApiContext
 
 } from './types'
 
-import { arraysIntersects, left, right } from '@semantic-api/common'
+import { arraysIntersects, left, right, isLeft, unwrapEither, Right } from '@semantic-api/common'
 // import SystemCollections from '@semantic-api/system/resources/collections/index.js'
 // import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
 // import type { DecodedToken } from '../types/server'
@@ -94,82 +95,82 @@ export const requireWrapper = (path: string) => {
 //   }
 // }
 
-const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType: ResourceType) => {
-  const [resourceName] = functionPath.split('@')
-  // const proxyFn = (resourceName: string, context: any, _resourceType?: ResourceType) => {
-  //   return new Proxy({}, {
-  //     get: async (_, resourceFunction: string) => {
-  //       // const asset = await getResourceFunction(`${resourceName}@${resourceFunction}`, _resourceType)
-  //       // return typeof asset === 'function'
-  //       //   ? (props?: any) => asset(props, context)
-  //       //   : asset
-  //     }      
-  //   }) as AnyFunctions
-  // }
+// const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType: ResourceType) => {
+//   const [resourceName] = functionPath.split('@')
+//   // const proxyFn = (resourceName: string, context: any, _resourceType?: ResourceType) => {
+//   //   return new Proxy({}, {
+//   //     get: async (_, resourceFunction: string) => {
+//   //       // const asset = await getResourceFunction(`${resourceName}@${resourceFunction}`, _resourceType)
+//   //       // return typeof asset === 'function'
+//   //       //   ? (props?: any) => asset(props, context)
+//   //       //   : asset
+//   //     }      
+//   //   }) as AnyFunctions
+//   // }
 
-  const wrapper: ApiFunction = async (props, context) => {
-    const { useCollection } = require(`@semantic-api/api/collection/use.js`)
-    context.functionPath = functionPath
+//   const wrapper: ApiFunction = async (props, context) => {
+//     const { useCollection } = require(`@semantic-api/api/collection/use.js`)
+//     context.functionPath = functionPath
 
-    const newContext: ApiContext = {
-      ...context,
-      descriptions: global.descriptions,
-      resourceName,
-      validate: (..._args: [any]) => null,
-      limitRate: (...args: [any]) => {
-        return limitRate(context, ...args)
-      },
-      hasRoles: (roles: Array<string>|string) => arraysIntersects(roles, context.token.user.roles),
-      log: async (message, details) => {
-        return (await useCollection('log', context)).insert({
-          what: {
-            message,
-            details,
-            context: resourceName,
-            owner: context.token.user?._id
-          }
-        })
-      },
-    }
+//     const newContext: ApiContext = {
+//       ...context,
+//       descriptions: global.descriptions,
+//       resourceName,
+//       validate: (..._args: [any]) => null,
+//       limitRate: (...args: [any]) => {
+//         return limitRate(context, ...args)
+//       },
+//       hasRoles: (roles: Array<string>|string) => arraysIntersects(roles, context.token.user.roles),
+//       log: async (message, details) => {
+//         return (await useCollection('log', context)).insert({
+//           what: {
+//             message,
+//             details,
+//             context: resourceName,
+//             owner: context.token.user?._id
+//           }
+//         })
+//       },
+//     }
 
-    if( resourceType === 'collection' ) {
-      const description = await getResourceAsset(resourceName, 'description')
-      newContext.model = await getResourceAsset(resourceName, 'model'),
-      newContext.description = description
-      newContext.validate = (...args: Parameters<ValidateFunction<any>>) => {
-        const targetDescription = args.length === 3
-          ? args.pop()
-          : description
+//     if( resourceType === 'collection' ) {
+//       const description = await getResourceAsset(resourceName, 'description')
+//       newContext.model = await getResourceAsset(resourceName, 'model'),
+//       newContext.description = description
+//       newContext.validate = (...args: Parameters<ValidateFunction<any>>) => {
+//         const targetDescription = args.length === 3
+//           ? args.pop()
+//           : description
 
-        return validateFromDescription(targetDescription, ...args)
-      }
-      newContext.collection = await useCollection(resourceName, newContext)
-      newContext.hasCategories = (categories: Array<string>|string) => {
-        if( !description.categories ) {
-          return false
-        }
+//         return validateFromDescription(targetDescription, ...args)
+//       }
+//       newContext.collection = await useCollection(resourceName, newContext)
+//       newContext.hasCategories = (categories: Array<string>|string) => {
+//         if( !description.categories ) {
+//           return false
+//         }
 
-        return arraysIntersects(categories, description.categories)
-      }
-    }
+//         return arraysIntersects(categories, description.categories)
+//       }
+//     }
 
-    // newContext.collections = new Proxy({}, {
-    //   get: (_, resourceName: string) => {
-    //     return proxyFn(resourceName, newContext)
-    //   }
-    // })
+//     // newContext.collections = new Proxy({}, {
+//     //   get: (_, resourceName: string) => {
+//     //     return proxyFn(resourceName, newContext)
+//     //   }
+//     // })
 
-    // newContext.algorithms = new Proxy({}, {
-    //   get: (_, resourceName: string) => {
-    //     return proxyFn(resourceName, newContext, 'algorithm')
-    //   }
-    // })
+//     // newContext.algorithms = new Proxy({}, {
+//     //   get: (_, resourceName: string) => {
+//     //     return proxyFn(resourceName, newContext, 'algorithm')
+//     //   }
+//     // })
 
-    return fn(props, newContext)
-  }
+//     return fn(props, newContext)
+//   }
 
-  return wrapper
-}
+//   return wrapper
+// }
 
 
 // const loadFunction = (functionPath: FunctionPath, resourceType: ResourceType = 'collection', internal: boolean = false) => {
@@ -270,33 +271,37 @@ const wrapFunction = (fn: ApiFunction, functionPath: FunctionPath, resourceType:
 // }
 //
 export const getResourceAsset = async <
-  const ResourceName extends keyof UserConfig['collections'],
-  const AssetName extends keyof UserConfig['collections'][ResourceName]
+  const ResourceName extends keyof Collections,
+  const AssetName extends keyof Collections[ResourceName] & AssetType
 >(
   resourceName: ResourceName,
   assetName: AssetName,
-): Promise<ResourceName extends keyof UserConfig['collections']
-  ? AssetName extends keyof UserConfig['collections'][ResourceName]
-    ? UserConfig['collections'][ResourceName][AssetName]
-    : never
-    : never
-> => {
+) => {
+  const collections = await import('@semantic-api/system/collections')
+  const userConfig = await import(process.cwd() + '/index.js')
+  const config: typeof userConfig = {}
 
-  const config = await import(process.cwd() + '/index.js')
+  Object.assign(config, userConfig)
+  Object.assign(config, { collections })
+
   const key = 'collections'
+  if( !(resourceName in config[key]) ) return left('RESOURCE_NOT_FOUND')
+  if( !(assetName in config[key][resourceName]()) ) return left('ASSET_NOT_FOUND')
 
-  const resource = config[key][resourceName][assetName]
-  return resource
+  const asset = (await config[key][resourceName]())[assetName] as Collections[ResourceName][AssetName]
+
+  const result = right(asset)
+  return result as Exclude<typeof result, Right<never>>
 }
 
 export const get = getResourceAsset
 
 export const getFunction = async <
-  ResourceName extends keyof UserConfig['collections'],
-  FunctionName extends keyof UserConfig['collections'][ResourceName]['functions'],
+  ResourceName extends keyof Collections,
+  FunctionName extends keyof Collections[ResourceName]['functions'],
   ReturnedFunction=ResourceName extends keyof UserConfig['collections']
-      ? FunctionName extends keyof UserConfig['collections'][ResourceName]['functions']
-        ? UserConfig['collections'][ResourceName]['functions'][FunctionName]
+      ? FunctionName extends keyof Collections[ResourceName]['functions']
+        ? Collections[ResourceName]['functions'][FunctionName]
         : never
         : never
 >(
@@ -310,6 +315,11 @@ export const getFunction = async <
     }
   }
 
-  const functions = await getResourceAsset(resourceName, 'functions') as UserConfig['collections'][ResourceName]['functions']
+  const functionsEither = await getResourceAsset(resourceName, 'functions')
+  if( isLeft(functionsEither) ) {
+    return functionsEither
+  }
+
+  const functions = unwrapEither(functionsEither) 
   return right(functions![functionName] as ReturnedFunction)
 }

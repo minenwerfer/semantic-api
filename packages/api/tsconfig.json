@@ -25,6 +25,9 @@
       "@semantic-api/system": [
         "../system/dist"
       ],
+      "@semantic-api/system/*": [
+        "../system/dist/*"
+      ],
       "@semantic-api/types": [
         "../types/dist"
       ]

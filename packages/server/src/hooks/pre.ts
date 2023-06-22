@@ -10,7 +10,7 @@ type PreHookParams = {
   context: ApiContext
 }
 
-export const sanitizeRequest = (params: PreHookParams) => {
+export const sanitizeRequest = async (params: PreHookParams) => {
   const { request } = params
   if( ['POST', 'PUT'].includes(request.method) ) {
     if( !request.payload ) {
@@ -21,7 +21,7 @@ export const sanitizeRequest = (params: PreHookParams) => {
   return params
 }
 
-export const prependPagination = (params: PreHookParams) => {
+export const prependPagination = async (params: PreHookParams) => {
   const { request } = params
   if(
     typeof request.payload?.limit === 'number'

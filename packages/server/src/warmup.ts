@@ -6,5 +6,5 @@ if( process.env.MODE !== 'PRODUCTION' ) {
 }
 
 export const warmup = async (context: Pick<ApiContext, 'descriptions' | 'apiConfig'>) => {
-  return meta.functions.describeAll({ noSerialize: true }, context as ApiContext)
+  return meta().functions.describeAll({ noSerialize: true }, context as ApiContext)
 }

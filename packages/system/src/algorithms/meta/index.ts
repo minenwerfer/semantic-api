@@ -1,7 +1,7 @@
 import describeAll from './describeAll'
 
-export default {
+export default () => ({
   functions: {
     describeAll
   }
-}
+})

@@ -8,6 +8,10 @@ export const options = {
   }
 }
 
+export const connections = {} as {
+  default: Awaited<ReturnType<typeof mongoose.connect>>
+}
+
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 mongoose.set('strictQuery', true)
@@ -30,7 +34,6 @@ export const connectDatabase = async () => {
     return envUri
   })()
 
-  const connection = await mongoose.connect(mongodbUri)
-  global.mongoose = connection
+  const connection = connections.default = await mongoose.connect(mongodbUri)
   return connection
 }

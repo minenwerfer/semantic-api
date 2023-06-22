@@ -3,11 +3,11 @@ import { makeException } from '@semantic-api/api'
 
 const ping = async (_props: null, { token }: ApiContext) => {
   if( !token.user?.roles?.length ) {
-    throw new (makeException({
+    throw makeException({
       name: 'AuthorizationError',
       message: 'you shall not pass',
       logout: true
-    }))
+    })
   }
 }
 

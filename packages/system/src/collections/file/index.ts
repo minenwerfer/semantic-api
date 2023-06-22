@@ -3,11 +3,11 @@ import insert from './insert'
 import download from './download'
 import _delete from './delete'
 
-export default {
+export default () => ({
   description,
   functions: {
     insert,
     download,
     delete: _delete
   }
-}
+})
