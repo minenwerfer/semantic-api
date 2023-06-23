@@ -11,28 +11,28 @@
     "resolveJsonModule": true,
     "paths": {
       "@semantic-api/api": [
-        "../packages/api/dist"
+        "../../packages/api/dist"
       ],
       "@semantic-api/api/*": [
-        "../packages/api/dist/*"
+        "../../packages/api/dist/*"
       ],
       "@semantic-api/access-control": [
-        "../packages/access-control/dist"
+        "../../packages/access-control/dist"
       ],
       "@semantic-api/common": [
-        "../packages/common/dist"
+        "../../packages/common/dist"
       ],
       "@semantic-api/server": [
-        "../packages/server/dist"
+        "../../packages/server/dist"
       ],
       "@semantic-api/system": [
-        "../packages/system/dist"
+        "../../packages/system/dist"
       ],
       "@semantic-api/system/*": [
-        "../packages/system/dist/*"
+        "../../packages/system/dist/*"
       ],
       "@semantic-api/types": [
-        "../packages/types/dist"
+        "../../packages/types/dist"
       ]
     }
   }

@@ -1,7 +1,6 @@
 import type { Request } from '@hapi/hapi'
 import type { ApiContext, ResourceType } from '@semantic-api/api'
 import type { HandlerRequest, } from '../types'
-import { useCollection } from '@semantic-api/api'
 
 type PostHookParams = {
   redirected?: boolean
@@ -30,10 +29,10 @@ export const appendPagination = async (params: PostHookParams) => {
   }
 
   if( Array.isArray(result) && resourceType === 'collection' ) {
-    const countFunction = (await useCollection(resourceName, context)).count
-    const recordsTotal = typeof countFunction === 'function'
-      ? await countFunction({ filters: request.payload?.filters || {} })
-      : result.length
+    // const countFunction = (await useCollection(resourceName, context)).count
+    // const recordsTotal = typeof countFunction === 'function'
+    //   ? await countFunction({ filters: request.payload?.filters || {} })
+    //   : result.length
 
     const limit = request.payload?.limit
       ? +request.payload.limit
@@ -42,7 +41,7 @@ export const appendPagination = async (params: PostHookParams) => {
     Object.assign(response, {
       pagination: {
         recordsCount: result.length,
-        recordsTotal,
+        // recordsTotal,
         offset: request.payload?.offset || 0,
         limit
       }

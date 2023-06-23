@@ -1,5 +1,5 @@
 import { COLLECTION_PRESETS, STORE_EFFECTS, } from '../constants'
-import type { ApiFunction, Model } from '@semantic-api/api'
+import type { ApiFunction, mongoose } from '@semantic-api/api'
 import type { Property } from './jsonschema'
 
 export type CollectionPresets = typeof COLLECTION_PRESETS[number]
@@ -91,7 +91,7 @@ export type Description = {
 
   preferred?: Record<string, Description>
 
-  model?: Model<any>
+  model?: mongoose.Model<any>
   functions?: Record<string, ApiFunction<any, any>>
 
   alias?: string
@@ -104,22 +104,22 @@ export type Description = {
   // modifiers
   owned?: boolean
   strict?: boolean
-  immutable?: boolean|Array<string>
+  immutable?: boolean|ReadonlyArray<string>
   alwaysOwned?: boolean
 
   // takes an array of something
-  route?: Array<string>
+  route?: ReadonlyArray<string>
   presets?: ReadonlyArray<CollectionPresets>
   required?: ReadonlyArray<string>
-  table?: Array<string>
-  tableMeta?: Array<string>
+  table?: ReadonlyArray<string>
+  tableMeta?: ReadonlyArray<string>
 
   filtersPresets?: Record<string, FiltersPreset>
   freshItem?: Record<string, any>
 
   form?: ReadonlyArray<string>|Record<string, Array<string>>
-  writable?: Array<string>
-  filters?: Array<string|{
+  writable?: ReadonlyArray<string>
+  filters?: ReadonlyArray<string|{
     property: string
     default: string
   }>

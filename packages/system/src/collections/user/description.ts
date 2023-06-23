@@ -95,7 +95,7 @@ const schema = <const>{
   }
 }
 
-export default defineDescription<typeof schema>(schema, {
+export default defineDescription(schema, {
   presets: [
     'crud',
     'view',

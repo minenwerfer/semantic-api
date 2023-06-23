@@ -144,7 +144,7 @@ export const customVerbs = (resourceType: ResourceType) =>
     })
   ])
 
-  const fnEither = await getFunction(resourceName, functionName)
+  const fnEither = await getFunction(resourceName, functionName, null, `${resourceType}s`)
   if( isLeft(fnEither) ) {
     throw new Error('no such function')
   }

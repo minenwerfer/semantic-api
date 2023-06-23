@@ -1,6 +1,7 @@
 import { Types } from 'mongoose'
 import { getResourceAsset } from '@semantic-api/api'
-import type { ApiFunction } from '@semantic-api/api'
+import { isLeft, unwrapEither } from '@semantic-api/common'
+import type { Context } from '@semantic-api/api'
 import type { User } from './description'
 
 type SaveWithExtraProps = {
@@ -10,10 +11,16 @@ type SaveWithExtraProps = {
 }
 
 export const userExtraModel = async () => {
-  return getResourceAsset('userExtra', 'model')
+  const either = await getResourceAsset('userExtra', 'model')
+  if( isLeft(either) ) {
+    const error = unwrapEither(either)
+    throw error
+  }
+
+  return unwrapEither(either)
 }
 
-export const saveWithExtra: ApiFunction<SaveWithExtraProps> = async (props, context): Promise<Partial<User>> => {
+export const saveWithExtra = async (props: SaveWithExtraProps, context: Context<User>): Promise<Partial<User>> => {
   const { collection } = context
   const { extra } = props.what
 
@@ -27,10 +34,10 @@ export const saveWithExtra: ApiFunction<SaveWithExtraProps> = async (props, cont
   const user = await collection.insert(props)
 
   try {
-    await context.collections.userExtra.insert<User>({
+    await context.collections.userExtra.functions.insert({
       what: {
         ...extra,
-        owner: user._id
+        owner: user._id,
       }
     })
   } catch(e) {

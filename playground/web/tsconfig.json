@@ -1,4 +1,5 @@
 {
+  "extends": "../api/tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
     "target": "esnext",
@@ -10,9 +11,9 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
-      "@semantic-api/api": [
-        "../api/dist"
+      "@savitri/web": [
+        "./node_modules/@savitri/web/dist/esm"
       ]
     }
-  }   
+  }
 }

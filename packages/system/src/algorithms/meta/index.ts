@@ -2,6 +2,7 @@ import describeAll from './describeAll'
 
 export default () => ({
   functions: {
-    describeAll
+    describeAll,
+    test: (name: 'joao'|'jurandir') => `Hello, ${name}!`
   }
 })

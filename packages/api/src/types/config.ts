@@ -7,7 +7,7 @@ import type { FunctionPath } from './function'
 export type CollectionStructure = {
   description: Description
   model?: ReturnType<typeof createModel>
-  functions?: Record<string, (...args: any[]) => any>
+  functions?: Record<string, (...args: Exclude<any, string>[]) => any>
 }
 
 export type Collection = () => CollectionStructure|Promise<CollectionStructure>
@@ -18,6 +18,7 @@ export type Algorithm = {
 
 export type Config<Collections extends Record<string, Collection>> = {
   collections: Collections
+  algorithms: Record<string, Algorithm>
   accessControl: AccessControl<Collections>
 }
 

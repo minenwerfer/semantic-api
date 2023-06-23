@@ -276,24 +276,33 @@ export const requireWrapper = (path: string) => {
 // }
 //
 export const getResourceAsset = async <
-  const ResourceName extends keyof Collections,
-  const AssetName extends keyof Collections[ResourceName] & AssetType
+  ResourceName extends keyof Collections,
+  AssetName extends keyof Collections[ResourceName] & AssetType,
+  TResourceType extends `${ResourceType}s`
 >(
   resourceName: ResourceName,
   assetName: AssetName,
+  _resourceType?: TResourceType
 ) => {
-  const collections = await import('@semantic-api/system/collections')
+  const { collections, algorithms } = await import('@semantic-api/system')
   const userConfig = await import(process.cwd() + '/index.js')
-  const config: typeof userConfig = {}
+  const config: typeof userConfig = {
+    collections: {},
+    algorithms: {}
+  }
+
+  const resourceType = _resourceType || 'collections'
 
   Object.assign(config, userConfig)
-  Object.assign(config, { collections })
+  Object.assign(config.collections, collections)
+  Object.assign(config.algorithms, algorithms)
 
-  const key = 'collections'
-  if( !(resourceName in config[key]) ) return left(ResourceErrors.ResourceNotFound)
-  if( !(assetName in config[key][resourceName]()) ) return left(ResourceErrors.AssetNotFound)
+  console.log(config[resourceType])
+  
+  if( !(resourceName in config[resourceType]) ) return left(ResourceErrors.ResourceNotFound)
+  if( !(assetName in config[resourceType][resourceName]()) ) return left(ResourceErrors.AssetNotFound)
 
-  const asset = (await config[key][resourceName]())[assetName] as Collections[ResourceName][AssetName]
+  const asset = (await config[resourceType][resourceName]())[assetName] as Collections[ResourceName][AssetName]
 
   const result = right(asset)
   return result as Exclude<typeof result, Right<never>>
@@ -304,23 +313,24 @@ export const get = getResourceAsset
 export const getFunction = async <
   ResourceName extends keyof Collections,
   FunctionName extends keyof Collections[ResourceName]['functions'],
-  ReturnedFunction=ResourceName extends keyof UserConfig['collections']
-      ? FunctionName extends keyof Collections[ResourceName]['functions']
+  TResourceType extends `${ResourceType}s` & keyof UserConfig,
+  ReturnedFunction=ResourceName extends keyof UserConfig[TResourceType]
+      ? FunctionName extends keyof Collections[ResourceName][TResourceType]
         ? Collections[ResourceName]['functions'][FunctionName]
         : never
         : never
 >(
   resourceName: ResourceName,
   functionName: FunctionName,
-  acProfile?: UserACProfile
+  acProfile?: UserACProfile,
+  resourceType?: TResourceType
 ) => {
   if( acProfile ) {
     if( !await isGranted(resourceName, String(functionName), acProfile) ) {
       return left(ACErrors.AuthorizationError)
     }
   }
-
-  const functionsEither = await getResourceAsset(resourceName, 'functions')
+  const functionsEither = await getResourceAsset(resourceName, 'functions', resourceType || 'collections')
   if( isLeft(functionsEither) ) {
     const error = unwrapEither(functionsEither)
     return left(error)

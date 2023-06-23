@@ -12,7 +12,7 @@ type WithAvailableProps<
   TDescription extends Partial<Description>
 > = Omit<TDescription, PropertyDependent> & Partial<Record<
   PropertyDependent & keyof TDescription,
-  Array<keyof Properties
+  ReadonlyArray<keyof Properties
   | 'owner'
   | 'created_at'
   | 'updated_at'
