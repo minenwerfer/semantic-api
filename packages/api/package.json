@@ -8,8 +8,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./presets/*": "./presets/*",
-    "./database": "./dist/database.js",
-    "./functions": "./dist/functions/index.js"
+    "./database": "./dist/database.js"
   },
   "keywords": [],
   "author": "",

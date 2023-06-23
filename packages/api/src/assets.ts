@@ -114,7 +114,7 @@ export const requireWrapper = (path: string) => {
 //   // }
 
 //   const wrapper: ApiFunction = async (props, context) => {
-//     const { useCollection } = require(`@semantic-api/api/collection/use.js`)
+//     const { uxseCollection } = require(`@semantic-api/api/collection/use.js`)
 //     context.functionPath = functionPath
 
 //     const newContext: ApiContext = {
@@ -127,7 +127,7 @@ export const requireWrapper = (path: string) => {
 //       },
 //       hasRoles: (roles: Array<string>|string) => arraysIntersects(roles, context.token.user.roles),
 //       log: async (message, details) => {
-//         return (await useCollection('log', context)).insert({
+//         return (await uxseCollection('log', context)).insert({
 //           what: {
 //             message,
 //             details,

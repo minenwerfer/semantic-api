@@ -4,5 +4,6 @@ export * from './exceptions'
 export * from './token'
 export * from './types'
 export * from './database'
+export * from './functions/use'
 
 export * from '@semantic-api/common/either'
