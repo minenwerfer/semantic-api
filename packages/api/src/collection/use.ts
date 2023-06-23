@@ -5,7 +5,7 @@ import { getResourceAsset } from '../assets'
 import * as CollectionFunctions from '../functions'
 // import useFunctions from './functions'
 
-export const useCollection = async (collectionName: keyof Collections, _context: ApiContext|null = null) => {
+export const useCollection = async (collectionName: keyof Collections & string, _context: ApiContext|null = null) => {
   const context = _context || {} as ApiContext
 
   const description = await (async () => {
@@ -20,16 +20,6 @@ export const useCollection = async (collectionName: keyof Collections, _context:
 
     return unwrapEither(descriptionEither)
   })()
-
-  // const description = context.description = context.description?.$id === collectionName
-  //   ? context.description
-  //   : await getResourceAsset(collectionName, 'description')
-
-  // if( !description ) {
-  //   throw new Error(
-  //     `description of ${collectionName} not found`
-  //   )
-  // }
 
   const originalCollectionName = (description.alias || collectionName) as keyof Collections
   const model = getResourceAsset(originalCollectionName, 'model')

@@ -47,5 +47,10 @@ declare module '@semantic-api/api' {
     resourceName: ResourceName,
     functionName: FunctionName,
     acProfile?: UserACProfile
-  ): any
+  ): Promise<
+    Either<
+      ResourceErrors,
+      ReturnedFunction
+    >
+  >
 }

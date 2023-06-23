@@ -3,8 +3,20 @@ import { isLeft, unwrapEither } from '@semantic-api/common'
 // import { ACErrors } from '@semantic-api/access-control'
 import { initWithDatabase as init } from '@semantic-api/server'
 
-init().then((server) => {
+init().then(async (server) => {
   server.start()
+
+  const either = await getFunction('person', 'hello')
+  if( isLeft(either) ) {
+    const error = unwrapEither(either)
+    switch( error ) {
+      case ResourceErrors.ResourceNotFound: throw new Error('resource not found')
+      default: throw new Error('unhandled exception')
+    }
+  }
+
+  const func = unwrapEither(either)
+  func('japao', 123)
 })
 
 import person from './person'

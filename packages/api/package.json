@@ -9,7 +9,7 @@
     ".": "./dist/index.js",
     "./presets/*": "./presets/*",
     "./database": "./dist/database.js",
-    "./*": "./dist/*"
+    "./functions": "./dist/functions/index.js"
   },
   "keywords": [],
   "author": "",

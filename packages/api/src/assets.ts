@@ -322,7 +322,8 @@ export const getFunction = async <
 
   const functionsEither = await getResourceAsset(resourceName, 'functions')
   if( isLeft(functionsEither) ) {
-    return functionsEither
+    const error = unwrapEither(functionsEither)
+    return left(error)
   }
 
   const functions = unwrapEither(functionsEither) 

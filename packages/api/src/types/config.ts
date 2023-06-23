@@ -9,7 +9,6 @@ export type Collection = () => {
   description: Description
   model?: ReturnType<typeof createModel>
   functions?: Record<string, (...args: any[]) => any>
-  fallbackFunctions?: ReadonlyArray<keyof typeof CollectionFunctions>
 }
 
 export type Algorithm = {
