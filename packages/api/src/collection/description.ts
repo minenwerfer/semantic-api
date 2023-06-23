@@ -3,23 +3,26 @@ import type { SchemaProperties } from './schema.types'
 
 type PropertyDependent =
   'filters'
-    | 'table'
-    | 'form'
-    | 'writable'
+  | 'table'
+  | 'form'
+  | 'writable'
+
+type WithAvailableProps<
+  Properties extends Description['properties'],
+  TDescription extends Partial<Description>
+> = Omit<TDescription, PropertyDependent> & Partial<Record<
+  PropertyDependent & keyof TDescription,
+  Array<keyof Properties
+  | 'owner'
+  | 'created_at'
+  | 'updated_at'
+  >>
+>
 
 export const defineDescription = <
-  T extends Description,
-  A=SchemaProperties<T>,
-  AvailableProperties=Array<
-    keyof T['properties']
-    | 'owner'
-    | 'created_at'
-    | 'updated_at'
-  >,
-  TDescription=Omit<Description, keyof A | PropertyDependent> & {
-    [P in PropertyDependent]?: AvailableProperties
-  }
->(schema: A, description?: TDescription): A & TDescription => ({
+  const TSchema extends WithAvailableProps<Description['properties'], SchemaProperties<Description>>,
+  const TDescription extends WithAvailableProps<TSchema['properties'], Omit<Description, keyof TSchema>>
+>(schema: TSchema, description?: TDescription): TSchema & TDescription => ({
   ...schema,
   ...description||{} as TDescription
 })
