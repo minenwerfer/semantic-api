@@ -5,10 +5,10 @@ import type { Filters, Projection } from './types'
 export const get = <
   TDescription extends Description,
   TDocument extends MongoDocument
->(context: Context<TDescription, Collections>) => (payload: {
+>() => (payload: {
   filters?: Filters<TDocument>,
   project?: Projection<TDocument>
-}) => {
+}, context: Context<TDescription, Collections>) => {
   return context.model.findOne(
     payload.filters,
     payload.project

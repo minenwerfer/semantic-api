@@ -1,10 +1,11 @@
-import type { collections } from '.'
 import type { AssetType, ResourceErrors, Context as Context_ } from '@semantic-api/api'
 import type { Description } from '@semantic-api/api'
 import { Either, Left } from '@semantic-api/common'
-import * as SystemCollections from '@semantic-api/system/collections'
 
 declare global {
+  import type { collections } from '.'
+  import * as SystemCollections from '@semantic-api/system/collections'
+
   type UserCollections = typeof collections
   type Collections = {
     [K in keyof (UserCollections & typeof SystemCollections)]: Awaited<ReturnType<(UserCollections & typeof SystemCollections)[K]>>

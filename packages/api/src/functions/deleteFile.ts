@@ -5,6 +5,6 @@ import type { FileDeleteProps } from './types'
 export const deleteFile = <
   TDescription extends Description,
   _TDocument extends MongoDocument
->(context: Context<TDescription, Collections>) => (payload: FileDeleteProps) => {
+>() => (payload: FileDeleteProps, context: Context<TDescription, Collections>) => {
   return Promise.resolve({})
 }

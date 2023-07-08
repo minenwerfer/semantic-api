@@ -5,9 +5,9 @@ import type { Projection } from './types'
 export const insert = <
   TDescription extends Description,
   TDocument extends MongoDocument
->(context: Context<TDescription, Collections>) => (payload: {
+>() => (payload: {
   what: Partial<TDocument>,
   project?: Projection<TDocument>
-}) => {
+}, context: Context<TDescription, Collections>) => {
   return context.model.create(payload.what) as Promise<TDocument>
 }

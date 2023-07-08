@@ -7,6 +7,14 @@ const schema = <const>{
   properties: {
     name: {
       type: 'string'
+    },
+    job: {
+      enum: [
+        'driver',
+        'baker',
+        'programmer',
+        'policeman'
+      ]
     }
   }
 }

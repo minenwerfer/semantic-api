@@ -5,13 +5,13 @@ import type { Filters, Projection, QuerySort } from './types'
 export const getAll = <
   TDescription extends Description,
   TDocument extends MongoDocument
->(context: Context<TDescription, Collections>) => (payload: {
+>() => (payload: {
   filters?: Filters<TDocument>
   project?: Projection<TDocument>
   offset?: number
   limit?: number
   sort?: QuerySort<TDocument>
-}) => {
+}, context: Context<TDescription, Collections>) => {
   return context.model.find(
     payload.filters as any,
     payload.project

@@ -13,7 +13,34 @@
     "paths": {
       "@savitri/web": [
         "./node_modules/@savitri/web/dist/esm"
+      ],
+      "@semantic-api/api": [
+        "../../packages/api/dist"
+      ],
+      "@semantic-api/api/*": [
+        "../../packages/api/dist/*"
+      ],
+      "@semantic-api/access-control": [
+        "../../packages/access-control/dist"
+      ],
+      "@semantic-api/common": [
+        "../../packages/common/dist"
+      ],
+      "@semantic-api/server": [
+        "../../packages/server/dist"
+      ],
+      "@semantic-api/system": [
+        "../../packages/system/dist"
+      ],
+      "@semantic-api/system/*": [
+        "../../packages/system/dist/*"
+      ],
+      "@semantic-api/types": [
+        "../../packages/types/dist"
       ]
-    }
+    },
+    "types": [
+      "../api/global.d.ts"
+    ]
   }
 }

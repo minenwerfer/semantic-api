@@ -1,7 +1,8 @@
 import { defineCollection } from '@semantic-api/api'
-import description from './description'
+import description, { Pet } from './description'
 
 export default defineCollection(() => ({
+  item: {} as Pet,
   description,
   functions: {
     bark: (person: string) => `Bark! *Bites ${person}*`,

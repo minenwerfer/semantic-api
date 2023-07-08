@@ -5,6 +5,6 @@ import type { Filters } from './types'
 export const count = <
   TDescription extends Description,
   TDocument extends MongoDocument
->(context: Context<TDescription, Collections>) => async (payload: { filters?: Filters<TDocument> }) => {
+>() => async (payload: { filters?: Filters<TDocument> }, context: Context<TDescription, Collections>) => {
   return context.model.countDocuments(payload.filters)
 }

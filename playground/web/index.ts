@@ -1,22 +1,19 @@
-import { defineStore } from 'pinia'
+import { useStore } from '@savitri/web'
 
-const useTestStore = defineStore('test', {
-  state: () => {
-    return {
-      name: 'test'
+const petStore = useStore('pet')
+petStore.functions.performTrick(5)
+petStore.items[0].name
+
+const personStore = useStore('person')
+personStore.item.job === 'policeman'
+
+;(async () => {
+  const items = await personStore.functions.getAll({
+    filters: {
+      job: 'baker'
     }
-  },
-  actions: {
-    greet(prefix: 'dr'|'sr') {
-      return `${prefix} ${this.name}`
-    }
-  }
-})
+  })
 
-const t = useTestStore()
+  items[0].job === 'isso non ecziste'
 
-// expected error since 'oi' is not a known property
-t.oi
-
-// expected function signature to be present
-t.greet()
+})()

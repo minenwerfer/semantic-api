@@ -5,6 +5,6 @@ import type { UploadProps } from './types'
 export const upload = <
   TDescription extends Description,
   TDocument extends MongoDocument
->(context: Context<TDescription, Collections>) => (payload: UploadProps) => {
+>() => (payload: UploadProps, context: Context<TDescription, Collections>) => {
   return Promise.resolve({})
 }

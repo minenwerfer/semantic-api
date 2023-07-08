@@ -5,9 +5,9 @@ import type { Filters } from './types'
 export const _delete = <
   TDescription extends Description,
   TDocument extends MongoDocument
->(context: Context<TDescription, Collections>) => (payload: {
+>() => (payload: {
   filters: Filters<TDocument>
-}) => {
+}, context: Context<TDescription, Collections>) => {
   return context.model.findOneAndDelete(payload.filters, {
     strict: 'throw'
   })

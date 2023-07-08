@@ -5,9 +5,9 @@ import type { Filters } from './types'
 export const deleteAll = <
   TDescription extends Description,
   TDocument extends MongoDocument
->(context: Context<TDescription, Collections>) => (payload: {
+>() => (payload: {
   filters: Filters<TDocument>
-}) => {
+}, context: Context<TDescription, Collections>) => {
   const filters = {
     ...payload.filters,
     _id: { $in: payload.filters._id }

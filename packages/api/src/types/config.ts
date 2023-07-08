@@ -5,6 +5,7 @@ import type { createModel } from '../collection/schema'
 import type { FunctionPath } from './function'
 
 export type CollectionStructure = {
+  item: any
   description: Description
   model?: ReturnType<typeof createModel>
   functions?: Record<string, (...args: Exclude<any, string>[]) => any>

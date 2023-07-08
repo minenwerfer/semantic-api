@@ -5,9 +5,9 @@ import type { Filters } from './types'
 export const modify = <
   TDescription extends Description,
   TDocument extends MongoDocument
->(context: Context<TDescription, Collections>) => (payload: {
+>() => (payload: {
   filters: Filters<TDocument>,
   what: Partial<TDocument>
-}) => {
+}, context: Context<TDescription, Collections>) => {
   return {} as unknown
 }
