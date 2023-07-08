@@ -1,6 +1,7 @@
 import type { Model } from 'mongoose'
 import type { Description } from '@semantic-api/types'
 import type { Schema } from './collection'
+import type { FunctionPath, DecodedToken } from './types'
 import { algorithms, collections } from '@semantic-api/system'
 
 type Models = {
@@ -14,6 +15,8 @@ export type Context<
   model: Models[TDescription['$id']]
   collection: TCollections[TDescription['$id']]
   collections: TCollections
+  functionPath: FunctionPath
+  token: DecodedToken
 }
 
 export const createContext = async (collectionName: keyof Collections) => {

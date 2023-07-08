@@ -1,9 +1,13 @@
+import type { Description } from '@semantic-api/types'
 import type { Context, MongoDocument } from '../types'
 import type { Filters } from './types'
 
-export const modify = <T extends MongoDocument>(context: Context<T>) => (payload: {
-  filters: Filters<T>,
-  what: Partial<T>
+export const modify = <
+  TDescription extends Description,
+  TDocument extends MongoDocument
+>(context: Context<TDescription, Collections>) => (payload: {
+  filters: Filters<TDocument>,
+  what: Partial<TDocument>
 }) => {
-  return Promise.resolve(null)
+  return {} as unknown
 }

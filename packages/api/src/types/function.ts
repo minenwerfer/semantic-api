@@ -8,41 +8,36 @@ import type { Algorithm, Collection, ApiConfig, DecodedToken } from './config'
 
 export type FunctionPath = `${string}@${string}`
 
-export type ApiFunction<Props=unknown, Return=any> = (
-  props: Props,
-  context: ApiContext
-) => Return
+// export type ApiContext = {
+//   resourceName: string
+//   functionPath?: FunctionPath
 
-export type ApiContext = {
-  resourceName: string
-  functionPath?: FunctionPath
+//   apiConfig: ApiConfig
+//   accessControl: AccessControl<any>
+//   injected: Record<string, any>
+//   token: DecodedToken
 
-  apiConfig: ApiConfig
-  accessControl: AccessControl<any>
-  injected: Record<string, any>
-  token: DecodedToken
+//   validate: <T>(what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
+//   limitRate: (params: RateLimitingParams) => ReturnType<typeof limitRate>
 
-  validate: <T>(what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
-  limitRate: (params: RateLimitingParams) => ReturnType<typeof limitRate>
+//   hasRoles: (roles: Array<string>|string) => boolean
+//   hasCategories: (categories: Array<string>|string) => boolean
+//   collection: Collection
+//   model: Model<any>
 
-  hasRoles: (roles: Array<string>|string) => boolean
-  hasCategories: (categories: Array<string>|string) => boolean
-  collection: Collection
-  model: Model<any>
+//   log: (message: string, details?: Record<string, any>) => Promise<Log>
+//   algorithms: Record<string, Algorithm>
+//   collections: Record<string, Collection>
+//   descriptions: Record<string, Description>
+//   description: Description
+//   request: Request & {
+//     payload: Record<string, any>
+//   }
 
-  log: (message: string, details?: Record<string, any>) => Promise<Log>
-  algorithms: Record<string, Algorithm>
-  collections: Record<string, Collection>
-  descriptions: Record<string, Description>
-  description: Description
-  request: Request & {
-    payload: Record<string, any>
-  }
+//   h: unknown
+// }
 
-  h: unknown
-}
-
-export type ApiContextWithAC = ApiContext & {
-  acFunctions: ReturnType<typeof useAccessControl>
-}
+// export type ApiContextWithAC = ApiContext & {
+//   acFunctions: ReturnType<typeof useAccessControl>
+// }
 

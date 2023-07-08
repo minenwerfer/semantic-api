@@ -1,8 +1,12 @@
+import type { Description } from '@semantic-api/types'
 import type { Context, MongoDocument } from '../types'
 import type { Filters } from './types'
 
-export const deleteAll = <T extends MongoDocument>(context: Context<T>) => (payload: {
-  filters: Filters<T>
+export const deleteAll = <
+  TDescription extends Description,
+  TDocument extends MongoDocument
+>(context: Context<TDescription, Collections>) => (payload: {
+  filters: Filters<TDocument>
 }) => {
   const filters = {
     ...payload.filters,

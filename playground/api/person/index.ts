@@ -7,11 +7,11 @@ const { getAll } = useFunctions<Person>()
 export default defineCollection(() => ({
   description,
   functions: {
-    test(name: string, context: Context<typeof description>) {
-      context.collections.pet.functions.performTrick(2)
-      context.collection.functions.test
-      return {}
-    },
+    // test(name: string, context: Context<typeof description>) {
+    //   context.collections.pet.functions.performTrick(2)
+    //   context.collection.functions.test
+    //   return {}
+    // },
     getAll
   },
 }))

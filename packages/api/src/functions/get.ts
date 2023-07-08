@@ -1,9 +1,16 @@
+import type { Description } from '@semantic-api/types'
 import type { Context, MongoDocument } from '../types'
 import type { Filters, Projection } from './types'
 
-export const get = <T extends MongoDocument>(context: Context<T>) => (payload: {
-  filters?: Filters<T>,
-  project?: Projection<T>
+export const get = <
+  TDescription extends Description,
+  TDocument extends MongoDocument
+>(context: Context<TDescription, Collections>) => (payload: {
+  filters?: Filters<TDocument>,
+  project?: Projection<TDocument>
 }) => {
-  return Promise.resolve({})
+  return context.model.findOne(
+    payload.filters,
+    payload.project
+  ) as Promise<TDocument>
 }

@@ -4,7 +4,10 @@ import description from './description'
 export default defineCollection(() => ({
   description,
   functions: {
-    bark: (person: string) => console.log(`Bark! *Bites ${person}*`),
-    performTrick: (times: number) => console.log(`*sits ${times}x*`)
+    bark: (person: string) => `Bark! *Bites ${person}*`,
+    performTrick: (times: number, context: Context<typeof description>) => {
+      console.log(context)
+      return `*sits ${times}x*`
+    }
   },
 }))

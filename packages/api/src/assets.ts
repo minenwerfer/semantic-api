@@ -1,11 +1,9 @@
 // import { existsSync } from 'fs'
 // import type { Model } from 'mongoose'
 import type {
-  ApiFunction ,
   ResourceType,
   AssetType,
   FunctionPath,
-  ApiContext
 
 } from './types'
 
@@ -117,7 +115,7 @@ export const requireWrapper = (path: string) => {
 //     const { uxseCollection } = require(`@semantic-api/api/collection/use.js`)
 //     context.functionPath = functionPath
 
-//     const newContext: ApiContext = {
+//     const newContext: A_piContext = {
 //       ...context,
 //       descriptions: global.descriptions,
 //       resourceName,

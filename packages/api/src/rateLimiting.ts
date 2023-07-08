@@ -1,4 +1,5 @@
-import type { ApiContext } from './types/function'
+import type { Description } from '@semantic-api/types'
+import type { Context } from './context'
 import { makeException } from './exceptions'
 import { mongoose } from './database'
 
@@ -14,7 +15,7 @@ const rateLimitingError = (message: string) => makeException({
   httpCode: 429
 })
 
-export const limitRate = async (context: ApiContext, params: RateLimitingParams) => {
+export const limitRate = async <const T extends Description>(context: Context<T, Collections>, params: RateLimitingParams) => {
   const UserModel = mongoose.models.user
   const ResourceUsageModel = mongoose.models.resourceUsage
 
