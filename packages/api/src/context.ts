@@ -1,7 +1,7 @@
-import type { Model } from 'mongoose'
 import type { Description } from '@semantic-api/types'
 import type { Schema } from './collection'
 import type { FunctionPath, DecodedToken } from './types'
+import mongoose, { Model } from 'mongoose'
 import { algorithms, collections } from '@semantic-api/system'
 
 type Models = {
@@ -33,7 +33,7 @@ export const createContext = async (collectionName: keyof Collections) => {
     }),
     models: new Proxy<Models>({}, {
       get: (_, key: keyof Collections) => {
-        return getResourceAsset(String(key), 'model')
+        return mongoose.models[String(key)]
       }
     })
   }
