@@ -1,6 +1,6 @@
 import type { Description } from '@semantic-api/types'
 import type { Schema } from './collection'
-import type { Config, FunctionPath, DecodedToken, ResourceType } from './types'
+import type { Config, ApiConfig, FunctionPath, DecodedToken, ResourceType } from './types'
 import type { AccessControl } from '@semantic-api/access-control'
 import mongoose, { type Model } from 'mongoose'
 import { unsafe } from '@semantic-api/common'
@@ -24,6 +24,7 @@ export type Context<
   TCollections extends Collections,
   _TAlgorithms extends Algorithms
 > = Omit<Awaited<ReturnType<typeof internalCreateContext>>, 'collection' | 'collections'> & {
+  description: TDescription
   model: TDescription['$id'] extends keyof Collections
     ? Models[TDescription['$id']]
     : never
@@ -38,8 +39,10 @@ export type Context<
   request: any
   h: any
 
-  apiConfig: any
+  apiConfig: ApiConfig
   accessControl: AccessControl<TCollections>
+  log: (...args: any[]) => any
+  validate: (...args: any[]) => any
 }
 
 export const internalCreateContext = async <
@@ -55,8 +58,9 @@ export const internalCreateContext = async <
   const { collections, algorithms } = await getResources()
 
   return {
-    model: (resourceName && resourceType === 'collection') && unsafe(await getResourceAsset(resourceName, 'model')),
-    collection: {} as any,
+    description: (resourceName && resourceType === 'collection') && unsafe(await getResourceAsset(resourceName, 'description')),
+    model: (resourceName && resourceType === 'collection') && unsafe(await getResourceAsset(resourceName, 'model'), resourceName),
+    collection: (resourceName && resourceType === 'collection') && collections[resourceName],
     algorithms: new Proxy<Algorithms>({}, {
       get: <TResourceName extends keyof typeof algorithms>(_: unknown, resourceName: TResourceName) => {
         return algorithms[resourceName]?.()

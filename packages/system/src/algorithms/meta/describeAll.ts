@@ -5,11 +5,14 @@ type Props = {
   noSerialize?: boolean
 }
 
-const describeAll = async (props: Props, context: Context<any, any>): Promise<any> => {
+const describeAll = async (props: Props, context: Context<any, any, any>): Promise<any> => {
   const resources = await getResources()
+
   const descriptions = Object.fromEntries(
-    Object.values(resources.collections as any[])
-        .map(({ description }) => [description.$id, description])
+    await Promise.all(Object.values(resources.collections as any[]).map(async (collection) => {
+      const { description } = await collection()
+      return [description.$id, description]
+    }))
   )
 
   const result =  {

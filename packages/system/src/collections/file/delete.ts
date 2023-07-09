@@ -1,6 +1,6 @@
 import { unlink } from 'fs/promises'
-import type { ApiContext } from '@semantic-api/api'
-import type { File } from './description'
+import type { Context } from '@semantic-api/api'
+import description, { type File } from './description'
 
 type Props = {
   filters: {
@@ -8,8 +8,8 @@ type Props = {
   }
 }
 
-const _delete = async (props: Props, { collection }: ApiContext) => {
-  const file = await collection.get<File>(props)
+const _delete = async (props: Props, { collection }: Context<typeof description, any, any>) => {
+  const file = await collection.get(props)
   if( !file ) {
     throw new Error('file not found')
   }

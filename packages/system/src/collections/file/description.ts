@@ -54,7 +54,7 @@ const schema = <const>{
   },
 }
 
-export default defineDescription<typeof schema>(schema, {
+export default defineDescription(schema, {
   actions: {
     deleteAll: {
       name: 'Remover',

@@ -1,7 +1,7 @@
 import { createHash } from 'crypto'
 import { writeFile, unlink } from 'fs/promises'
-import type { ApiContext } from '@semantic-api/api'
-import { File } from './description'
+import type { Context } from '@semantic-api/api'
+import description, { File } from './description'
 
 const { STORAGE_PATH } = process.env
 
@@ -14,7 +14,7 @@ type Props = {
   >
 }
 
-const insert = async (props: Props, { token, collection }: ApiContext) => {
+const insert = async (props: Props, { token, collection }: Context<typeof description, any, any>) => {
   const what = Object.assign({}, props.what)
   what.owner = token?.user._id
 
@@ -23,7 +23,7 @@ const insert = async (props: Props, { token, collection }: ApiContext) => {
     throw new Error('filename lacks extension')
   }
 
-  const oldFile = await collection.get<File>({
+  const oldFile = await collection.get({
     filters: {
       _id: props.what._id 
     }

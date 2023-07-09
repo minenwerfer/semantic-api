@@ -20,7 +20,7 @@ export default createModel(FileDescription, {
         .lean()
 
         if( doc ) {
-          await deleteFile(doc.absolute_path)
+          await deleteFile((<any>doc).absolute_path)
         }
     })
 

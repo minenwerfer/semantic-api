@@ -15,12 +15,7 @@ const internalCheck: (...args: Parameters<AccessControlLayer>) => Promise<void> 
     || (Array.isArray(description.immutable) && description.immutable.includes(propertyName) )
   )
 
-  const currentDocument = await context.resource.get<any>({
-    filters: {
-      _id: parentId
-    }
-  })
-
+  const currentDocument = await context.model.findOne({ _id: parentId }).lean()
   if( !currentDocument ) {
     throw new TypeError(
       `parent document not found`

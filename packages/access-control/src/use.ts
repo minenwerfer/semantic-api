@@ -1,5 +1,5 @@
 import { deepMerge } from '@semantic-api/common'
-import type { ApiFunction, ApiContext } from '@semantic-api/server'
+import type { Context } from '@semantic-api/api'
 import type { Description } from '@semantic-api/types'
 import * as baseControl from './baseLayers'
 
@@ -14,49 +14,49 @@ type WritePayload = {
   filters: Record<string, any>
 }
 
-export const useAccessControl = (description: Description, context?: ApiContext) => {
-  const options = description.options
-    ? Object.assign({}, description.options)
+export const useAccessControl = <TDescription extends Description>(context: Context<TDescription, any, any>) => {
+  const options = context.description.options
+    ? Object.assign({}, context.description.options)
     : {}
 
   const accessControl = context?.accessControl||{}
 
-  const beforeRead: ApiFunction<any> = async (props, context): Promise<ReadPayload> => {
-    const payload = Object.assign({}, {
-      filters: props?.filters||{},
-      sort: props?.sort,
-      limit: props?.limit
-    })
+  const beforeRead = async <Payload extends Partial<ReadPayload>>(payload: Payload, context: Context<any, any, any>): Promise<ReadPayload> => {
+    const newPayload = Object.assign({}, {
+      filters: payload?.filters||{},
+      sort: payload?.sort,
+      limit: payload?.limit
+    }) as ReadPayload
 
     if( options.queryPreset ) {
       deepMerge(
-        payload,
+        newPayload,
         options.queryPreset
       )
     }
 
     if( accessControl.layers?.read && context.token ) {
-      await accessControl.layers?.read(context, { payload })
+      await accessControl.layers?.read(context, { payload: newPayload })
     }
 
-    await baseControl.read!(context, { payload })
+    await baseControl.read!(context, { payload: newPayload })
 
-    if( payload.limit > 150 ) {
-      payload.limit = 150
+    if( newPayload.limit > 150 ) {
+      newPayload.limit = 150
     }
 
-    return payload
+    return newPayload
   }
 
-  const beforeWrite: ApiFunction<any> = async (props, context): Promise<WritePayload> => {
-    const payload = Object.assign({ what: {} }, props)
+  const beforeWrite = async <Payload>(payload: Payload, context: Context<any, any, any>): Promise<WritePayload> => {
+    const newPayload = Object.assign({ what: {} }, payload) as unknown as WritePayload
 
     if( accessControl.layers?.write && context.token ) {
-      await accessControl.layers?.write(context, { payload })
+      await accessControl.layers?.write(context, { payload: newPayload })
     }
 
-    await baseControl.write!(context, { payload })
-    return payload
+    await baseControl.write!(context, { payload: newPayload })
+    return newPayload
   }
 
   return {

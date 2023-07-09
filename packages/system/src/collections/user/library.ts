@@ -2,7 +2,7 @@ import { Types } from 'mongoose'
 import { getResourceAsset } from '@semantic-api/api'
 import { isLeft, unwrapEither } from '@semantic-api/common'
 import type { Context } from '@semantic-api/api'
-import type { User } from './description'
+import description, { type User } from './description'
 
 type SaveWithExtraProps = {
   what: Partial<User> & {
@@ -11,7 +11,7 @@ type SaveWithExtraProps = {
 }
 
 export const userExtraModel = async () => {
-  const either = await getResourceAsset('userExtra', 'model')
+  const either = await getResourceAsset('userExtra' as any, 'model')
   if( isLeft(either) ) {
     const error = unwrapEither(either)
     throw error
@@ -20,7 +20,7 @@ export const userExtraModel = async () => {
   return unwrapEither(either)
 }
 
-export const saveWithExtra = async (props: SaveWithExtraProps, context: Context<User>): Promise<Partial<User>> => {
+export const saveWithExtra = async (props: SaveWithExtraProps, context: Context<typeof description, any, any>): Promise<Partial<User>> => {
   const { collection } = context
   const { extra } = props.what
 

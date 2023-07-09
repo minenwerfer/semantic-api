@@ -29,17 +29,20 @@ const applyInheritance = async (accessControl: AccessControl<any>, targetRole: R
 }
 
 export const isGranted = async <
-  const ResourceName extends keyof TesteConfig['collections'],
-  const FunctionName extends string
+  const ResourceName extends string,
+  const FunctionName extends string,
+  const ACProfile extends AccessControl<any> & {
+    allowedFunctions?: Array<string>
+  }
 >(
   resourceName: ResourceName,
   functionName: FunctionName,
-  acProfile: UserACProfile
+  acProfile: ACProfile
 ) => {
   const userRoles = acProfile.roles
   const accessControl = await getAccessControl()
 
-  for( const roleName of userRoles ) {
+  for( const roleName in userRoles ) {
     const _currentRole = accessControl.roles?.[roleName]
     if( !_currentRole ) {
       throw new Error(`role ${roleName} doesnt exist`)
@@ -53,8 +56,8 @@ export const isGranted = async <
       return false
     }
 
-    const allowedInToken = !acProfile.allowed_functions || (
-      acProfile.allowed_functions.includes(`${resourceName}@${functionName}`)
+    const allowedInToken = !acProfile.allowedFunctions || (
+      acProfile.allowedFunctions.includes(`${resourceName}@${functionName}`)
     )
 
     const result = allowedInToken

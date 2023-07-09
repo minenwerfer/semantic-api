@@ -7,7 +7,7 @@ import {
 } from 'mongoose'
 
 import type { Description, CollectionProperty } from '@semantic-api/types'
-import { getReferencedCollection, isLeft, unwrapEither } from '@semantic-api/common'
+import { getReferencedCollection, unsafe } from '@semantic-api/common'
 
 import { options as defaultOptions, connections } from '../database'
 import { getResourceAsset } from '../assets'
@@ -32,7 +32,7 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
       return a
     }
 
-    const type = getTypeConstructor(property, (description) => descriptionToSchema(description, { _id: false }))
+    const type = await getTypeConstructor(property, (description) => descriptionToSchema(description, { _id: false }))
     const containedType = Array.isArray(type) && type.length === 1
       ? type[0]
       : type
@@ -82,12 +82,7 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
     }
 
     if( typeof referencedCollection === 'string' ) {
-      const referenceEither = await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description')
-      if( isLeft(referenceEither) ) {
-        throw referenceEither
-      }
-
-      const referenceDescription = unwrapEither(referenceEither)
+      const referenceDescription = unsafe(await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description'))
       hasRefs = true
 
       const actualReferenceName = result.ref = referenceDescription.alias || referenceDescription.$id
@@ -195,7 +190,6 @@ export const createModel = async <T=any>(
     schemaCallback
   } = config||{}
 
-  console.log({ description })
   const modelName = description.$id.split('/').pop() as string
   if( mongooseModels[modelName] ) {
     return mongooseModels[modelName] as Model<T>
@@ -212,12 +206,7 @@ export const createModel = async <T=any>(
 
   for( const [propertyName, property] of Object.entries(description.properties) ) {
     if( property.s$isFile || property.s$inline ) {
-      const referenceEither = await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description')
-      if( isLeft(referenceEither) ) {
-        throw referenceEither
-      }
-
-      const referenceDescription = unwrapEither(referenceEither)
+      const referenceDescription = unsafe(await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description'))
 
       cascadingDelete.push({
         propertyName,

@@ -157,7 +157,7 @@ export const regularVerb = (functionName: RegularVerb) =>
   async (
     request: HandlerRequest,
     h: ResponseToolkit,
-    context: Context<any, any, any>
+    parentContext: Context<any, any, any>
 ) => {
   const {
     params: {
@@ -167,6 +167,10 @@ export const regularVerb = (functionName: RegularVerb) =>
   } = request
 
   const token = await getToken(request) as DecodedToken
+  const context = await createContext({
+    parentContext,
+    resourceName
+  })
 
   Object.assign(context, {
     token,

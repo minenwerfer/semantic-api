@@ -1,6 +1,6 @@
-import type { ApiContext } from '@semantic-api/api'
+import type { Context } from '@semantic-api/api'
 import * as bcrypt from 'bcrypt'
-import { User } from './description'
+import description, { type User } from './description'
 import { saveWithExtra } from './library'
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 
 type Return = Promise<Partial<User>>
 
-const insert = async (props: Props, context: ApiContext): Return => {
+const insert = async (props: Props, context: Context<typeof description, any, any>): Return => {
   const { token, collection, apiConfig } = context
   props.what.group = apiConfig.group
 
@@ -53,7 +53,7 @@ const insert = async (props: Props, context: ApiContext): Return => {
 
   return props.what.extra
     ? saveWithExtra(props, context)
-    : collection.insert(props) as Promise<User>
+    : collection.functions.insert(props) as Promise<User>
 }
 
 export default insert

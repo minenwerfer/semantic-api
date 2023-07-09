@@ -94,7 +94,7 @@ export const getResourceAsset = async <
     }
   })())
 
-  if( !asset ) {
+  if( !result.value ) {
     if( !(resourceName in resources[resourceType]) ) return left(ResourceErrors.ResourceNotFound)
     if( !(assetName in resources[resourceType][resourceName]()) ) return left(ResourceErrors.AssetNotFound)
   }
@@ -120,7 +120,7 @@ export const getFunction = async <
   resourceType?: TResourceType
 ) => {
   if( acProfile ) {
-    if( !await isGranted(resourceName, String(functionName), acProfile) ) {
+    if( !await isGranted(resourceName, String(functionName), acProfile as any) ) {
       return left(ACErrors.AuthorizationError)
     }
   }

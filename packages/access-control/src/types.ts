@@ -1,32 +1,32 @@
-import type { Collections } from '@semantic-api/api'
+import type { Collection } from '@semantic-api/api'
 import type { AccessControlLayer } from './layers/types'
 
 export type ValidAccessControlLayer =
   'read'
   | 'write'
 
-export type Role<_Collections extends Collections> = {
+export type Role<TCollections extends Record<string, Collection>> = {
   inherit?: Array<string>
   grantEverything?: boolean
   forbidEverything?: boolean
   capabilities?: {
-    [P in keyof _Collections]?: {
+    [P in keyof TCollections]?: {
       grantEverything?: boolean
       forbidEverything?: boolean
-      functions?: _Collections[P]['fallbackFunctions'] extends readonly string[]
-        ? Array<keyof _Collections[P]['functions'] | _Collections[P]['fallbackFunctions'][number]>
-        : Array<keyof _Collections[P]['functions']>
-      blacklist?: _Collections[P]['fallbackFunctions'] extends readonly string[]
-        ? Array<keyof _Collections[P]['functions'] | _Collections[P]['fallbackFunctions'][number]>
-        : Array<keyof _Collections[P]['functions']>
+      functions?: 'functions' extends keyof TCollections[P]
+        ? Array<keyof TCollections[P]['functions']>
+        : never
+      blacklist?: 'functions' extends keyof TCollections[P]
+        ? Array<keyof TCollections[P]['functions']>
+        : never
     }
   }
 }
 
-export type Roles<_Collections extends Collections> = Record<string, Role<_Collections>>
+export type Roles<TCollections extends Record<string, Collection>> = Record<string, Role<TCollections>>
 
-export type AccessControl<_Collections extends Collections> = {
-  roles?: Roles<_Collections>
+export type AccessControl<TCollections extends Record<string, Collection>> = {
+  roles?: Roles<TCollections>
   layers?: Partial<Record<ValidAccessControlLayer, AccessControlLayer>>
 }
 

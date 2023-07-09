@@ -1,8 +1,8 @@
 import { readFile } from 'fs/promises'
-import type { ApiContext } from '@semantic-api/api'
-import type { File } from './description'
+import type { Context } from '@semantic-api/api'
+import description, { type File } from './description'
 
-const download = async (_id: string, { collection }: ApiContext) => {
+const download = async (_id: string, { collection }: Context<typeof description, any, any>) => {
   const file = await collection.get({
     filters: {
       _id

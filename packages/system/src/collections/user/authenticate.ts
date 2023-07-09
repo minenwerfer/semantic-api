@@ -1,6 +1,6 @@
+import type { Context } from '@semantic-api/api'
 import { Token, makeException } from '@semantic-api/api'
-import type { ApiContext } from '@semantic-api/api'
-import type { User } from './description'
+import description, { type User } from './description'
 
 import { userExtraModel } from './library'
 
@@ -24,7 +24,7 @@ type Return = {
   }
 }
 
-const authenticate = async (props: Props, context: ApiContext) => {
+const authenticate = async (props: Props, context: Context<typeof description, any, any>) => {
   if( !props?.email ) {
     throw new Error('Empty email or password')
   }
