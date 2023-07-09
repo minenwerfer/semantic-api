@@ -1,14 +1,9 @@
 import * as R from 'ramda'
-import { getFunction, Token, makeException } from '@semantic-api/api'
+import { createContext, getFunction, Token, makeException } from '@semantic-api/api'
 import { isLeft, unwrapEither } from '@semantic-api/common'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest } from './types'
-import type {
-  DecodedToken,
-  Context,
-  ResourceType,
-
-} from '@semantic-api/api'
+import type { DecodedToken, Context, ResourceType, } from '@semantic-api/api'
 
 import { Error as MongooseError } from 'mongoose'
 import { sanitizeRequest, prependPagination } from './hooks/pre'
@@ -97,8 +92,8 @@ export const safeHandle = (
 }
 
 export const safeHandleContext = (
-  fn: (request: HandlerRequest, h: ResponseToolkit, context: Context<any, any>) => object,
-  context: Context<any, any>
+  fn: (request: HandlerRequest, h: ResponseToolkit, context: Context<any, any, any>) => object,
+  context: Context<any, any, any>
 ) => {
   const fn2 = (r: HandlerRequest, h: ResponseToolkit) => fn(r, h, context)
   return safeHandle(fn2)
@@ -108,7 +103,7 @@ export const customVerbs = (resourceType: ResourceType) =>
   async (
   request: HandlerRequest,
   h: ResponseToolkit,
-  context: Context<any, any>
+  parentContext: Context<any, any, any>
 ) => {
   const {
     params: {
@@ -119,6 +114,11 @@ export const customVerbs = (resourceType: ResourceType) =>
 
 
   const token = await getToken(request) as DecodedToken
+  const context = await createContext({
+    parentContext,
+    resourceType,
+    resourceName
+  })
 
   Object.assign(context, {
     token,
@@ -157,7 +157,7 @@ export const regularVerb = (functionName: RegularVerb) =>
   async (
     request: HandlerRequest,
     h: ResponseToolkit,
-    context: Context<any, any>
+    context: Context<any, any, any>
 ) => {
   const {
     params: {
@@ -221,7 +221,7 @@ export const regularVerb = (functionName: RegularVerb) =>
 export const fileDownload = async (
   request: HandlerRequest,
   h: ResponseToolkit,
-  context: Context<any, any>
+  context: Context<any, any, any>
 ) => {
   const token = await getToken(request) as DecodedToken
   context.token = token

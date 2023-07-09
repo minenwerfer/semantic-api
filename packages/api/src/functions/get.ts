@@ -8,7 +8,7 @@ export const get = <
 >() => (payload: {
   filters?: Filters<TDocument>,
   project?: Projection<TDocument>
-}, context: Context<TDescription, Collections>) => {
+}, context: Context<TDescription, Collections, Algorithms>) => {
   return context.model.findOne(
     payload.filters,
     payload.project

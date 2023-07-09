@@ -7,7 +7,7 @@ import type {
 
 } from './types'
 
-import { arraysIntersects, left, right, isLeft, unwrapEither, Right } from '@semantic-api/common'
+import { unsafe, left, right, isLeft, unwrapEither, Right } from '@semantic-api/common'
 // import SystemCollections from '@semantic-api/system/resources/collections/index.js'
 // import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
 // import type { DecodedToken } from '../types/server'
@@ -73,12 +73,32 @@ export const getResourceAsset = async <
   const resources = await getResources()
   const resourceType = _resourceType || 'collections'
 
-  if( !(resourceName in resources[resourceType]) ) return left(ResourceErrors.ResourceNotFound)
-  if( !(assetName in resources[resourceType][resourceName]()) ) return left(ResourceErrors.AssetNotFound)
+  const asset = (await resources[resourceType][resourceName]?.())?.[assetName] as Collections[ResourceName][AssetName]
 
-  const asset = (await resources[resourceType][resourceName]())[assetName] as Collections[ResourceName][AssetName]
+  const result = right(await (async () => {
+    switch( assetName ) {
+      case 'model': {
+        if( !asset ) {
+          const description = unsafe(await getResourceAsset(resourceName, 'description')) as any
+          const { createModel } = await import('./collection/schema')
+          return createModel(description)
+        }
 
-  const result = right(asset)
+        return typeof asset === 'function'
+          ? asset()
+          : asset
+      }
+
+      default:
+        return asset
+    }
+  })())
+
+  if( !asset ) {
+    if( !(resourceName in resources[resourceType]) ) return left(ResourceErrors.ResourceNotFound)
+    if( !(assetName in resources[resourceType][resourceName]()) ) return left(ResourceErrors.AssetNotFound)
+  }
+
   return result as Exclude<typeof result, Right<never>>
 }
 

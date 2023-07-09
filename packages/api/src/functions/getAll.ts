@@ -11,7 +11,7 @@ export const getAll = <
   offset?: number
   limit?: number
   sort?: QuerySort<TDocument>
-}, context: Context<TDescription, Collections>) => {
+}, context: Context<TDescription, Collections, Algorithms>) => {
   return context.model.find(
     payload.filters as any,
     payload.project

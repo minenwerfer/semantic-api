@@ -8,6 +8,6 @@ export const modify = <
 >() => (payload: {
   filters: Filters<TDocument>,
   what: Partial<TDocument>
-}, context: Context<TDescription, Collections>) => {
+}, context: Context<TDescription, Collections, Algorithms>) => {
   return {} as unknown
 }

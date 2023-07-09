@@ -7,7 +7,7 @@ export const deleteAll = <
   TDocument extends MongoDocument
 >() => (payload: {
   filters: Filters<TDocument>
-}, context: Context<TDescription, Collections>) => {
+}, context: Context<TDescription, Collections, Algorithms>) => {
   const filters = {
     ...payload.filters,
     _id: { $in: payload.filters._id }

@@ -9,7 +9,7 @@ import {
 
 } from './handler'
 
-export default (context: Context<any, any>): Array<ServerRoute> => {
+export default (context: Context<any, any, any>): Array<ServerRoute> => {
   const defaultHandler = (fn: ReturnType<typeof regularVerb>) => {
     return safeHandleContext(fn, context)
   }

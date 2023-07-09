@@ -37,3 +37,11 @@ export const ok = right
 export const isError = isLeft
 export const isOk = isRight
 export const unpack = unwrapEither
+
+export const unsafe = <L, R>(either: Either<L, R>) => {
+  if( either._tag !== 'Right' ) {
+    throw new Error('unsafe threw')
+  }
+
+  return either.value
+}

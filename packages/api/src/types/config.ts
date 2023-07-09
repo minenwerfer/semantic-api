@@ -17,10 +17,14 @@ export type Algorithm = {
   functions?: Record<string, (...args: any[]) => any>
 }
 
-export type Config<Collections extends Record<string, Collection>> = {
-  collections: Collections
-  algorithms: Record<string, Algorithm>
-  accessControl: AccessControl<Collections>
+export type Config<
+  Collections extends Record<string, Collection>,
+  Algorithms extends Record<string, Algorithm>
+> = {
+  collections?: Collections
+  algorithms?: Algorithms
+  apiConfig?: ApiConfig
+  accessControl?: AccessControl<Collections>
 }
 
 export type DecodedToken = {

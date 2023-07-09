@@ -7,7 +7,7 @@ export const _delete = <
   TDocument extends MongoDocument
 >() => (payload: {
   filters: Filters<TDocument>
-}, context: Context<TDescription, Collections>) => {
+}, context: Context<TDescription, Collections, Algorithms>) => {
   return context.model.findOneAndDelete(payload.filters, {
     strict: 'throw'
   })

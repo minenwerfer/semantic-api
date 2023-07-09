@@ -8,6 +8,6 @@ export const insert = <
 >() => (payload: {
   what: Partial<TDocument>,
   project?: Projection<TDocument>
-}, context: Context<TDescription, Collections>) => {
+}, context: Context<TDescription, Collections, Algorithms>) => {
   return context.model.create(payload.what) as Promise<TDocument>
 }

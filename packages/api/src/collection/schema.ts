@@ -195,6 +195,7 @@ export const createModel = async <T=any>(
     schemaCallback
   } = config||{}
 
+  console.log({ description })
   const modelName = description.$id.split('/').pop() as string
   if( mongooseModels[modelName] ) {
     return mongooseModels[modelName] as Model<T>

@@ -6,7 +6,7 @@ type PostHookParams = {
   redirected?: boolean
   result: any
   request: Request & HandlerRequest
-  context: Context<any, any>
+  context: Context<any, any, any>
   resourceName: string
   resourceType: ResourceType
 }

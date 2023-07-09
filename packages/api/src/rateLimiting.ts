@@ -15,7 +15,7 @@ const rateLimitingError = (message: string) => makeException({
   httpCode: 429
 })
 
-export const limitRate = async <const T extends Description>(context: Context<T, Collections>, params: RateLimitingParams) => {
+export const limitRate = async <const T extends Description>(context: Context<T, Collections, Algorithms>, params: RateLimitingParams) => {
   const UserModel = mongoose.models.user
   const ResourceUsageModel = mongoose.models.resourceUsage
 

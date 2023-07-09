@@ -7,7 +7,7 @@ type PreHookParams = {
   request: HandlerRequest
   token: DecodedToken
   response: ResponseToolkit
-  context: Context<any, any>
+  context: Context<any, any, any>
 }
 
 export const sanitizeRequest = async (params: PreHookParams) => {
