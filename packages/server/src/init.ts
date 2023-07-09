@@ -1,35 +1,34 @@
 import Hapi from '@hapi/hapi'
 import Inert from '@hapi/inert'
 
-import type { ApiContext } from '@semantic-api/api'
+import { createContext, Context } from '@semantic-api/api'
 import { connectDatabase } from '@semantic-api/api'
 import { defaultApiConfig, defaultAccessControl } from './constants'
 import { warmup } from './warmup'
 import getRoutes from './routes'
 
-export const init = async (_context?: Partial<ApiContext>|null): Promise<Hapi.Server> => {
+export const init = async (_context?: Partial<Context<any, any>>|null): Promise<Hapi.Server> => {
   const apiConfig = Object.assign({}, defaultApiConfig)
   const accessControl = Object.assign({}, defaultAccessControl)
 
-  Object.assign(apiConfig, _context?.apiConfig||{})
-  Object.assign(accessControl, _context?.accessControl||{})
+  // Object.assign(apiConfig, _context?.apiConfig||{})
+  // Object.assign(accessControl, _context?.accessControl||{})
 
-  const context = Object.assign(_context||{}, {
+  // const context = Object.assign(_context||{}, {
+  //   apiConfig,
+  //   accessControl,
+  // }) as Context
+  //
+  //
+  const context = await createContext()
+  Object.assign(context, {
     apiConfig,
-    accessControl,
-  }) as ApiContext
+    accessControl
+  })
 
   console.time('warmup')
   await warmup(context)
     .then(() => console.timeEnd('warmup'))
-
-  // if( apiConfig.modules ) {
-  //   global.modules = apiConfig.modules
-  // }
-
-  // if( context?.descriptions ) {
-  //   Object.assign(global.descriptions, context.descriptions)
-  // }
 
   const server = Hapi.server({
     port: apiConfig.port,

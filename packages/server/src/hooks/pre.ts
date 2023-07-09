@@ -1,5 +1,5 @@
 import type { ResponseToolkit } from '@hapi/hapi'
-import type { DecodedToken, ApiContext } from '@semantic-api/api'
+import type { DecodedToken, Context } from '@semantic-api/api'
 import type { HandlerRequest } from '../types'
 import { PAGINATION_PER_PAGE_LIMIT } from '@semantic-api/types'
 
@@ -7,7 +7,7 @@ type PreHookParams = {
   request: HandlerRequest
   token: DecodedToken
   response: ResponseToolkit
-  context: ApiContext
+  context: Context<any, any>
 }
 
 export const sanitizeRequest = async (params: PreHookParams) => {

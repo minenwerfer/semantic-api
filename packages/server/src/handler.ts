@@ -5,7 +5,7 @@ import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest } from './types'
 import type {
   DecodedToken,
-  ApiContext,
+  Context,
   ResourceType,
 
 } from '@semantic-api/api'
@@ -31,13 +31,6 @@ const prePipe = R.pipeWith(R.andThen)([
 const postPipe = R.pipeWith(R.andThen)([
   appendPagination
 ])
-
-const fallbackContext = {
-  apiConfig: {},
-  injected: {},
-  collection: {}
-
-} as ApiContext
 
 export const getToken = async (request: Request) => {
   try {
@@ -104,12 +97,9 @@ export const safeHandle = (
 }
 
 export const safeHandleContext = (
-  fn: (request: HandlerRequest, h: ResponseToolkit, context: ApiContext) => object,
-  _context?: Partial<ApiContext>
+  fn: (request: HandlerRequest, h: ResponseToolkit, context: Context<any, any>) => object,
+  context: Context<any, any>
 ) => {
-  const fc = Object.assign({}, fallbackContext)
-  const context = Object.assign(fc, _context)
-
   const fn2 = (r: HandlerRequest, h: ResponseToolkit) => fn(r, h, context)
   return safeHandle(fn2)
 }
@@ -118,7 +108,7 @@ export const customVerbs = (resourceType: ResourceType) =>
   async (
   request: HandlerRequest,
   h: ResponseToolkit,
-  _context?: ApiContext
+  context: Context<any, any>
 ) => {
   const {
     params: {
@@ -129,11 +119,13 @@ export const customVerbs = (resourceType: ResourceType) =>
 
 
   const token = await getToken(request) as DecodedToken
-  const context = _context||fallbackContext
-  context.token = token
-  context.resourceName = resourceName
-  context.h = h
-  context.request = request as any
+
+  Object.assign(context, {
+    token,
+    resourceName,
+    h,
+    request
+  })
 
   await Promise.all([
     prePipe({
@@ -165,7 +157,7 @@ export const regularVerb = (functionName: RegularVerb) =>
   async (
     request: HandlerRequest,
     h: ResponseToolkit,
-    _context?: ApiContext
+    context: Context<any, any>
 ) => {
   const {
     params: {
@@ -175,10 +167,13 @@ export const regularVerb = (functionName: RegularVerb) =>
   } = request
 
   const token = await getToken(request) as DecodedToken
-  const context = _context||fallbackContext
-  context.resourceName = resourceName
-  context.token = token
-  context.request = request as any
+
+  Object.assign(context, {
+    token,
+    resourceName,
+    h,
+    request
+  })
 
   await Promise.all([
     prePipe({
@@ -226,10 +221,9 @@ export const regularVerb = (functionName: RegularVerb) =>
 export const fileDownload = async (
   request: HandlerRequest,
   h: ResponseToolkit,
-  _context?: ApiContext
+  context: Context<any, any>
 ) => {
   const token = await getToken(request) as DecodedToken
-  const context = _context||fallbackContext
   context.token = token
 
   // const { hash, options } = request.params

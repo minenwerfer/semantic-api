@@ -1,7 +1,8 @@
 import type { Description } from '@semantic-api/types'
 import type { Schema } from './collection'
 import type { FunctionPath, DecodedToken } from './types'
-import mongoose, { Model } from 'mongoose'
+import type { AccessControl } from '@semantic-api/access-control'
+import mongoose, { type Model } from 'mongoose'
 import { algorithms, collections } from '@semantic-api/system'
 
 type Models = {
@@ -11,19 +12,26 @@ type Models = {
 export type Context<
   TDescription extends Description,
   TCollections extends Collections
-> = Omit<Awaited<ReturnType<typeof createContext>>, 'collection' | 'collections'> & {
+> = Omit<Awaited<ReturnType<typeof internalCreateContext>>, 'collection' | 'collections'> & {
   model: Models[TDescription['$id']]
   collection: TCollections[TDescription['$id']]
   collections: TCollections
   functionPath: FunctionPath
   token: DecodedToken
+
+  resourceName: string
+  request: any
+  h: any
+
+  apiConfig: any
+  accessControl: AccessControl<TCollections>
 }
 
-export const createContext = async (collectionName: keyof Collections) => {
+export const internalCreateContext = async (collectionName?: keyof Collections) => {
   const { getResourceAsset } = await import('./assets')
 
   return {
-    model: await getResourceAsset(collectionName, 'model'),
+    model: collectionName && await getResourceAsset(collectionName, 'model'),
     algorithms,
     collection: {} as any,
     collections: new Proxy<Collections>({}, {
@@ -35,6 +43,14 @@ export const createContext = async (collectionName: keyof Collections) => {
       get: (_, key: keyof Collections) => {
         return mongoose.models[String(key)]
       }
-    })
+    }),
+    apiConfig: {},
   }
+}
+
+export const createContext = async <
+  TDescription extends Description,
+  TCollections extends Collections
+>(collectionName?: keyof Collections) => {
+  return internalCreateContext(collectionName) as Promise<Context<TDescription, TCollections>>
 }

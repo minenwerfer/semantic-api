@@ -1,12 +1,12 @@
 import type { Request } from '@hapi/hapi'
-import type { ApiContext, ResourceType } from '@semantic-api/api'
+import type { Context, ResourceType } from '@semantic-api/api'
 import type { HandlerRequest, } from '../types'
 
 type PostHookParams = {
   redirected?: boolean
   result: any
   request: Request & HandlerRequest
-  context: ApiContext
+  context: Context<any, any>
   resourceName: string
   resourceType: ResourceType
 }

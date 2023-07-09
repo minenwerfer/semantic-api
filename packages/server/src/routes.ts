@@ -1,4 +1,4 @@
-import type { ApiContext } from '@semantic-api/api'
+import type { Context } from '@semantic-api/api'
 import { ServerRoute } from '@hapi/hapi'
 import {
   safeHandle,
@@ -9,9 +9,9 @@ import {
 
 } from './handler'
 
-export default (context: Partial<ApiContext>|null): Array<ServerRoute> => {
-  const defaultHandler = (...args: Parameters<typeof safeHandle>) => {
-    return safeHandleContext(args[0], context||{})
+export default (context: Context<any, any>): Array<ServerRoute> => {
+  const defaultHandler = (fn: ReturnType<typeof regularVerb>) => {
+    return safeHandleContext(fn, context)
   }
 
   return [

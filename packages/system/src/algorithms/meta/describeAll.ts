@@ -1,13 +1,17 @@
-import type { ApiContext } from '@semantic-api/api'
+import { getResources, type Context } from '@semantic-api/api'
 import { serialize } from '@semantic-api/common'
-import { getDescriptions } from './library'
 
 type Props = {
   noSerialize?: boolean
 }
 
-const describeAll = (props: Props, context: ApiContext): any => {
-  const descriptions = getDescriptions(context)
+const describeAll = async (props: Props, context: Context<any, any>): Promise<any> => {
+  const resources = await getResources()
+  const descriptions = Object.fromEntries(
+    Object.values(resources.collections as any[])
+        .map(({ description }) => [description.$id, description])
+  )
+
   const result =  {
     descriptions,
     roles: context.accessControl.roles
