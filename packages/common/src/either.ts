@@ -31,3 +31,9 @@ export const isRight = <L, R>(either: Either<L, R>): either is Right<R> => {
 export const unwrapEither = <L, R>(either: Either<L, R>) => {
   return either.value
 }
+
+export const error = left
+export const ok = right
+export const isError = isLeft
+export const isOk = isRight
+export const unpack = unwrapEither

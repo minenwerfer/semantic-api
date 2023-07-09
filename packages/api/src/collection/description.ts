@@ -8,15 +8,17 @@ type PropertyDependent =
   | 'writable'
 
 type WithAvailableProps<
-  Properties extends Description['properties'],
+  Properties extends Description['properties']|undefined,
   TDescription extends Partial<Description>
-> = Omit<TDescription, PropertyDependent> & Partial<Record<
+> = Omit<TDescription, PropertyDependent | 'properties'> & Partial<Record<
   PropertyDependent & keyof TDescription,
   ReadonlyArray<keyof Properties
   | 'owner'
   | 'created_at'
   | 'updated_at'
-  >>
+  >> & {
+    properties: Description['properties']|undefined
+ }
 >
 
 export const defineDescription = <

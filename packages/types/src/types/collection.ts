@@ -1,5 +1,5 @@
 import { COLLECTION_PRESETS, STORE_EFFECTS, } from '../constants'
-import type { ApiFunction, mongoose } from '@semantic-api/api'
+import type { mongoose } from '@semantic-api/api'
 import type { Property } from './jsonschema'
 
 export type CollectionPresets = typeof COLLECTION_PRESETS[number]
@@ -92,7 +92,6 @@ export type Description = {
   preferred?: Record<string, Description>
 
   model?: mongoose.Model<any>
-  functions?: Record<string, ApiFunction<any, any>>
 
   alias?: string
   icon?: string

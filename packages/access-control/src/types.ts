@@ -9,7 +9,7 @@ export type Role<_Collections extends Collections> = {
   inherit?: Array<string>
   grantEverything?: boolean
   forbidEverything?: boolean
-  capabilities: {
+  capabilities?: {
     [P in keyof _Collections]?: {
       grantEverything?: boolean
       forbidEverything?: boolean

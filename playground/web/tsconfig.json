@@ -40,7 +40,7 @@
       ]
     },
     "types": [
-      "../api/global.d.ts"
+      "../api/semantic-api.d.ts"
     ]
   }
 }
