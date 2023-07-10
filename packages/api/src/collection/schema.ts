@@ -7,6 +7,7 @@ import {
 } from 'mongoose'
 
 import type { Description, CollectionProperty } from '@semantic-api/types'
+import type { Schema as CollectionSchema } from './schema.types'
 import { getReferencedCollection, unsafe } from '@semantic-api/common'
 
 import { options as defaultOptions, connections } from '../database'
@@ -39,7 +40,7 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
 
     if( containedType[0] === Object ) {
       return {
-        ...a,
+        ...await a,
         [propertyName]: Array.isArray(type) && Array.isArray(type[0])
           ? [containedType[1]]
           : containedType[1]
@@ -114,7 +115,7 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
     }
 
     return {
-      ...a,
+      ...await a,
       [propertyName]: result
     }
   }
@@ -174,12 +175,12 @@ export const descriptionToSchema = async <T>(
   return schema
 }
 
-export const createModel = async <T=any>(
-  _description: Description,
+export const createModel = async <TDescription extends Description>(
+  _description: TDescription,
   config?: {
     options?: SchemaOptions|null,
     modelCallback?: ((structure: SchemaStructure) => void)|null,
-    schemaCallback?: (schema: Schema<T>) => void
+    schemaCallback?: (schema: Schema<CollectionSchema<TDescription>>) => void
   }
 ) => {
   const description = await preloadDescription(_description)
@@ -192,11 +193,11 @@ export const createModel = async <T=any>(
 
   const modelName = description.$id.split('/').pop() as string
   if( mongooseModels[modelName] ) {
-    return mongooseModels[modelName] as Model<T>
+    return mongooseModels[modelName] as Model<CollectionSchema<TDescription>>
   }
 
   __loadedModels.push(modelName)
-  const schema = await descriptionToSchema<T>(description, options || defaultOptions, modelCallback)
+  const schema = await descriptionToSchema<CollectionSchema<TDescription>>(description, options || defaultOptions, modelCallback)
 
   const cascadingDelete: Array<{
     propertyName: string
@@ -267,5 +268,5 @@ export const createModel = async <T=any>(
     schemaCallback(schema)
   }
 
-  return connections.default.model<T>(modelName, schema)
+  return connections.default.model<CollectionSchema<TDescription>>(modelName, schema)
 }

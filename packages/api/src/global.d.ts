@@ -9,8 +9,9 @@ declare global {
   var modules: Record<string, any>
   var mongoose: typeof mongoose
 
-  type UserCollections = Record<string, any>
-  type UserAlgorithms = Record<string, any>
+  type UserCollections = Record<string, Collection>
+  type UserAlgorithms = Record<string, Algorithm>
+
   type UserConfig = Config<
     UserCollections & typeof SystemCollections,
     UserAlgorithms & typeof UserAlgorithms
@@ -23,11 +24,9 @@ declare global {
   type Collections = UnpackFunctions<UserCollections | typeof SystemCollections>
   type Algorithms = UnpackFunctions<UserAlgorithms | typeof SystemAlgorithms>
 
-
   type UserAccessControl = AccessControl<any>
   type UserACProfile = {
     readonly roles: string[]
     readonly allowed_functions?: string[]
   }
 }
-

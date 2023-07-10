@@ -1,9 +1,9 @@
 import { Types } from 'mongoose'
 import { Description, CollectionProperty } from '@semantic-api/types'
 
-export const getTypeConstructor = (property: CollectionProperty, recurse: (description: Pick<Description, 'properties'>) => any): any => {
+export const getTypeConstructor = async (property: CollectionProperty, recurse: (description: Pick<Description, 'properties'>) => any): Promise<any> => {
   if( property.type === 'array' ) {
-    const type = getTypeConstructor(property.items!, recurse)
+    const type = await getTypeConstructor(property.items!, recurse)
     return [type]
   }
 
@@ -21,7 +21,7 @@ export const getTypeConstructor = (property: CollectionProperty, recurse: (descr
   if( property.additionalProperties ) {
     return [
       Map,
-      getTypeConstructor(property.additionalProperties, recurse)
+      await getTypeConstructor(property.additionalProperties, recurse)
     ]
   }
 

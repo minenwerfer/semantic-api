@@ -6,9 +6,14 @@ export default defineCollection(() => ({
   description,
   functions: {
     bark: (person: string) => `Bark! *Bites ${person}*`,
-    performTrick: (times: number, context: Context<typeof description>) => {
-      console.log(context)
-      return `*sits ${times}x*`
-    }
+    // performTrick: async (times: number, context: Context<typeof description>) => {
+    //   const result = await context.collections.person.functions.getAll({
+    //     filters: {
+    //       job: 'baker'
+    //     }
+    //   }, context)
+
+    //   return result
+    // }
   },
 }))

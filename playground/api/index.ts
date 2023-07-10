@@ -11,6 +11,8 @@ export const collections = {
   pet
 }
 
+export const accessControl = {}
+
 init().then(async (server) => {
   server.start()
 

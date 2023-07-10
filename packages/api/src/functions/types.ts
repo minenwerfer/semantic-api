@@ -1,5 +1,4 @@
-import type { file } from '@semantic-api/system'
-type File = ReturnType<typeof file>
+type File = any
 
 type UploadAuxProps = {
   parentId: string

@@ -23,7 +23,7 @@ const isValidReference = (property: CollectionProperty, value: any) => {
   }
 }
 
-export const validateFromDescription = <T>(
+export const validateFromDescription = async <T>(
   description: Omit<Description, '$id'>,
   what: T,
   required?: Array<keyof T>|null,
@@ -57,7 +57,7 @@ export const validateFromDescription = <T>(
     }
   }> = {}
 
-  propsSet.forEach((_prop) => {
+  for( const _prop of propsSet ) {
     const prop = _prop as string
     const value = what[prop as keyof T]
     const property = description.properties[prop]
@@ -95,7 +95,7 @@ export const validateFromDescription = <T>(
       return
     }
 
-    const expectedConstructor = getTypeConstructor(description.properties[prop], () => null)
+    const expectedConstructor = await getTypeConstructor(description.properties[prop], () => null)
     const actualConstructor = (value as any).constructor
 
     if( expectedConstructor === Number ) {
@@ -145,7 +145,7 @@ export const validateFromDescription = <T>(
         }
       }
     }
-  })
+  }
 
   if( Object.keys(errors).length > 0 ) {
     return left({

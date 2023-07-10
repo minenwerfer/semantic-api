@@ -90,7 +90,7 @@ export const preloadDescription = async <Options extends PreloadOptions, Return=
 
       if( property.properties ) {
         return {
-          ...a,
+          ...await a,
           [key]: await preloadDescription(property)
         }
       }

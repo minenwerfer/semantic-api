@@ -5,8 +5,11 @@ import type { AccessControl } from '@semantic-api/access-control'
 import mongoose, { type Model } from 'mongoose'
 import { unsafe } from '@semantic-api/common'
 
+type CollectionModel<TDescription extends Description> =
+  Model<Schema<TDescription>>
+
 type Models = {
-  [K in keyof Collections]: Model<Schema<Collections[K]['description']>>
+  [K in keyof Collections]: CollectionModel<Collections[K]['description']>
 }
 
 export type ContextOptions<
@@ -25,12 +28,8 @@ export type Context<
   _TAlgorithms extends Algorithms
 > = Omit<Awaited<ReturnType<typeof internalCreateContext>>, 'collection' | 'collections'> & {
   description: TDescription
-  model: TDescription['$id'] extends keyof Collections
-    ? Models[TDescription['$id']]
-    : never
-  collection: TDescription['$id'] extends keyof Collections
-    ? TCollections[TDescription['$id']]
-    : never
+  model:  CollectionModel<TDescription>
+  collection: TCollections[TDescription['$id']]
   collections: TCollections
   functionPath: FunctionPath
   token: DecodedToken

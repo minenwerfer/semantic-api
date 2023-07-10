@@ -8,8 +8,6 @@ import type {
 } from './types'
 
 import { unsafe, left, right, isLeft, unwrapEither, Right } from '@semantic-api/common'
-// import SystemCollections from '@semantic-api/system/resources/collections/index.js'
-// import SystemAlgorithms from '@semantic-api/system/resources/algorithms/index.js'
 // import type { DecodedToken } from '../types/server'
 //
 import { isGranted, ACErrors } from '@semantic-api/access-control'
@@ -33,6 +31,7 @@ export const requireWrapper = (path: string) => {
 }
 
 export const internalGetResources = async () => {
+  // @ts-ignore
   const { collections, algorithms } = await import('@semantic-api/system')
   const userConfig = await import(process.cwd() + '/index.js')
   const resources: typeof userConfig = {
@@ -120,7 +119,7 @@ export const getFunction = async <
   resourceType?: TResourceType
 ) => {
   if( acProfile ) {
-    if( !await isGranted(resourceName, String(functionName), acProfile as any) ) {
+    if( !await isGranted(String(resourceName), String(functionName), acProfile as any) ) {
       return left(ACErrors.AuthorizationError)
     }
   }

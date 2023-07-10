@@ -1,14 +1,15 @@
 import { Description } from '@semantic-api/types'
-import type { User } from '@semantic-api/system'
 import type { AccessControl } from '@semantic-api/access-control'
 import type { createModel } from '../collection/schema'
-import type { FunctionPath } from './function'
+import type { FunctionPath } from './resource'
+
+type User = any
 
 export type CollectionStructure = {
   item: any
   description: Description
   model?: ReturnType<typeof createModel>
-  functions?: Record<string, (...args: Exclude<any, string>[]) => any>
+  functions?: Record<string, (...args: any[]) => any>
 }
 
 export type Collection = () => CollectionStructure|Promise<CollectionStructure>

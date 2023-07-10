@@ -7,3 +7,5 @@ export type AssetType =
 export type ResourceType =
   'collection'
   | 'algorithm'
+
+export type FunctionPath = `${string}@${string}`

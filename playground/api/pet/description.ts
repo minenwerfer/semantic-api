@@ -10,7 +10,7 @@ const schema = <const>{
     },
     favorite_toy: {
       type: 'string'
-    }
+    },
   }
 }
 

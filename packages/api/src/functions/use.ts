@@ -1,6 +1,5 @@
 import type { Description } from '@semantic-api/types'
 import type { MongoDocument } from '../types'
-import type { Context } from '../context'
 import * as collFunctions from '.'
 
 export const useFunctions = <

@@ -1,27 +1,20 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "dist",
-    "target": "esnext",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "strict": true,
-    "declaration": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
     "paths": {
-      "@semantic-api/api": [
-        "../api/dist"
-      ],
       "@semantic-api/common": [
         "../common/dist"
       ],
-      "@semantic-api/system": [
-        "../system/dist"
+      "@semantic-api/common/*": [
+        "../common/dist/*"
+      ],
+      "@semantic-api/api": [
+        "../api/dist"
       ],
       "@semantic-api/types": [
         "../types/dist"
       ]
     }
-  }   
+  }
 }
