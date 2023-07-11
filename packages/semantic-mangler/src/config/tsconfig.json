@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmitOnError": true,
+    "outDir": "dist",
+    "target": "es2017",
+    "module": "commonjs",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@semantic-api/access-control": [
+        "./node_modules/@semantic-api/access-control/dist"
+      ],
+      "@semantic-api/api": [
+        "./node_modules/@semantic-api/api/dist"
+      ],
+      "@semantic-api/api/*": [
+        "./node_modules/@semantic-api/api/dist/*"
+      ],
+      "@semantic-api/server": [
+        "./node_modules/@semantic-api/server/dist"
+      ],
+      "@semantic-api/common": [
+        "./node_modules/@semantic-api/common/dist"
+      ],
+      "@semantic-api/types": [
+        "./node_modules/@semantic-api/types/dist"
+      ],
+      "@semantic-api/system": [
+        "./node_modules/@semantic-api/system/dist"
+      ],
+      "@semantic-api/system/*": [
+        "./node_modules/@semantic-api/system/dist/*"
+      ]
+    }
+  }
+}
