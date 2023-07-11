@@ -1,18 +1,8 @@
-// import { existsSync } from 'fs'
-// import type { Model } from 'mongoose'
-import type {
-  ResourceType,
-  AssetType,
-  FunctionPath,
-
-} from './types'
-
+import type { ResourceType, AssetType, } from './types'
 import { unsafe, left, right, isLeft, unwrapEither, Right } from '@semantic-api/common'
-// import type { DecodedToken } from '../types/server'
-//
 import { isGranted, ACErrors } from '@semantic-api/access-control'
-import { validateFromDescription, ValidateFunction } from './collection/validate'
-import { limitRate } from './rateLimiting'
+// import { validateFromDescription, ValidateFunction } from './collection/validate'
+// import { limitRate } from './rateLimiting'
 
 const __cachedResources: Awaited<ReturnType<typeof internalGetResources>> & {
   _cached: boolean
