@@ -3,21 +3,21 @@ import path from 'path'
 
 const DTS_FILENAME = 'semantic-api.d.ts'
 
-const dts = `import type { AssetType, ResourceErrors, Context as Context_ } from '@semantic-api/api'
-import type { Description } from '@semantic-api/api'
+const dts = `// this file will be overwritten
+import type { AssetType, ResourceErrors, Context as Context_ } from '@semantic-api/api'
+import type { Description } from '@semantic-api/types'
 import { Either, Left } from '@semantic-api/common'
 
 declare global {
-  import type { collections } from '.'
-  import * as SystemCollections from '@semantic-api/system/collections'
+  type UserCollections = typeof import('.').collections
+  type SystemCollections = typeof import('@semantic-api/system/collections')
 
-  type UserCollections = typeof collections
   type Collections = {
-    [K in keyof (UserCollections & typeof SystemCollections)]: Awaited<ReturnType<(UserCollections & typeof SystemCollections)[K]>>
+    [K in keyof (UserCollections & SystemCollections)]: Awaited<ReturnType<(UserCollections & SystemCollections)[K]>>
   }
 
   type Context<TDescription extends Description>
-    = Context_<TDescription, Collections>
+    = Context_<TDescription, Collections, any>
 
   type UserAccessControl = typeof accessControl
 
@@ -46,7 +46,7 @@ declare module '@semantic-api/api' {
   >
 
   export const get = getResourceAsset
-
+  
   export async function getFunction<
     ResourceName extends keyof Collections,
     FunctionName extends keyof Collections[ResourceName]['functions'],

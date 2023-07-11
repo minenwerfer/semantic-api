@@ -1,4 +1,4 @@
-import { initWithDatabase as init } from '@semantic-api/server'
+import { initWithDatabase } from '@semantic-api/server'
 
 import person from './person'
 import pet from './pet'
@@ -22,7 +22,7 @@ export const accessControl = {
   }
 }
 
-init().then(async (server) => {
+initWithDatabase().then(async (server) => {
   server.start()
 })
 
