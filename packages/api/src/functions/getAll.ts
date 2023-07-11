@@ -12,8 +12,13 @@ export const getAll = <
   limit?: number
   sort?: QuerySort<TDocument>
 }, context: Context<TDescription, Collections, Algorithms>) => {
+  const {
+    filters = {},
+    project = {}
+  } = payload || {}
+
   return context.model.find(
-    payload.filters as any,
-    payload.project
+    filters as any,
+    project
   ) as Promise<Array<TDocument>>
 }

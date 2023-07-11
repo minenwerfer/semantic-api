@@ -31,7 +31,8 @@ const applyInheritance = async (accessControl: AccessControl<any>, targetRole: R
 export const isGranted = async <
   const ResourceName extends string,
   const FunctionName extends string,
-  const ACProfile extends AccessControl<any> & {
+  const ACProfile extends {
+    roles?: Array<string>
     allowedFunctions?: Array<string>
   }
 >(
@@ -39,18 +40,16 @@ export const isGranted = async <
   functionName: FunctionName,
   acProfile: ACProfile
 ) => {
-  const userRoles = acProfile.roles
+  const userRoles = acProfile.roles || ['guest']
   const accessControl = await getAccessControl()
 
-  for( const roleName in userRoles ) {
+  for( const roleName of userRoles ) {
     const _currentRole = accessControl.roles?.[roleName]
     if( !_currentRole ) {
       throw new Error(`role ${roleName} doesnt exist`)
     }
 
     const currentRole = await applyInheritance(accessControl, _currentRole)
-    console.log(currentRole)
-
     const subject = currentRole?.capabilities?.[resourceName]
     if( subject?.blacklist?.includes(functionName) ) {
       return false

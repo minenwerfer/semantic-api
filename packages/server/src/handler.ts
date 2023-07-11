@@ -136,7 +136,7 @@ export const customVerbs = (resourceType: ResourceType) =>
     })
   ])
 
-  const fnEither = await getFunction(resourceName, functionName, null, `${resourceType}s`)
+  const fnEither = await getFunction(resourceName, functionName, token, `${resourceType}s`)
   if( isLeft(fnEither) ) {
     throw new Error('no such function')
   }
@@ -202,7 +202,7 @@ export const regularVerb = (functionName: RegularVerb) =>
     }
   }
 
-  const fnEither = await getFunction(resourceName, functionName)
+  const fnEither = await getFunction(resourceName, functionName, token)
   if( isLeft(fnEither) ) {
     const error = unwrapEither(fnEither)
     return {
