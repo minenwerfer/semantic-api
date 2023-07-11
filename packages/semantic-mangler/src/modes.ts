@@ -2,7 +2,6 @@ import glob from 'glob'
 import { rollup, InputOptions, OutputOptions } from 'rollup'
 import terser from '@rollup/plugin-terser'
 import json from '@rollup/plugin-json'
-import { getLicense } from './licensing'
 
 const root = process.cwd()
 
@@ -37,9 +36,6 @@ const makeInputs = async () => {
 
 export const build = async () => {
   const inputs = await makeInputs()
-
-  const license = await getLicense('MIT')
-  outputOptions.banner = `/* @license MIT\n${license}*/`
 
   for( const input of inputs ) {
     const path = input.input.replace('/dist/', '/release/')
