@@ -1,8 +1,6 @@
 import type { ResourceType, AssetType, } from './types'
 import { unsafe, left, right, isLeft, unwrapEither, Right } from '@semantic-api/common'
 import { isGranted, ACErrors } from '@semantic-api/access-control'
-// import { validateFromDescription, ValidateFunction } from './collection/validate'
-// import { limitRate } from './rateLimiting'
 
 const __cachedResources: Awaited<ReturnType<typeof internalGetResources>> & {
   _cached: boolean
@@ -34,6 +32,11 @@ export const internalGetResources = async () => {
   Object.assign(resources.algorithms, algorithms)
 
   return resources
+}
+
+export const getAccessControl = async () => {
+  const userConfig = await import(process.cwd() + '/index.js')
+  return userConfig.accessControl
 }
 
 export const getResources = async () => {
@@ -113,6 +116,7 @@ export const getFunction = async <
       return left(ACErrors.AuthorizationError)
     }
   }
+
   const functionsEither = await getResourceAsset(resourceName, 'functions', resourceType || 'collections')
   if( isLeft(functionsEither) ) {
     const error = unwrapEither(functionsEither)

@@ -8,8 +8,8 @@ import ping from './ping'
 const { get, getAll } = useFunctions<User, typeof description>()
 
 export default defineCollection(async () => ({
-  description,
   item: {} as User,
+  description,
   model: model(),
   functions: {
     authenticate,

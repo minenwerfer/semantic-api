@@ -1,6 +1,6 @@
 import * as R from 'ramda'
-import { createContext, getFunction, Token, makeException } from '@semantic-api/api'
-import { isLeft, unwrapEither } from '@semantic-api/common'
+import { createContext, getFunction, Token, makeException, ResourceErrors } from '@semantic-api/api'
+import { isLeft, unwrapEither, unsafe } from '@semantic-api/common'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest } from './types'
 import type { DecodedToken, Context, ResourceType, } from '@semantic-api/api'
@@ -31,7 +31,7 @@ export const getToken = async (request: Request) => {
   try {
     return request.headers.authorization
       ? Token.decode(request.headers.authorization.split('Bearer ').pop() || '')
-      : {} as object
+      : { user: {} }
   } catch( e: any ) {
     throw makeException({
       name: 'AuthenticationError',
@@ -114,17 +114,18 @@ export const customVerbs = (resourceType: ResourceType) =>
 
 
   const token = await getToken(request) as DecodedToken
-  const context = await createContext({
-    parentContext,
-    resourceType,
-    resourceName
-  })
 
-  Object.assign(context, {
+  Object.assign(parentContext, {
     token,
     resourceName,
     h,
     request
+  })
+
+  const context = await createContext({
+    parentContext,
+    resourceType,
+    resourceName
   })
 
   await Promise.all([
@@ -136,9 +137,13 @@ export const customVerbs = (resourceType: ResourceType) =>
     })
   ])
 
-  const fnEither = await getFunction(resourceName, functionName, token, `${resourceType}s`)
+  const fnEither = await getFunction(resourceName, functionName, token.user, `${resourceType}s`)
   if( isLeft(fnEither) ) {
-    throw new Error('no such function')
+    const error = unwrapEither(fnEither)
+    switch( error ) {
+      case ResourceErrors.ResourceNotFound: throw new Error('no such function')
+      default: throw new Error(`unknown error: ${error}`)
+    }
   }
 
   const fn = unwrapEither(fnEither)
@@ -167,16 +172,17 @@ export const regularVerb = (functionName: RegularVerb) =>
   } = request
 
   const token = await getToken(request) as DecodedToken
-  const context = await createContext({
-    parentContext,
-    resourceName
-  })
 
-  Object.assign(context, {
+  Object.assign(parentContext, {
     token,
     resourceName,
     h,
     request
+  })
+
+  const context = await createContext({
+    parentContext,
+    resourceName
   })
 
   await Promise.all([
@@ -202,7 +208,7 @@ export const regularVerb = (functionName: RegularVerb) =>
     }
   }
 
-  const fnEither = await getFunction(resourceName, functionName, token)
+  const fnEither = await getFunction(resourceName, functionName, token.user)
   if( isLeft(fnEither) ) {
     const error = unwrapEither(fnEither)
     return {
@@ -225,17 +231,22 @@ export const regularVerb = (functionName: RegularVerb) =>
 export const fileDownload = async (
   request: HandlerRequest,
   h: ResponseToolkit,
-  context: Context<any, any, any>
+  parentContext: Context<any, any, any>
 ) => {
   const token = await getToken(request) as DecodedToken
-  context.token = token
+  parentContext.token = token
 
-  // const { hash, options } = request.params
-  // const { filename, content, mime } = await getResourceFunction('file@download')(hash, context)
+  const context = await createContext({
+    resourceName: 'file',
+    parentContext
+  })
 
-  // const has = (opt: string) => options?.split('/').includes(opt)
+  const { hash, options } = request.params
+  const { filename, content, mime } = await (unsafe(await getFunction('file', 'download')))(hash, context)
 
-  // return h.response(mime)
-  //   .header('content-type', content)
-  //   .header('content-disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
+  const has = (opt: string) => options?.split('/').includes(opt)
+
+  return h.response(content)
+    .header('content-type', mime)
+    .header('content-disposition', `${has('download') ? 'attachment; ' : ''}filename=${filename}`)
 }

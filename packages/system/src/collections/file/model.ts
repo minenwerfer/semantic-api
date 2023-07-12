@@ -12,7 +12,7 @@ const deleteFile = async (path: string) => {
   return unlink(path).catch(() => null)
 }
 
-export default createModel(FileDescription, {
+export default () => createModel(FileDescription, {
   schemaCallback: (schema) => {
     schema.pre('deleteOne', async function() {
       const doc = await this.model

@@ -1,13 +1,17 @@
 import { readFile } from 'fs/promises'
-import type { Context } from '@semantic-api/api'
+import { type Context, useFunctions } from '@semantic-api/api'
 import description, { type File } from './description'
 
-const download = async (_id: string, { collection }: Context<typeof description, any, any>) => {
-  const file = await collection.get({
+const download = async (_id: string, context: Context<typeof description, any, any>) => {
+  const { get, } = useFunctions<File, typeof description>()
+  const file = await get({
     filters: {
-      _id
-    }
-  }) as File
+      _id,
+    },
+    project: [
+      'absolute_path'
+    ]
+  }, context)
 
   if( !file ) {
     throw new Error('file not found')

@@ -3,8 +3,6 @@ import { left } from '@semantic-api/common'
 import { Types } from 'mongoose'
 import { getTypeConstructor } from './typemapping'
 
-export type ValidateFunction<T> = (what: T, required?: Array<keyof T>|null, description?: Omit<Description, '$id'>) => void
-
 export enum ValidationErrors {
   EmptyTarget = 'EMPTY_TARGET',
   InvalidProperties = 'INVALID_PROPERTIES'
@@ -26,8 +24,7 @@ const isValidReference = (property: CollectionProperty, value: any) => {
 export const validateFromDescription = async <T>(
   description: Omit<Description, '$id'>,
   what: T,
-  required?: Array<keyof T>|null,
-  ..._: any[]
+  required?: Array<keyof T>|null
 ) => {
   if( !what ) {
     return left({

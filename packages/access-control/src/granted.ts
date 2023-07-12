@@ -1,7 +1,7 @@
 import type { AccessControl, Role } from './types'
 import { deepMerge } from '@semantic-api/common'
 
-let __accessControl: AccessControl<any>|null = null
+let __accessControl: AccessControl<any, any>|null = null
 
 const getAccessControl = async () => {
   if ( !__accessControl ) {
@@ -11,7 +11,7 @@ const getAccessControl = async () => {
   return __accessControl!
 }
 
-const applyInheritance = async (accessControl: AccessControl<any>, targetRole: Role<any>) => {
+const applyInheritance = async (accessControl: AccessControl<any, any>, targetRole: Role<any, any>) => {
   const role = Object.assign({}, targetRole)
 
   if( role.inherit ) {

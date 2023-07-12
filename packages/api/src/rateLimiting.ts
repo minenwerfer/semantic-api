@@ -1,19 +1,13 @@
 import type { Description } from '@semantic-api/types'
 import type { Context } from './context'
-import { makeException } from './exceptions'
 import { mongoose } from './database'
+import { left } from '@semantic-api/common'
 
 export type RateLimitingParams = {
   limit?: number
   scale?: number
   increment?: number
 }
-
-const rateLimitingError = (message: string) => makeException({
-  name: 'RateLimitingError',
-  message,
-  httpCode: 429
-})
 
 export const limitRate = async <const T extends Description>(context: Context<T, Collections, Algorithms>, params: RateLimitingParams) => {
   const UserModel = mongoose.models.user
@@ -25,7 +19,10 @@ export const limitRate = async <const T extends Description>(context: Context<T,
   )
 
   if( !user ) {
-    throw rateLimitingError('user not found')
+    return left({
+      error: 'No user found',
+      httpCode: 429
+    })
   }
 
   const increment = params.increment || 1
@@ -50,7 +47,10 @@ export const limitRate = async <const T extends Description>(context: Context<T,
   }
 
   if( params.scale && (new Date().getTime()/1000 - usage.updated_at.getTime()/1000 < params.scale) ) {
-    throw rateLimitingError('not so fast')
+    return left({
+      error: 'limit reached',
+      httpCode: 429
+    })
   }
 
   if( params.limit && (usage.hits % params.limit === 0) ) {

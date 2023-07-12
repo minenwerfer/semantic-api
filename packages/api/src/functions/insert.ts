@@ -12,11 +12,10 @@ export const insert = <
   what: Partial<TDocument>,
   project?: Projection<TDocument>
 }, context: Context<TDescription, Collections, Algorithms>) => {
-
   const accessControl = useAccessControl(context)
 
   const { _id } = payload.what
-  const { what } = await accessControl.beforeWrite<typeof payload>(payload, context)
+  const { what } = await accessControl.beforeWrite(payload, context)
   const readyWhat = prepareInsert(what, context.description)
   const projection = payload.project
     && normalizeProjection(payload.project, context.description)

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import glob from 'glob'
 import { parseArgs } from 'node:util'
 import { build } from './modes'

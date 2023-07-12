@@ -6,12 +6,19 @@ declare global {
   type UserCollections = typeof import('.').collections
   type SystemCollections = typeof import('@semantic-api/system/collections')
 
+  type UserAlgorithms = typeof import('.').algorithms
+  type SystemAlgorithms = typeof import('@semantic-api/system/algorithms')
+
   type Collections = {
     [K in keyof (UserCollections & SystemCollections)]: Awaited<ReturnType<(UserCollections & SystemCollections)[K]>>
   }
 
+  type Algorithms = {
+    [K in keyof (UserAlgorithms & SystemAlgorithms)]: Awaited<ReturnType<(UserAlgorithms & SystemAlgorithms)[K]>>
+  }
+
   type Context<TDescription extends Description>
-    = Context_<TDescription, Collections, any>
+    = Context_<TDescription, Collections, Algorithms>
 
   type UserAccessControl = typeof accessControl
 

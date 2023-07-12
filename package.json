@@ -9,7 +9,7 @@
     "@semantic-api/system": "file:dist/staging/system",
     "@semantic-api/types": "file:dist/staging/types",
     "tsc": "latest",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.6"
   },
   "version": "0.0.8"
 }

@@ -1,12 +1,13 @@
-import { defineCollection, useFunctions } from '@semantic-api/api'
-import description, { Person } from './description'
+import { useFunctions } from '@semantic-api/api'
+import description, { type Person } from './description'
 
-const { getAll } = useFunctions<Person, typeof description>()
+const { getAll, insert } = useFunctions<Person, typeof description>()
 
-export default defineCollection(() => ({
+export default () => ({
   item: {} as Person,
   description,
   functions: {
-    getAll
+    getAll,
+    insert
   },
-}))
+})

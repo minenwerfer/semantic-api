@@ -14,7 +14,7 @@ export type CollectionStructure = {
 
 export type Collection = () => CollectionStructure|Promise<CollectionStructure>
 
-export type Algorithm = {
+export type Algorithm = () => {
   functions?: Record<string, (...args: any[]) => any>
 }
 
@@ -25,7 +25,7 @@ export type Config<
   collections?: Collections
   algorithms?: Algorithms
   apiConfig?: ApiConfig
-  accessControl?: AccessControl<Collections>
+  accessControl?: AccessControl<Collections, Algorithms>
 }
 
 export type DecodedToken = {

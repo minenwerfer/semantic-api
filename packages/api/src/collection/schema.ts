@@ -88,7 +88,7 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
 
       const actualReferenceName = result.ref = referenceDescription.alias || referenceDescription.$id
       if( !__loadedModels.includes(actualReferenceName) ) {
-        getResourceAsset(actualReferenceName as keyof Collections, 'model')
+        await getResourceAsset(actualReferenceName as keyof Collections, 'model')
         __loadedModels.push(actualReferenceName)
       }
 
@@ -194,6 +194,10 @@ export const createModel = async <TDescription extends Description>(
   const modelName = description.$id.split('/').pop() as string
   if( mongooseModels[modelName] ) {
     return mongooseModels[modelName] as Model<CollectionSchema<TDescription>>
+  }
+
+  if( __loadedModels.includes(modelName) ) {
+    return
   }
 
   __loadedModels.push(modelName)

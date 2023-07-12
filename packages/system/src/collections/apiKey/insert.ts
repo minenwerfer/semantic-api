@@ -10,7 +10,7 @@ const insert = async (props: Props, context: Context<typeof description, any, an
     return context.collection.insert(props)
   }
 
-  context.validate(props?.what, [
+  context.validate(description, props?.what, [
     'name',
     'allowed_functions'
   ])

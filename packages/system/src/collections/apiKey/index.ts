@@ -5,8 +5,8 @@ import insert from './insert'
 const { getAll } = useFunctions<ApiKey, typeof description>()
 
 export default defineCollection(() => ({
-  description,
   item: {} as ApiKey,
+  description,
   functions: {
     insert,
     getAll

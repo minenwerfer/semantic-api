@@ -1,4 +1,4 @@
-import type { Context } from '@semantic-api/api'
+import { type Context, useFunctions } from '@semantic-api/api'
 import * as bcrypt from 'bcrypt'
 import description, { type User } from './description'
 import { saveWithExtra } from './library'
@@ -13,7 +13,7 @@ type Props = {
 type Return = Promise<Partial<User>>
 
 const insert = async (props: Props, context: Context<typeof description, any, any>): Return => {
-  const { token, collection, apiConfig } = context
+  const { token, apiConfig } = context
   props.what.group = apiConfig.group
 
   // user is being inserted by a non-root user
@@ -51,9 +51,11 @@ const insert = async (props: Props, context: Context<typeof description, any, an
     delete props.what.password
   }
 
+  const { insert } = useFunctions<User, typeof description>()
+
   return props.what.extra
     ? saveWithExtra(props, context)
-    : collection.functions.insert(props) as Promise<User>
+    : insert(props, context) as Promise<User>
 }
 
 export default insert
