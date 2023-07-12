@@ -1,7 +1,7 @@
 import type { Description } from '@semantic-api/types'
 import type { Context, MongoDocument } from '../types'
 import type { Projection } from './types'
-import { LEAN_OPTIONS } from '@semantic-api/types'
+import { LEAN_OPTIONS } from '../constants'
 import { useAccessControl } from '@semantic-api/access-control'
 import { normalizeProjection, prepareInsert } from '../collection/utils'
 

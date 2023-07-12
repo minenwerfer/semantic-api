@@ -30,7 +30,7 @@ declare global {
 declare module '@semantic-api/api' {
   export async function getResourceAsset<
     const ResourceName extends keyof Collections,
-    const AssetName extends keyof Collections[ResourceName] & AssetType,
+    const AssetName extends (keyof Collections[ResourceName] & AssetType) | 'model',
     ReturnedAsset=ResourceName extends keyof Collections
         ? AssetName extends keyof Collections[ResourceName]
           ? Collections[ResourceName][AssetName]
@@ -47,7 +47,7 @@ declare module '@semantic-api/api' {
   >
 
   export const get = getResourceAsset
-  
+
   export async function getFunction<
     ResourceName extends keyof Collections,
     FunctionName extends keyof Collections[ResourceName]['functions'],

@@ -50,7 +50,7 @@ export type TableLayout = {
 }
 
 export type FiltersPreset = {
-  name: string
+  name?: string
   icon?: string
   filters: Record<string, any>
   table?: Array<string>
@@ -153,6 +153,8 @@ export type PropertyInputType =
   | 'email'
   | 'password'
   | 'search'
+  | 'time'
+  | 'month'
 
 type CollectionPropertyAux = {
   icon?: string

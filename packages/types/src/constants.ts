@@ -23,7 +23,9 @@ export const PROPERTY_TYPES = [
   'number',
   'boolean',
   'object',
-  'array'
+  'array',
+  'time',
+  'month'
 ] as const
 
 export const PROPERTY_FORMATS = [
