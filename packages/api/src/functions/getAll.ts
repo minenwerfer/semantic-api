@@ -34,7 +34,7 @@ export const getAll = <
   const parsedFilters = Object.fromEntries(entries) || {}
   const query = await accessControl.beforeRead({ filters: parsedFilters }, context)
 
-  const sort = payload.sort
+  const sort = payload?.sort
     ? payload.sort
     : query.sort || DEFAULT_SORT
 
