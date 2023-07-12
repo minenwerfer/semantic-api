@@ -14,7 +14,7 @@ export const algorithms = {
   algorithm
 }
 
-export const accessControl: AccessControl<typeof collections, typeof algorithms> = {
+export const accessControl: AccessControl<Collections, Algorithms> = {
   roles: {
     guest: {
       capabilities: {
