@@ -6,7 +6,7 @@ const DTS_FILENAME = 'semantic-api.d.ts'
 const dts = `// this file will be overwritten
 import type { AssetType, ResourceErrors, Context as Context_ } from '@semantic-api/api'
 import type { Description } from '@semantic-api/types'
-import { Either, Left } from '@semantic-api/common'
+import { Either } from '@semantic-api/common'
 
 declare global {
   type UserCollections = typeof import('.').collections
