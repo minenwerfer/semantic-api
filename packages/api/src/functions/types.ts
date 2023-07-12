@@ -1,12 +1,7 @@
-type File = any
-
-type UploadAuxProps = {
+export type UploadAuxProps = {
   parentId: string
   propertyName: string
 }
-
-export type UploadProps = UploadAuxProps & Parameters<File['functions']['insert']>[0]
-export type FileDeleteProps = UploadAuxProps & Parameters<File['functions']['delete']>[0]
 
 export type Filters<T> = Record<`$${string}`, any> & {
   [P in keyof T]?: T[P] | Record<`$${string}`, any>

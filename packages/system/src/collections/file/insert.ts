@@ -1,9 +1,7 @@
 import { createHash } from 'crypto'
 import { writeFile, unlink } from 'fs/promises'
-import type { Context } from '@semantic-api/api'
+import { type Context, useFunctions } from '@semantic-api/api'
 import description, { File } from './description'
-
-const { STORAGE_PATH } = process.env
 
 type Props = {
   what: { content: string } & Pick<File,
@@ -14,25 +12,27 @@ type Props = {
   >
 }
 
-const insert = async (props: Props, { token, collection }: Context<typeof description, any, any>) => {
+const insert = async (props: Props, context: Context<typeof description, any, any>) => {
+  const { insert } = useFunctions<File, typeof description>()
   const what = Object.assign({}, props.what)
-  what.owner = token?.user._id
+  what.owner = context.token?.user._id
+  const { STORAGE_PATH } = process.env
 
   const extension = what.filename?.split('.').pop()
   if( !extension ) {
     throw new Error('filename lacks extension')
   }
 
-  const oldFile = await collection.get({
+  const oldFile = await context.collection.functions.get({
     filters: {
       _id: props.what._id 
-    }
-  })
+    },
+    project: [
+      'absolute_path'
+    ]
+  }, context)
 
   if( oldFile ) {
-    // if( oldFile.immutable === true ) {
-    //   throw new Error('você não pode mais editar esse arquivo')
-    // }
     await unlink(oldFile.absolute_path!).catch(console.trace)
   }
 
@@ -43,10 +43,10 @@ const insert = async (props: Props, { token, collection }: Context<typeof descri
   what.absolute_path = `${STORAGE_PATH}/${filenameHash}.${extension}`
   await writeFile(what.absolute_path, Buffer.from(what.content.split(',').pop()!, 'base64'))
 
-  return collection.insert({
+  return insert({
     ...props,
     what
-  })
+  }, context)
 }
 
 export default insert

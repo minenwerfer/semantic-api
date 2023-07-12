@@ -1,6 +1,6 @@
 {
   "name": "@semantic-api/common",
-  "version": "0.0.56",
+  "version": "0.0.61",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,9 @@
   "license": "ISC",
   "exports": {
     ".": "./dist/index.js",
-    "./either": "./dist/either.js"
+    "./either": "./dist/either.js",
+    "./string": "./dist/string.js",
+    "./date": "./dist/date.js"
   },
   "dependencies": {
     "@semantic-api/system": "latest",

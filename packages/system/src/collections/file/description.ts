@@ -34,8 +34,7 @@ const schema = <const>{
       type: 'string',
     },
     absolute_path: {
-      type: 'string',
-      s$hidden: true
+      type: 'string'
     },
     relative_path: {
       type: 'string'

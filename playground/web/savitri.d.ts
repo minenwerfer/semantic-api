@@ -1,4 +1,5 @@
 import type { Context } from '@semantic-api/api'
+import type { CollectionStore } from '@savitri/web'
 
 declare module '@savitri/web' {
   type UserCollections = typeof import('api').collections
@@ -8,8 +9,10 @@ declare module '@savitri/web' {
     [K in keyof (UserCollections & SystemCollections)]: Awaited<ReturnType<(UserCollections & SystemCollections)[K]>>
   }
 
-  export function useStore<StoreId extends keyof Collections>(storeId: StoreId): {
-    ui: Collections[StoreId]
+  export function useStore<StoreId extends keyof Collections>(storeId: StoreId): Omit<CollectionStore<Collections[StoreId]>,
+    'functions'
+    | 'item'
+    | 'items'> & {
     functions: {
       [P in keyof Collections[StoreId]['functions']]: (arg: Parameters<Collections[StoreId]['functions'][P]>[0]) => ReturnType<Collections[StoreId]['functions'][P]>
     }

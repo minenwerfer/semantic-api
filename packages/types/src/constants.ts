@@ -2,20 +2,7 @@ export const SV_API_URL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:3000/api'
   : '/api'
 
-/**
- * Those are for runtime validation.
- * Please keep it like that.
- */
-
 export const PAGINATION_PER_PAGE_LIMIT = 150
-export const PAGINATION_PER_PAGE_DEFAULTS = [
-  10,
-  35,
-  100,
-  150
-]
-
-export const PAGINATION_PER_PAGE_DEFAULT = 10
 
 export const PROPERTY_TYPES = [
   'string',
