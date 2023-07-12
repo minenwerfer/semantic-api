@@ -141,7 +141,9 @@ export const customVerbs = (resourceType: ResourceType) =>
   if( isLeft(fnEither) ) {
     const error = unwrapEither(fnEither)
     switch( error ) {
-      case ResourceErrors.ResourceNotFound: throw new Error('no such function')
+      case ResourceErrors.ResourceNotFound: throw new Error(`no such resource ${resourceName}`)
+      case ResourceErrors.FunctionNotFound: throw new Error(`no such function ${resourceName}@${functionName}`)
+      case ResourceErrors.AssetNotFound: throw new Error(`resource ${resourceName} has no registered functions`)
       default: throw new Error(`unknown error: ${error}`)
     }
   }

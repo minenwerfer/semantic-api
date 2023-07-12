@@ -10,7 +10,8 @@ const __cachedResources: Awaited<ReturnType<typeof internalGetResources>> & {
 
 export enum ResourceErrors {
   ResourceNotFound = 'RESOURCE_NOT_FOUND',
-  AssetNotFound = 'AssetNotFound'
+  AssetNotFound = 'ASSET_NOT_FOUND',
+  FunctionNotFound = 'FUNCTION_NOT_FOUND'
 }
 
 export const requireWrapper = (path: string) => {
@@ -124,5 +125,9 @@ export const getFunction = async <
   }
 
   const functions = unwrapEither(functionsEither) 
-  return right(functions![functionName] as ReturnedFunction)
+  if( !(functionName in functions) ) {
+    return left(ResourceErrors.FunctionNotFound)
+  }
+
+  return right(functions[functionName] as ReturnedFunction)
 }
