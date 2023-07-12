@@ -11,5 +11,5 @@
     "tsc": "latest",
     "typescript": "^5.1.6"
   },
-  "version": "0.0.8"
+  "version": "0.0.9"
 }
