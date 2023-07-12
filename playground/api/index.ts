@@ -1,5 +1,5 @@
-import { useFunctions } from '@semantic-api/api'
 import { initWithDatabase } from '@semantic-api/server'
+import { useFunctions } from '@semantic-api/api'
 import type { AccessControl } from '@semantic-api/access-control'
 
 import person from './person'
