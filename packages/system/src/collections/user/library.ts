@@ -31,7 +31,7 @@ export const saveWithExtra = async (props: SaveWithExtraProps, context: Context<
   })
 
   await userExtra.validate()
-  const user = await collection.insert(props)
+  const user = await collection.functions.insert(props)
 
   try {
     await context.collections.userExtra.functions.insert({
@@ -42,7 +42,7 @@ export const saveWithExtra = async (props: SaveWithExtraProps, context: Context<
     })
   } catch(e) {
     if( !props.what._id ) {
-      await collection.delete({
+      await collection.functions.delete({
         filters: {
           _id: user._id
         }
