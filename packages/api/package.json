@@ -1,9 +1,12 @@
 {
   "name": "@semantic-api/api",
-  "version": "0.0.23",
+  "version": "0.0.28",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build",
     "postinstall": "node dist/__scripts__/postinstall.js"
   },
   "exports": {
@@ -21,10 +24,10 @@
     "@types/sharp": "^0.31.1"
   },
   "dependencies": {
-    "@semantic-api/access-control": "file:../access-control",
-    "@semantic-api/common": "file:../common",
-    "@semantic-api/system": "file:../system",
-    "@semantic-api/types": "file:../types",
+    "@semantic-api/access-control": "latest",
+    "@semantic-api/common": "latest",
+    "@semantic-api/system": "latest",
+    "@semantic-api/types": "latest",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^7.3.1",
     "mongoose-autopopulate": "^0.16.0",

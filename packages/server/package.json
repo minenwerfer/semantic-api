@@ -1,10 +1,13 @@
 {
   "name": "@semantic-api/server",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
   },
   "exports": {
     ".": "./dist/index.js"
@@ -20,12 +23,12 @@
   "dependencies": {
     "@hapi/hapi": "^21.1.0",
     "@hapi/inert": "^7.0.0",
-    "@semantic-api/access-control": "file:../access-control",
-    "@semantic-api/api": "file:../api",
-    "@semantic-api/common": "file:../common",
-    "@semantic-api/server": "file:../server",
-    "@semantic-api/system": "file:../system",
-    "@semantic-api/types": "file:../types",
+    "@semantic-api/access-control": "latest",
+    "@semantic-api/api": "latest",
+    "@semantic-api/common": "latest",
+    "@semantic-api/server": "latest",
+    "@semantic-api/system": "latest",
+    "@semantic-api/types": "latest",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.8",
     "mongoose": "^7.3.1",

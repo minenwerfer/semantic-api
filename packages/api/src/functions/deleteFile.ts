@@ -28,7 +28,7 @@ export const deleteFile = <
     }
   )
 
-  return context.collections.file.delete(props, await createContext({
+  return context.collections.file.functions.delete(props, await createContext({
     resourceName: 'file',
     parentContext: context
   }))
