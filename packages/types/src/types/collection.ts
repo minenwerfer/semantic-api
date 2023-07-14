@@ -136,7 +136,7 @@ export type Description = {
     placeholder?: string
   }
 
-  properties: Record<string, CollectionProperty>
+  properties: Record<Lowercase<string>, CollectionProperty>
 }
 
 export type CollectionProperty = Property

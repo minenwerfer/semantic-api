@@ -36,6 +36,6 @@ export type AccessControl<
   TAlgorithms extends Record<string, Awaited<ReturnType<Algorithm>>>
 > = {
   roles?: Roles<TCollections, TAlgorithms>
-  layers?: Partial<Record<ValidAccessControlLayer, AccessControlLayer>>
+  layers?: Partial<Record<ValidAccessControlLayer, AccessControlLayer<TCollections, TAlgorithms>>>
 }
 

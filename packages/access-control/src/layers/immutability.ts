@@ -1,7 +1,7 @@
 import type { AccessControlLayer } from './types'
 import * as R from 'ramda'
 
-const internalCheck: (...args: Parameters<AccessControlLayer>) => Promise<void> = async (context, { propertyName: _propertyName, parentId, childId, payload }) => {
+const internalCheck: (...args: Parameters<AccessControlLayer<any, any>>) => Promise<void> = async (context, { propertyName: _propertyName, parentId, childId, payload }) => {
   const { description } = context
   const propertyName = _propertyName || ''
 
@@ -48,7 +48,7 @@ const internalCheck: (...args: Parameters<AccessControlLayer>) => Promise<void> 
   }
 }
 
-export const checkImmutability: AccessControlLayer = async (context, props) => {
+export const checkImmutability: AccessControlLayer<any, any> = async (context, props) => {
   if( !props.parentId ) {
     return
   }

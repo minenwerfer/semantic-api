@@ -3,10 +3,10 @@ import type { Description } from '@semantic-api/types'
 import { Either } from '@semantic-api/common'
 
 declare global {
-  type UserCollections = typeof import('.').collections
+  type UserCollections = typeof import('./src').collections
   type SystemCollections = typeof import('@semantic-api/system/collections')
 
-  type UserAlgorithms = typeof import('.').algorithms
+  type UserAlgorithms = typeof import('./src').algorithms
   type SystemAlgorithms = typeof import('@semantic-api/system/algorithms')
 
   type Collections = {

@@ -1,7 +1,7 @@
 import type { AccessControlLayer } from './layers'
 import { writeLayers } from './layers'
 
-export const read: AccessControlLayer = async (context, { payload }) => {
+export const read: AccessControlLayer<any, any> = async (context, { payload }) => {
   const { token, description } = context
 
   if( token.user && description.owned ) {
@@ -11,7 +11,7 @@ export const read: AccessControlLayer = async (context, { payload }) => {
   }
 }
 
-export const write: AccessControlLayer = async (context, { payload }) => {
+export const write: AccessControlLayer<any, any> = async (context, { payload }) => {
   const { token, description } = context
 
   if( token.user && description.owned ) {

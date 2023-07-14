@@ -66,13 +66,13 @@ export const prepareInsert = (
 
   } = payload
 
-  const forbidden = (key: string) => {
+  const forbidden = (key: Lowercase<string>) => {
     return description.properties[key]?.readOnly
       || (description.writable && !description.writable.includes(key)
     )
   }
   const prepareUpdate = () => Object.entries(rest as Record<string, any>).reduce((a: any, [key, value]) => {
-    if( forbidden(key) ) {
+    if( forbidden(key as Lowercase<string>) ) {
       return a
     }
 
@@ -100,7 +100,7 @@ export const prepareInsert = (
   })
 
   const prepareCreate = () => Object.entries(rest as Record<string, any>).reduce((a: any, [key, value]) => {
-    if( forbidden(key) || [undefined, null].includes(value) ) {
+    if( forbidden(key as Lowercase<string>) || [undefined, null].includes(value) ) {
       return a
     }
 

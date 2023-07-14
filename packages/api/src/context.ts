@@ -21,7 +21,7 @@ export type ContextOptions<
   config?: Config<any, any>,
   parentContext?: Context<any, TCollections, TAlgorithms>,
   resourceType?: ResourceType
-  resourceName?: keyof Collections
+  resourceName?: keyof TCollections | keyof TAlgorithms
 }
 
 export type Context<
@@ -36,7 +36,7 @@ export type Context<
   functionPath: FunctionPath
   token: DecodedToken
 
-  resourceName: string
+  resourceName?: keyof TCollections | keyof TAlgorithms
   request: any
   h: any
 
@@ -118,7 +118,7 @@ export const createContext = async <
   } = options||{}
 
  const context = Object.assign({}, parentContext)
- Object.assign(context, await internalCreateContext(options))
+ Object.assign(context, await internalCreateContext<TCollections, TAlgorithms>(options))
  Object.assign(context, config)
 
  Object.assign(context, {

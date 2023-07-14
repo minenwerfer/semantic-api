@@ -55,7 +55,7 @@ export const validateFromDescription = async <T>(
   }> = {}
 
   for( const _prop of propsSet ) {
-    const prop = _prop as string
+    const prop = _prop as Lowercase<string>
     const value = what[prop as keyof T]
     const property = description.properties[prop]
 

@@ -7,7 +7,7 @@ export type JsonSchema = {
   $id: string
   required?: ReadonlyArray<string>
   presets?: ReadonlyArray<string>
-  properties: Record<string, Property>
+  properties: Record<Lowercase<string>, Property>
 }
 
 export type RefType = {
