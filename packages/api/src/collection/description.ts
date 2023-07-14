@@ -21,8 +21,19 @@ type WithAvailableProps<
  }
 >
 
+type SchemaStructure = Pick<Description,
+  | '$id'
+  | 'strict'
+  | 'owned'
+  | 'properties'
+  | 'required'
+  | 'indexes'
+>
+
+export const defineSchema = <const TSchema extends WithAvailableProps<Description['properties'], SchemaProperties<Description>>>(schema: TSchema) => schema
+
 export const defineDescription = <
-  const TSchema extends WithAvailableProps<Description['properties'], SchemaProperties<Description>>,
+  const TSchema extends SchemaStructure,
   const TDescription extends WithAvailableProps<TSchema['properties'], Omit<Description, keyof TSchema>>
 >(schema: TSchema, description?: TDescription): TSchema & TDescription => ({
   ...schema,
