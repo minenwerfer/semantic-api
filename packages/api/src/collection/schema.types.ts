@@ -1,54 +1,44 @@
-import type { CollectionProperty, ValuesOf, JsonSchema } from '@semantic-api/types'
+import type { ValuesOf, JsonSchema } from '@semantic-api/types'
 import type { MongoDocument, Reference } from '../types'
 
-export type Schema<T extends JsonSchema> = CaseOwned<T>
-
-export type SchemaProperties<T> = T & {
-  [
-    P in keyof T as
-    P extends keyof JsonSchema
-      ? P
-      : never
-  ]: P extends 'properties'
-    ? Writable<T[P]>
-    : T[P]
+export type Schema<T extends JsonSchema> = CaseOwned<T> & {
+  peixe: 123
 }
 
 type Owned = {
   owner: Reference
 }
 
-type MapType<T> = T extends { format: 'date'|'date-time' }
-  ? Date : T extends { type: 'string' }
-  ? string : T extends { type: 'number' }
-  ? number : T extends { type: 'boolean' }
-  ? boolean : T extends { properties: any }
-  ? Schema<T & { $id: '' }> : T extends { type: 'object' }
-  ? object: T extends { enum: ReadonlyArray<infer K> }
-  ? K : T extends { $ref: string }
-  ? Reference : never
+type TestType<T> = T & Record<string, any>
+
+type MapType<T> = T extends TestType<{ format: 'date'|'date-time' }>
+  ? Date        : T extends TestType<{ type: 'string' }>
+  ? string      : T extends TestType<{ type: 'number' }>
+  ? number      : T extends TestType<{ type: 'boolean' }>
+  ? boolean     : T extends TestType<{ properties: any }>
+  ? Schema<T & { $id: '' }> : T extends TestType<{ type: 'object' }>
+  ? object      : T extends TestType<{ enum: ReadonlyArray<infer K> }>
+  ? K           : T extends TestType<{ $ref: string }>
+  ? Reference   : never
 
 type CaseReference<T> = T extends { $id: string }
   ? Reference
-  : T extends { type: 'array', items: { properties: any } }
-  ? Array<MapType<T['items']>>
-  : T extends { type: 'array', items: infer K }
-  ? Array<MapType<K>>
-  : MapType<T>
+  : T extends TestType<{ type: 'array', items: { properties: any } }>
+    ? Array<MapType<T['items']>>
+    : T extends TestType<{ type: 'array', items: infer K }>
+      ? Array<MapType<K>>
+      : MapType<T>
 
 type Type<T> = CaseReference<T>
 
 type IsRequired<
   F,
-  ExplicitlyRequired,
-  Value
+  ExplicitlyRequired
 > = keyof {
   [
     P in keyof F as
     P extends ValuesOf<ExplicitlyRequired>
-      ? Value extends true
       ? P
-      : never
       : never
   ]: F[P]
 }
@@ -62,42 +52,20 @@ type IsReadonly<F> = keyof {
   ]: F[P]
 }
 
-type RequiredProperties<F, E> = IsRequired<F, E, true>
-type UnrequiredProperties<F> = IsRequired<F, '', false>
+type RequiredProperties<F, E> = IsRequired<F, E>
 type ReadonlyProperties<F> = IsReadonly<F>
 
 type OptionalProperties<F, E> = Exclude<keyof F, RequiredProperties<F, E> | ReadonlyProperties<F>>
-
-type StrictMode<F> = MongoDocument &
-  { -readonly [P in keyof F]: Type<F[P]> } &
-  { -readonly [P in UnrequiredProperties<F>]?: Type<F[P]> } &
-  { readonly [P in ReadonlyProperties<F>]: Type<F[P]> }
-
-type PermissiveMode<F, E> = MongoDocument &
-  { [P in OptionalProperties<F, E>]?: Type<F[P]> } &
-  { -readonly [P in RequiredProperties<F, E>]: Type<F[P]> } &
-  { readonly [P in ReadonlyProperties<F>]?: Type<F[P]> }
-
-type CaseOwned<T extends JsonSchema> = T extends { owned: true }
-  ? Owned & MapTypes<T>
-  : MapTypes<T>
 
 type MapTypes<
   S extends JsonSchema,
   F=S['properties'],
   ExplicitlyRequired=S['required']
-> = S extends { strict: true }
-  ? StrictMode<F>
-  : PermissiveMode<F, ExplicitlyRequired>
+> = MongoDocument &
+  { [P in OptionalProperties<F, ExplicitlyRequired>]?: Type<F[P]> } &
+  { -readonly [P in RequiredProperties<F, ExplicitlyRequired>]: Type<F[P]> } &
+  { readonly [P in ReadonlyProperties<F>]?: Type<F[P]> }
 
-type WritableProp<T> = {
-  -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer K>
-    ? T[P] & ReadonlyArray<K>
-    : P extends keyof CollectionProperty
-    ? CollectionProperty[P]
-    : never
-}
-
-type Writable<T> = {
-  -readonly [P in keyof T]: WritableProp<T[P]>
-}
+type CaseOwned<T extends JsonSchema> = T extends { owned: true }
+  ? Owned & MapTypes<T>
+  : MapTypes<T>

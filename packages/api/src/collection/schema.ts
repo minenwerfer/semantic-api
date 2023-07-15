@@ -53,7 +53,7 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
     } = getReferencedCollection(property)||{} as CollectionProperty
 
     const required = property.type !== 'boolean'
-      && (description.strict || description.required?.includes(propertyName))
+      && (!description.required || description.required.includes(propertyName))
 
     const result: Record<string, any> = {
       type: String,

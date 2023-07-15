@@ -102,7 +102,6 @@ export type Description = {
 
   // modifiers
   owned?: boolean
-  strict?: boolean
   immutable?: boolean|ReadonlyArray<string>
   alwaysOwned?: boolean
 
