@@ -1,9 +1,7 @@
 import type { ValuesOf, JsonSchema } from '@semantic-api/types'
 import type { MongoDocument, Reference } from '../types'
 
-export type Schema<T extends JsonSchema> = CaseOwned<T> & {
-  peixe: 123
-}
+export type Schema<T extends JsonSchema> = CaseOwned<T>
 
 type Owned = {
   owner: Reference
