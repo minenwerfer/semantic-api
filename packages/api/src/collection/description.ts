@@ -8,6 +8,7 @@ type PropertyDependent =
   | 'writable'
   | 'required'
   | 'indexes'
+  | 'immutable'
 
 type SchemaProps = 
   | '$id'
@@ -16,12 +17,13 @@ type SchemaProps =
   | 'indexes'
   | 'properties'
 
-export const defineDescription = <const TDescription extends Omit<Description, PropertyDependent | SchemaProps> & Record<
-  Exclude<PropertyDependent & keyof TDescription, SchemaProps>,
-  'properties' extends keyof TDescription
-    ? Array<keyof TDescription['properties']>
+export const defineDescription = <const TDescription extends Omit<Description, PropertyDependent | SchemaProps> & {
+  [P in Exclude<PropertyDependent & keyof TDescription, SchemaProps>]: 'properties' extends keyof TDescription
+    ? P extends 'immutable'
+      ? Array<keyof TDescription['properties']> | boolean
+      : Array<keyof TDescription['properties']>
     : never
-> & {
+} & {
   [P in Exclude<SchemaProps, 'properties'>]: TDescription[P] extends NonNullable<Description[P]>
     ? P extends PropertyDependent
       ? (TDescription[P] & Array<keyof TDescription['properties']>) | []

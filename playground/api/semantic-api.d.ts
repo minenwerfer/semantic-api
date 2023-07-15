@@ -17,7 +17,7 @@ declare global {
     [K in keyof (UserAlgorithms & SystemAlgorithms)]: Awaited<ReturnType<(UserAlgorithms & SystemAlgorithms)[K]>>
   }
 
-  type Context<TDescription extends Description>
+  type Context<TDescription extends Description=any>
     = Context_<TDescription, Collections, Algorithms>
 
   type UserAccessControl = typeof accessControl

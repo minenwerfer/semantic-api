@@ -89,7 +89,7 @@ export type Description = {
   system?: boolean
   inline?: boolean
 
-  preferred?: Record<string, Description>
+  preferred?: Record<string, Partial<Description>>
 
   model?: mongoose.Model<any>
 
