@@ -1,12 +1,13 @@
 import { PROPERTY_TYPES, PROPERTY_FORMATS } from '../constants'
+import type { Description } from '.'
 
 export type PropertyType = typeof PROPERTY_TYPES[number]
 export type PropertyFormat = typeof PROPERTY_FORMATS[number]
 
-export type JsonSchema = {
+export type JsonSchema<TDescription extends Description=any> = {
   $id: string
-  required?: ReadonlyArray<string>
-  presets?: ReadonlyArray<string>
+  required?: ReadonlyArray<keyof TDescription['properties']>
+  presets?: ReadonlyArray<keyof TDescription['properties']>
   properties: Record<Lowercase<string>, Property>
 }
 

@@ -1,5 +1,4 @@
 import { COLLECTION_PRESETS, STORE_EFFECTS, } from '../constants'
-import type { mongoose } from '@semantic-api/api'
 import type { Property } from './jsonschema'
 
 export type CollectionPresets = typeof COLLECTION_PRESETS[number]
@@ -7,7 +6,7 @@ export type CollectionPresets = typeof COLLECTION_PRESETS[number]
 export type StoreEffect = keyof typeof STORE_EFFECTS
 export type CollectionId = string
 
-export type CollectionAction = Readonly<{
+export type CollectionAction<TDescription extends Description> = Readonly<{
   name: string
   icon?: string
   ask?: boolean
@@ -20,47 +19,48 @@ export type CollectionAction = Readonly<{
   params?: Record<string, any>
   query?: Record<string, any>
 
-  requires?: Array<string>
+  requires?: Array<keyof TDescription['properties']>
 }>
 
-export type CollectionActions = Record<string, null|CollectionAction>
+export type CollectionActions<TDescription extends Description> =
+  Record<string, null|CollectionAction<TDescription>>
 
-export type Condition = {
+export type Condition<TDescription extends Description> = {
   operator:
     'equal'
     | 'unequal'
     | 'in'
     | 'notin'
-  term1: string
-  term2: string
+  term1: keyof TDescription['properties']
+  term2: string|Array<string>
   else?: any
 }
 
-export type FormLayout = {
+export type FormLayout<TDescription extends Description> = {
   span: number
   verticalSpacing: number
-  condition: Condition
+  if: Condition<TDescription>
 }
 
-export type TableLayout = {
+export type TableLayout<TDescription extends Description> = {
   actions: Record<string, {
     button: boolean
-    condition: Condition
+    condition: Condition<TDescription>
   }>
 }
 
-export type FiltersPreset = {
+export type FiltersPreset<TDescription extends Description> = {
   name?: string
   icon?: string
-  filters: Record<string, any>
-  table?: Array<string>
+  filters: Record<keyof TDescription['properties'], any>
+  table?: Array<keyof TDescription['properties']>
   badgeFunction?: string
 }
 
-export type CollectionOptions = {
+export type CollectionOptions<TDescription extends Description> = {
   queryPreset?: {
-    filters?: Record<string, any>
-    sort?: Record<string, any>
+    filters?: Record<keyof TDescription['properties'], any>
+    sort?: Record<keyof TDescription['properties'], any>
   }
 }
 
@@ -79,7 +79,7 @@ export type Layout = {
   options?: LayoutOptions
 }
 
-export type Description = {
+export type Description<TDescription extends Description=any> = {
   $id: CollectionId
   title?: string
 
@@ -89,13 +89,11 @@ export type Description = {
   system?: boolean
   inline?: boolean
 
-  preferred?: Record<string, Partial<Description>>
-
-  model?: mongoose.Model<any>
+  preferred?: Record<string, Partial<TDescription>>
 
   alias?: string
   icon?: string
-  options?: CollectionOptions
+  options?: CollectionOptions<TDescription>
 
   indexes?: ReadonlyArray<string>
   defaults?: Record<string, any>
@@ -108,27 +106,27 @@ export type Description = {
   // takes an array of something
   route?: ReadonlyArray<string>
   presets?: ReadonlyArray<CollectionPresets>
-  required?: ReadonlyArray<string>
-  table?: ReadonlyArray<string>
-  tableMeta?: ReadonlyArray<string>
+  required?: ReadonlyArray<keyof TDescription['properties']>
+  table?: ReadonlyArray<keyof TDescription['properties']>
+  tableMeta?: ReadonlyArray<keyof TDescription['properties']>
 
-  filtersPresets?: Record<string, FiltersPreset>
-  freshItem?: Record<string, any>
+  filtersPresets?: Record<keyof TDescription['properties'], FiltersPreset<TDescription>>
+  freshItem?: Record<keyof TDescription['properties'], any>
 
-  form?: ReadonlyArray<string>|Record<string, Array<string>>
-  writable?: ReadonlyArray<string>
-  filters?: ReadonlyArray<string|{
-    property: string
+  form?: ReadonlyArray<keyof TDescription['properties']>|Record<keyof TDescription['properties'], Array<string>>
+  writable?: ReadonlyArray<keyof TDescription['properties']>
+  filters?: ReadonlyArray<keyof TDescription['properties']|{
+    property: keyof TDescription['properties']
     default: string
   }>
 
   layout?: Layout
-  formLayout?: Record<string, Partial<FormLayout>>|object
-  tableLayout?: Record<string, Partial<TableLayout>>|object
+  formLayout?: Partial<Record<keyof TDescription['properties'], Partial<FormLayout<TDescription>>>>
+  tableLayout?: Partial<Record<keyof TDescription['properties'], Partial<TableLayout<TDescription>>>>
 
   // actions
-  actions?: CollectionActions
-  individualActions?: CollectionActions
+  actions?: CollectionActions<TDescription>
+  individualActions?: CollectionActions<TDescription>
 
   search?: {
     active: boolean

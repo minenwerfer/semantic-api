@@ -2,13 +2,8 @@ import type { Description } from '@semantic-api/types'
 import type { Schema } from './schema.types'
 
 type PropertyDependent =
-  'filters'
-  | 'table'
-  | 'form'
-  | 'writable'
   | 'required'
   | 'indexes'
-  | 'immutable'
 
 type SchemaProps = 
   | '$id'
@@ -17,13 +12,7 @@ type SchemaProps =
   | 'indexes'
   | 'properties'
 
-export const defineDescription = <const TDescription extends Omit<Description, PropertyDependent | SchemaProps> & {
-  [P in Exclude<PropertyDependent & keyof TDescription, SchemaProps>]: 'properties' extends keyof TDescription
-    ? P extends 'immutable'
-      ? Array<keyof TDescription['properties']> | boolean
-      : Array<keyof TDescription['properties']>
-    : never
-} & {
+export const defineDescription = <const TDescription extends Omit<Description<TDescription>, SchemaProps> & {
   [P in Exclude<SchemaProps, 'properties'>]: TDescription[P] extends NonNullable<Description[P]>
     ? P extends PropertyDependent
       ? (TDescription[P] & Array<keyof TDescription['properties']>) | []

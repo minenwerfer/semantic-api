@@ -16,7 +16,7 @@ import { preloadDescription, applyPreset } from './preload'
 import { getTypeConstructor } from './typemapping'
 
 
-type SchemaStructure = Record<string, Record<string, any>>
+type SchemaStructure = Record<Lowercase<string>, Record<string, any>>
 
 /** This static array is populated only once on the warmup with the name of the
  * collections cast with mongoose.model. It is the simplest way to avoid
@@ -28,7 +28,7 @@ const __loadedModels: Array<string> = []
 export const descriptionToSchemaObj = async (description: Omit<Description, '$id'>) => {
   let hasRefs = false
 
-  const convert = async (a: any, [propertyName, property]: [string, CollectionProperty]) => {
+  const convert = async (a: any, [propertyName, property]: [Lowercase<string>, CollectionProperty]) => {
     if( property.s$meta ) {
       return a
     }
@@ -133,7 +133,7 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
     }, description.properties)
   }
 
-  const schemaStructure = await Object.entries(description.properties)
+  const schemaStructure = await (Object.entries(description.properties) as Array<[Lowercase<string>, CollectionProperty]>)
     .reduce(convert, {})
 
   return {
@@ -204,12 +204,12 @@ export const createModel = async <TDescription extends Description>(
   const schema = await descriptionToSchema<CollectionSchema<TDescription>>(description, options || defaultOptions, modelCallback)
 
   const cascadingDelete: Array<{
-    propertyName: string
+    propertyName: Lowercase<string>
     collectionName: string
     array: boolean
   }> = []
 
-  for( const [propertyName, property] of Object.entries(description.properties) ) {
+  for( const [propertyName, property] of Object.entries(description.properties) as Array<[Lowercase<string>, CollectionProperty]> ) {
     if( property.s$isFile || property.s$inline ) {
       const referenceDescription = unsafe(await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description'))
 
