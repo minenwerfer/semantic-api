@@ -1,8 +1,6 @@
-import { type Schema, defineSchema, defineDescription } from '@semantic-api/api'
+import { defineDescription } from '@semantic-api/api'
 
-export type Pet = Schema<typeof schema>
-
-const schema = defineSchema({
+export const [Pet, description] = defineDescription({
   $id: 'pet',
   properties: {
     name: {
@@ -13,5 +11,3 @@ const schema = defineSchema({
     },
   }
 })
-
-export default defineDescription(schema)
