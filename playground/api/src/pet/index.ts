@@ -1,8 +1,8 @@
 import { createContext } from '@semantic-api/api'
-import { description, type Pet } from './description'
+import { description, Pet } from './description'
 
 export default () => ({
-  item: {} as typeof Pet,
+  item: Pet,
   description,
   functions: {
     bark: (person: string) => `Bark! *Bites ${person}*`,
