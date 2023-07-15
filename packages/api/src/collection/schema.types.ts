@@ -4,7 +4,7 @@ import type { MongoDocument, Reference } from '../types'
 export type Schema<T extends JsonSchema> = CaseOwned<T>
 
 type Owned = {
-  owner: Reference
+  owner?: Reference
 }
 
 type TestType<T> = T & Record<string, any>
