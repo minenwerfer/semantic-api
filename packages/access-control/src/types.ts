@@ -4,6 +4,7 @@ import type { AccessControlLayer } from './layers/types'
 export type ValidAccessControlLayer =
   'read'
   | 'write'
+  | 'call'
 
 export type Role<
   TCollections extends Record<string, Awaited<ReturnType<Collection>>>,

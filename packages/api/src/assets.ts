@@ -1,6 +1,6 @@
-import type { ResourceType, AssetType, } from './types'
+import type { ResourceType, AssetType, Context } from './types'
 import { unsafe, left, right, isLeft, unwrapEither, Right } from '@semantic-api/common'
-import { isGranted, ACErrors } from '@semantic-api/access-control'
+import { isGranted, ACErrors, type AccessControl } from '@semantic-api/access-control'
 
 const __cachedResources: Awaited<ReturnType<typeof internalGetResources>> & {
   _cached: boolean
@@ -37,7 +37,7 @@ export const internalGetResources = async () => {
 
 export const getAccessControl = async () => {
   const userConfig = await import(process.cwd() + '/index.js')
-  return userConfig.accessControl
+  return userConfig.accessControl as AccessControl<Collections, Algorithms>
 }
 
 export const getResources = async () => {
@@ -127,6 +127,16 @@ export const getFunction = async <
   const functions = unwrapEither(functionsEither) 
   if( !(functionName in functions) ) {
     return left(ResourceErrors.FunctionNotFound)
+  }
+
+  const accessControl = await getAccessControl()
+  if( accessControl.layers?.call ) {
+    const fn = async (payload: any, context: Context<any, Collections, Algorithms>) => {
+      await accessControl.layers!.call!(context, { payload })
+      return functions[functionName](payload, context)
+    }
+
+    return right(fn as ReturnedFunction)
   }
 
   return right(functions[functionName] as ReturnedFunction)
