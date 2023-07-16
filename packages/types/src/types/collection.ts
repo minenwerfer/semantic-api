@@ -32,27 +32,31 @@ export type Condition<TDescription extends Description> = {
     | 'in'
     | 'notin'
   term1: keyof TDescription['properties']
-  term2: string|Array<string>
+  term2: any
   else?: any
 }
 
 export type FormLayout<TDescription extends Description> = {
-  span: number
-  verticalSpacing: number
-  if: Condition<TDescription>
+  fields?: Partial<Record<keyof TDescription['properties'], FormLayoutField<TDescription>>>
+}
+
+export type FormLayoutField<TDescription extends Description> = {
+  span?: number
+  verticalSpacing?: number
+  if?: Condition<TDescription>
 }
 
 export type TableLayout<TDescription extends Description> = {
-  actions: Record<string, {
-    button: boolean
-    condition: Condition<TDescription>
-  }>
+  actions: Partial<Record<keyof TDescription['individualActions'], {
+    button?: boolean
+    condition?: Condition<TDescription>
+  }>>
 }
 
 export type FiltersPreset<TDescription extends Description> = {
   name?: string
   icon?: string
-  filters: Record<keyof TDescription['properties'], any>
+  filters: Partial<Record<keyof TDescription['properties'], any>>
   table?: Array<keyof TDescription['properties']>
   badgeFunction?: string
 }
@@ -110,8 +114,8 @@ export type Description<TDescription extends Description=any> = {
   table?: ReadonlyArray<keyof TDescription['properties']>
   tableMeta?: ReadonlyArray<keyof TDescription['properties']>
 
-  filtersPresets?: Record<keyof TDescription['properties'], FiltersPreset<TDescription>>
-  freshItem?: Record<keyof TDescription['properties'], any>
+  filtersPresets?: Record<string, FiltersPreset<TDescription>>
+  freshItem?: Partial<Record<keyof TDescription['properties'], any>>
 
   form?: ReadonlyArray<keyof TDescription['properties']>|Record<keyof TDescription['properties'], Array<string>>
   writable?: ReadonlyArray<keyof TDescription['properties']>
@@ -121,8 +125,8 @@ export type Description<TDescription extends Description=any> = {
   }>
 
   layout?: Layout
-  formLayout?: Partial<Record<keyof TDescription['properties'], Partial<FormLayout<TDescription>>>>
-  tableLayout?: Partial<Record<keyof TDescription['properties'], Partial<TableLayout<TDescription>>>>
+  formLayout?: Partial<FormLayout<TDescription>>
+  tableLayout?: Partial<TableLayout<TDescription>>
 
   // actions
   actions?: CollectionActions<TDescription>
