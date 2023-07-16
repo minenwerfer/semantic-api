@@ -7,19 +7,28 @@ To make the web server start listening, run `initWithDatabase` from `@semantic-a
 For more resources on server configuration visit [@semantic-api/server]().
 
 ```ts
-import type { AccessControl } from '@semantic-api/access-control'
+import { baseRoles, type AccessControl } from '@semantic-api/access-control'
 import { initWithDatabase } from '@semantic-api/server'
 
+import exampleCollection from './collections/exampleCollection'
+import exampleAlgorithm from './collections/exampleAlgorithm'
+
 export const collections = {
-    //
+    exampleCollection
 }
 
 export const algorithms = {
-    //
+    exampleAlgorithm
 }
 
 export const accessControl: AccessControl<Collections, Algorithms> = {
-    //
+    ...baseRoles,
+    guest: {
+        inherit: [
+            'unauthenticated'
+        ],
+        grantEverything: true
+    }
 }
 
 initWithDatabase().then(async (server) => {
