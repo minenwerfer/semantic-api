@@ -40,7 +40,7 @@ export const accessControl: AccessControl<Collections, Algorithms> = {
     },
     layers: {
         async call({ resourceName }, context) {
-            context.limitRate({
+            await context.limitRate({
                 // ...
             })
         }
