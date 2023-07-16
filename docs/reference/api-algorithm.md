@@ -32,17 +32,19 @@ export const accessControl: AccessControl<Collections, Algorithms> = {
     roles: {
         guest: {
             capabilities: {
-                imageProcessing: {
+                mediaProcessing: {
                     grantEverything: true
                 }
             }
         }
     },
     layers: {
-        async call({ resourceName }, context) {
-            await context.limitRate({
-                // ...
-            })
+        async call(context) {
+            if(context.resourceName === 'mediaProcessing') {
+                await context.limitRate({
+                    // ...
+                })
+            }
         }
     }
 }
