@@ -1,51 +1,30 @@
-import type { Collection, Algorithm } from '@semantic-api/api'
-import type { AccessControl } from './types'
+import type { CollectionStructure, AlgorithmStructure } from '@semantic-api/api'
+import type { AccessControl, AccessControlLayer, ValidAccessControlLayer } from './types'
 import { baseRoles } from './baseRoles'
 
-// export const defineAccessControl = <
-//   TCollections extends Record<string, Awaited<ReturnType<Collection>>>,
-//   TAlgorithms extends Record<string, Awaited<ReturnType<Algorithm>>>
-// >() => <const TAccessControl extends AccessControl<TCollections, TAlgorithms, TAccessControl>>(accessControl: TAccessControl) => {
-//   return {
-//     ...baseRoles,
-//     accessControl
-//   }
-// }
+// #region defineAccessControl
+export const defineAccessControl = <
+  TCollections extends Record<string, CollectionStructure>,
+  TAlgorithms extends Record<string, AlgorithmStructure>,
+>() => <const TAccessControl extends AccessControl<TCollections, TAlgorithms, TAccessControl>>(accessControl: TAccessControl) =>
+  (layers?: Partial<Record<ValidAccessControlLayer, AccessControlLayer<TCollections, TAlgorithms, TAccessControl>>>) => {
+  const roles = {}
+  Object.assign(roles, baseRoles)
+  Object.assign(roles, accessControl.roles)
 
-// const accessControl = defineAccessControl<any, any>()({
-//   kkk: 'oi',
-//   roles: {
-//     guest: {
-//       // inherit: [
-//       //   'authenticated'
-//       // ],
-//       capabilities: {
-//         checkout: {
-//           functions: [
-//             'render'
-//           ]
-//         }
-//       }
-//     },
-//     root: {
-//       grantEverything: true,
-//     },
-//     // customer: {
-//     //   grantEverything: true,
-//     //   capabilities: {
-//     //     user: {
-//     //       blacklist: [
-//     //         'getAllx'
-//     //       ]
-//     //     }
-//     //   }
-//     // }
-//   },
-//   layers: {
-//     write: async ({ resourceName, log }, { payload }) => {
-//       if( resourceName !== 'log' ) {
-//         log('user performed insert', payload?.what)
-//       }
-//     }
-//   }
-// })
+  accessControl.roles = roles
+  accessControl.layers = layers
+  return accessControl
+}
+// #endregion defineAccessControl
+
+export const accessControl = defineAccessControl<any, any>()({
+  roles: {
+    guest: {
+      inherit: [
+        'unauthenticated'
+      ],
+      grantEverything: true
+    }
+  }
+})()

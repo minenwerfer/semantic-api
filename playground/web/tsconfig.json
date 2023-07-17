@@ -1,5 +1,4 @@
 {
-  "extends": "../api/tsconfig.json",
   "compilerOptions": {
     "paths": {
       "@savitri/web": [

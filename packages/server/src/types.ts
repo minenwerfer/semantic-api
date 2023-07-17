@@ -4,6 +4,7 @@ export type HandlerRequest = Request & {
   payload: any
 }
 
+// #region ApiConfig
 export type ApiConfig = {
   port?: number
   group?: string
@@ -16,3 +17,4 @@ export type ApiConfig = {
 
   populateUserExtra?: Array<string>
 }
+// #endregion ApiConfig

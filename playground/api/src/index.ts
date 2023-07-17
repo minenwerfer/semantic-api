@@ -1,5 +1,5 @@
 import { initWithDatabase } from '@semantic-api/server'
-import type { AccessControl } from '@semantic-api/access-control'
+import { defineAccessControl } from '@semantic-api/access-control'
 
 import person from './person'
 import pet from './pet'
@@ -14,7 +14,7 @@ export const algorithms = {
   algorithm
 }
 
-export const accessControl: AccessControl<Collections, Algorithms> = {
+export const accessControl = defineAccessControl<Collections, Algorithms>()({
   roles: {
     guest: {
       capabilities: {
@@ -30,15 +30,19 @@ export const accessControl: AccessControl<Collections, Algorithms> = {
         }
       }
     }
-  },
-  layers: {
-    write: async ({ resourceName }, { payload }) => {
-      if( resourceName === 'person' ) {
-        payload.what.name = `Modified: ${payload.what.name}`
-      }
+  }   
+})({
+  write: async (context, { payload }) => {
+    const {
+      resourceName,
+      token
+    } = context
+
+    if( resourceName === 'person' && token.user.roles.includes('guest') ) {
+      payload.what.name = `Modified: ${payload.what.name}`
     }
   }
-}
+})
 
 initWithDatabase().then(async (server) => {
   server.start()

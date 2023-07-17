@@ -8,7 +8,10 @@ import { defaultApiConfig } from './constants'
 import { warmup } from './warmup'
 import getRoutes from './routes'
 
-export const init = async (_apiConfig?: ApiConfig): Promise<Hapi.Server> => {
+// #region init
+export const init = async (_apiConfig?: ApiConfig): Promise<Hapi.Server> =>
+// #endregion init
+  {
   const apiConfig: ApiConfig = {}
   Object.assign(apiConfig, defaultApiConfig)
   Object.assign(apiConfig, _apiConfig)
@@ -51,17 +54,23 @@ export const init = async (_apiConfig?: ApiConfig): Promise<Hapi.Server> => {
   return server
 }
 
+// #region initWithDatabase
 export const initWithDatabase = async (...args: Parameters<typeof init>) => {
   await connectDatabase()
   return init(...args)
 }
+// #endregion initWithDatabase
 
+// #region initThenStart
 export const initThenStart = async (...args: Parameters<typeof init>) => {
   const server = await init(...args)
   server.start()
 }
+// #endregion initThenStart
 
+// #region initWithDatabaseThenStart
 export const initWithDatabaseThenStart = async (...args: Parameters<typeof init>) => {
   const server = await initWithDatabase(...args)
   server.start()
 }
+// #endregion initWithDatabaseThenStart

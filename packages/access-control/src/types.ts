@@ -1,17 +1,22 @@
 import type { CollectionStructure, AlgorithmStructure } from '@semantic-api/api'
 import type { AccessControlLayer } from './layers/types'
+import type { baseRoles } from './baseRoles'
+export { AccessControlLayer }
 
+// #region ValidAccessControlLayer
 export type ValidAccessControlLayer =
   'read'
   | 'write'
   | 'call'
+// #endregion ValidAccessControlLayer
 
+// #region Role
 export type Role<
   TCollections extends Record<string, CollectionStructure>,
   TAlgorithms extends Record<string, AlgorithmStructure>,
   TAccessControl extends AccessControl<TCollections, TAlgorithms>=any
 > = {
-  inherit?: Array<keyof TAccessControl['roles']>
+  inherit?: Array<keyof TAccessControl['roles'] | keyof typeof baseRoles>
   grantEverything?: boolean
   forbidEverything?: boolean
   capabilities?: {
@@ -27,6 +32,7 @@ export type Role<
     }
   }
 }
+// #endregion Role
 
 export type Roles<
   TCollections extends Record<string, CollectionStructure>,
@@ -34,57 +40,23 @@ export type Roles<
   TAccessControl extends AccessControl<TCollections, TAlgorithms>=any
 > = Record<string, Role<TCollections, TAlgorithms, TAccessControl>>
 
-export type AccessControl<
+// #region AccessControl
+export type InternalAccessControl<
   TCollections extends Record<string, CollectionStructure>,
   TAlgorithms extends Record<string, AlgorithmStructure>,
   TAccessControl extends AccessControl<TCollections, TAlgorithms>=any
 > = {
   roles?: Roles<TCollections, TAlgorithms, TAccessControl>
   availableRoles?: keyof TAccessControl['roles']
+  parent?: TAccessControl['roles']
 }
 
-export const defineAccessControl = <
+export type AccessControl<
   TCollections extends Record<string, CollectionStructure>,
   TAlgorithms extends Record<string, AlgorithmStructure>,
->() => <const TAccessControl extends AccessControl<TCollections, TAlgorithms, TAccessControl>>(accessControl: TAccessControl) =>
-  (layers?: Partial<Record<ValidAccessControlLayer, AccessControlLayer<TCollections, TAlgorithms, TAccessControl>>>) => ({
-  ...accessControl,
-  layers
-})
-
-defineAccessControl<any, any>()({
-  roles: {
-    guest: {
-      inherit: [
-        'authenticated'
-      ],
-      capabilities: {
-        checkout: {
-          functions: [
-            'render'
-          ]
-        }
-      }
-    },
-    root: {
-      grantEverything: true,
-    },
-  },
-})({
-    write: async (context, { payload }) => {
-      const {
-        token,
-        resourceName,
-        log
-      } = context
-
-      if( token.user.roles.includes('oi') ) {
-        return
-      }
-
-      if( resourceName !== 'log' ) {
-        log('user performed insert', payload?.what)
-      }
-    }
-})
+  TAccessControl extends AccessControl<TCollections, TAlgorithms>=any
+> = InternalAccessControl<TCollections, TAlgorithms, TAccessControl> & {
+  layers?: Partial<Record<ValidAccessControlLayer, AccessControlLayer<TCollections, TAlgorithms, TAccessControl>>>
+}
+// #endregion AccessControl
 

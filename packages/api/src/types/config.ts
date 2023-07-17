@@ -5,6 +5,7 @@ import type { FunctionPath } from './resource'
 
 type User = any
 
+// #region Collection
 export type CollectionStructure = {
   item: any
   description: Description
@@ -12,12 +13,17 @@ export type CollectionStructure = {
   functions?: Record<string, (...args: any[]) => any>
 }
 
+export type Collection = () => CollectionStructure|Promise<CollectionStructure>
+// #endregion Collection
+
+// #region Algorithm
 export type AlgorithmStructure = {
   functions?: Record<string, (...args: any[]) => any>
 }
 
-export type Collection = () => CollectionStructure|Promise<CollectionStructure>
 export type Algorithm = () => AlgorithmStructure|Promise<AlgorithmStructure>
+// #endregion Algorithm
+
 
 export type DecodedToken<TAccessControl extends AccessControl<any, any>=any> = {
   user: Omit<User, 'roles'> & {

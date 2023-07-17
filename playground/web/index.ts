@@ -14,6 +14,6 @@ personStore.item.job === 'policeman'
     }
   })
 
-  // items[0].job === 'isso non ecziste'
+  items[0].job === 'isso non ecziste'
 
 })()

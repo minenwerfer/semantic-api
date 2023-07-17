@@ -1,6 +1,4 @@
-import { Roles } from './types'
-
-export const baseRoles: Roles<any, any> = {
+export const baseRoles = <const>{
   authenticated: {
     capabilities: {
       meta: {

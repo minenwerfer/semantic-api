@@ -43,10 +43,7 @@ export type Context<
   h: any
 
   apiConfig: ApiConfig
-  accessControl: AccessControl<TCollections, TAlgorithms>
-  log: (message: string, details?: any) => any
-  validate: typeof validateFromDescription
-  limitRate: (params: RateLimitingParams) => ReturnType<typeof limitRate>
+  accessControl: TAccessControl
 }
 
 export const internalCreateContext = async <
