@@ -1,7 +1,8 @@
 import type { Description } from '@semantic-api/types'
-import type { Schema } from './collection'
-import type { Config, ApiConfig, FunctionPath, DecodedToken, ResourceType } from './types'
 import type { AccessControl } from '@semantic-api/access-control'
+import type { ApiConfig } from '@semantic-api/server'
+import type { Schema } from './collection'
+import type { FunctionPath, DecodedToken, ResourceType } from './types'
 import mongoose, { type Model } from 'mongoose'
 import { validateFromDescription } from './collection/validate'
 import { limitRate, type RateLimitingParams } from './rateLimiting'
@@ -18,7 +19,7 @@ export type ContextOptions<
   TCollections extends Collections,
   TAlgorithms extends Algorithms
 > = {
-  config?: Config<any, any>,
+  apiConfig?: ApiConfig
   parentContext?: Context<any, TCollections, TAlgorithms>,
   resourceType?: ResourceType
   resourceName?: keyof TCollections | keyof TAlgorithms
@@ -27,14 +28,15 @@ export type ContextOptions<
 export type Context<
   TDescription extends Description,
   TCollections extends Collections,
-  TAlgorithms extends Algorithms
+  TAlgorithms extends Algorithms,
+  TAccessControl extends AccessControl<TCollections, TAlgorithms, TAccessControl>=any
 > = Omit<Awaited<ReturnType<typeof internalCreateContext>>, 'collection' | 'collections'> & {
   description: TDescription
   model:  CollectionModel<TDescription>
   collection: TCollections[TDescription['$id']]
   collections: TCollections
   functionPath: FunctionPath
-  token: DecodedToken
+  token: DecodedToken<TAccessControl>
 
   resourceName?: keyof TCollections | keyof TAlgorithms
   request: any
@@ -113,15 +115,15 @@ export const createContext = async <
 >(options?: ContextOptions<TCollections, TAlgorithms>) => {
   const {
     parentContext = {},
-    config = {},
+    apiConfig = {},
     resourceName = null
   } = options||{}
 
  const context = Object.assign({}, parentContext)
  Object.assign(context, await internalCreateContext<TCollections, TAlgorithms>(options))
- Object.assign(context, config)
 
  Object.assign(context, {
+   apiConfig,
    resourceName
  })
 

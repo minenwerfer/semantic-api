@@ -20,7 +20,17 @@ export default defineConfig({
 function nav() {
   return [
     { text: 'Guide', link: '/guide/what-is-semantic-api', activeMatch: '/guide/' },
-    { text: 'Reference', link: '/reference/entrypoint', activeMatch: '/reference' }
+    {
+      text: 'Reference',
+      activeMatch: '^/(api|common|server|system)/',
+      items: [
+        { text: '@semantic-api/access-control', link: '/access-control/' },
+        { text: '@semantic-api/api', link: '/api/' },
+        { text: '@semantic-api/common', link: '/common/' },
+        { text: '@semantic-api/server', link: '/server/' },
+        { text: '@semantic-api/system', link: '/system/' },
+      ]
+    }
   ]
 }
 
@@ -46,10 +56,10 @@ function sidebarReference() {
       text: '@semantic-api/api',
       collapsed: false,
       items: [
-        { text: 'Algorithm', link: '/reference/api-algorithm' },
-        { text: 'Collection', link: '/reference/api-collection' },
-        { text: 'Context', link: '/reference/api-context' },
-        { text: 'Description', link: '/reference/api-description' },
+        { text: 'Algorithm', link: '/api/algorithm' },
+        { text: 'Collection', link: '/api/collection' },
+        { text: 'Context', link: '/api/context' },
+        { text: 'Description', link: '/api/description' },
       ]
     }
   ]

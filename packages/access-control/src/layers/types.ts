@@ -1,9 +1,12 @@
-import type { Context, Collection, Algorithm } from '@semantic-api/api'
+import type { Context, CollectionStructure, Algorithm } from '@semantic-api/api'
+import type { AccessControl } from '../types'
 
 export type AccessControlLayer<
-  TCollections extends Record<string, Awaited<ReturnType<Collection>>>,
-  TAlgorithms extends Record<string, Awaited<ReturnType<Algorithm>>>
-> = (context: Context<any, TCollections, TAlgorithms>, props: {
+  TCollections extends Record<string, CollectionStructure>,
+  TAlgorithms extends Record<string, Awaited<ReturnType<Algorithm>>>,
+  TAccessControl extends AccessControl<TCollections, TAlgorithms>=any
+
+> = (context: Context<any, TCollections, TAlgorithms, TAccessControl>, props: {
   propertyName?: string
   parentId?: string
   childId?: string

@@ -19,7 +19,7 @@ export const requireWrapper = (path: string) => {
   return content.default || content
 }
 
-export const internalGetResources = async () => {
+const internalGetResources = async () => {
   // @ts-ignore
   const { collections, algorithms } = await import('@semantic-api/system')
   const userConfig = await import(process.cwd() + '/index.js')

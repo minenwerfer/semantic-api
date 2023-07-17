@@ -12,7 +12,9 @@ const getAccessControl = async () => {
 }
 
 const applyInheritance = async (accessControl: AccessControl<any, any>, targetRole: Role<any, any>) => {
-  const role = Object.assign({}, targetRole)
+  const role = Object.assign({}, targetRole) as typeof targetRole & {
+    inherit?: Array<keyof typeof accessControl['roles']>
+  }
 
   if( role.inherit ) {
     for( const roleName of role.inherit ) {
@@ -40,8 +42,8 @@ export const isGranted = async <
   functionName: FunctionName,
   acProfile: ACProfile
 ) => {
-  const userRoles = acProfile.roles || ['guest']
   const accessControl = await getAccessControl()
+  const userRoles = (acProfile.roles || ['guest']) as Array<keyof typeof accessControl['roles']>
 
   for( const roleName of userRoles ) {
     const _currentRole = accessControl.roles?.[roleName]

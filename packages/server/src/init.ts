@@ -1,35 +1,20 @@
 import Hapi from '@hapi/hapi'
 import Inert from '@hapi/inert'
 
-import { createContext, type Config, type Collection, type Algorithm } from '@semantic-api/api'
+import type { ApiConfig } from './types'
+import { createContext } from '@semantic-api/api'
 import { connectDatabase } from '@semantic-api/api'
-import { defaultApiConfig, defaultAccessControl } from './constants'
+import { defaultApiConfig } from './constants'
 import { warmup } from './warmup'
 import getRoutes from './routes'
 
-export const init = async <
-  TCollections extends Record<string, Collection>,
-  TAlgorithms extends Record<string, Algorithm>
->(_config?: Config<TCollections, TAlgorithms>): Promise<Hapi.Server> => {
-  const config = _config || {} as unknown as NonNullable<typeof _config>
-  const apiConfig = Object.assign({}, defaultApiConfig)
-  const accessControl = Object.assign({}, defaultAccessControl)
-
-  Object.assign(apiConfig, config?.apiConfig||{})
-  Object.assign(accessControl, config?.accessControl||{})
-
-  Object.assign(config, {
-    apiConfig,
-    accessControl
-  })
+export const init = async (_apiConfig?: ApiConfig): Promise<Hapi.Server> => {
+  const apiConfig: ApiConfig = {}
+  Object.assign(apiConfig, defaultApiConfig)
+  Object.assign(apiConfig, _apiConfig)
 
   const context = await createContext({
-    config
-  })
-
-  Object.assign(context, {
-    apiConfig,
-    accessControl
+    apiConfig
   })
 
   console.time('warmup')

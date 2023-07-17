@@ -1,4 +1,4 @@
-import { Description } from '@semantic-api/types'
+import type { Description } from '@semantic-api/types'
 import type { AccessControl } from '@semantic-api/access-control'
 import type { createModel } from '../collection/schema'
 import type { FunctionPath } from './resource'
@@ -12,40 +12,19 @@ export type CollectionStructure = {
   functions?: Record<string, (...args: any[]) => any>
 }
 
-export type Collection = () => CollectionStructure|Promise<CollectionStructure>
-
-export type Algorithm = () => {
+export type AlgorithmStructure = {
   functions?: Record<string, (...args: any[]) => any>
 }
 
-export type Config<
-  Collections extends Record<string, Collection>,
-  Algorithms extends Record<string, Algorithm>
-> = {
-  collections?: Collections
-  algorithms?: Algorithms
-  apiConfig?: ApiConfig
-  accessControl?: AccessControl<Collections, Algorithms>
-}
+export type Collection = () => CollectionStructure|Promise<CollectionStructure>
+export type Algorithm = () => AlgorithmStructure|Promise<AlgorithmStructure>
 
-export type DecodedToken = {
-  user: User
+export type DecodedToken<TAccessControl extends AccessControl<any, any>=any> = {
+  user: Omit<User, 'roles'> & {
+    roles: Array<NonNullable<TAccessControl['availableRoles']>>
+  }
   extra?: Record<string, any>
   allowed_functions?: Array<FunctionPath>
   key_id?: string
   key_name?: string
-}
-
-export type ApiConfig = {
-  port?: number
-  modules?: Array<string> // experimental
-  group?: string
-
-  allowSignup?: boolean
-  signupDefaults?: {
-    roles: Array<string>
-    active: boolean
-  }
-
-  populateUserExtra?: Array<string>
 }
