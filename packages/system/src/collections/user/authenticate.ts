@@ -82,12 +82,6 @@ const authenticate = async (props: Props, context: Context<typeof description, a
       virtuals: true
     })
 
-  context.log('successful authentication', {
-    email: leanUser.email,
-    roles: leanUser.roles,
-    _id: user._id
-  })
-
   const tokenContent = {
     user: {
       _id: leanUser._id,
@@ -95,14 +89,28 @@ const authenticate = async (props: Props, context: Context<typeof description, a
     },
   }
 
-  const response = {
-    user: leanUser,
+  if( context.apiConfig.logSuccessfulAuthentications ) {
+    context.log('successful authentication', {
+      email: leanUser.email,
+      roles: leanUser.roles,
+      _id: user._id
+    })
+  }
+
+  if( context.apiConfig.tokenUserProperties ) {
+    const pick = (obj: any, properties: Array<string>) => properties.reduce((a, prop) => ({
+      ...a,
+      [prop]: obj[prop]
+    }), {})
+
+    Object.assign(tokenContent.user, pick(leanUser, context.apiConfig.tokenUserProperties))
+
   }
 
   const token = await Token.sign(tokenContent) as string
 
   return {
-    ...response,
+    user: leanUser,
     token: {
       type: 'bearer',
       token

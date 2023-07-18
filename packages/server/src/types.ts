@@ -15,6 +15,7 @@ export type ApiConfig = {
     active: boolean
   }
 
-  populateUserExtra?: Array<string>
+  logSuccessfulAuthentications?: boolean
+  tokenUserProperties?: Array<string>
 }
 // #endregion ApiConfig
