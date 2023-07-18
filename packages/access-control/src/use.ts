@@ -48,7 +48,7 @@ export const useAccessControl = <TDescription extends Description>(context: Cont
     return newPayload
   }
 
-  const beforeWrite = async <Payload>(payload: Payload, context: Context<any, any, any>): Promise<WritePayload> => {
+  const beforeWrite = async <Payload extends Partial<WritePayload>>(payload: Payload, context: Context<any, any, any>): Promise<WritePayload> => {
     const newPayload = Object.assign({ what: {} }, payload) as unknown as WritePayload
 
     if( accessControl.layers?.write && context.token ) {
