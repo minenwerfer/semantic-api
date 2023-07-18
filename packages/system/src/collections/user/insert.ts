@@ -1,13 +1,9 @@
 import { type Context, useFunctions } from '@semantic-api/api'
 import * as bcrypt from 'bcrypt'
-import description, { type User } from './description'
-import { saveWithExtra } from './library'
+import { description, type User } from './description'
 
 type Props = {
-  what: Omit<Partial<User>, 'self_registered'> & {
-    self_registered: true
-    extra: Record<string, any>
-  }
+  what: Partial<User>
 }
 
 type Return = Promise<Partial<User>>
@@ -52,10 +48,7 @@ const insert = async (props: Props, context: Context<typeof description, any, an
   }
 
   const { insert } = useFunctions<User, typeof description>()
-
-  return props.what.extra
-    ? saveWithExtra(props, context)
-    : insert(props, context) as Promise<User>
+  return insert(props, context)
 }
 
 export default insert

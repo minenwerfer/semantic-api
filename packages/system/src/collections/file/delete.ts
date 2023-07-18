@@ -1,6 +1,6 @@
 import { unlink } from 'fs/promises'
 import { type Context, useFunctions } from '@semantic-api/api'
-import description, { type File } from './description'
+import { description, type File } from './description'
 
 type Props = {
   filters: {

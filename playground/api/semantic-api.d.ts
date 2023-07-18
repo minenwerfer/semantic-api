@@ -3,18 +3,18 @@ import type { Description } from '@semantic-api/types'
 import { Either } from '@semantic-api/common'
 
 declare global {
-  type UserCollections = typeof import('./src').collections
   type SystemCollections = typeof import('@semantic-api/system/collections')
+  type UserCollections = typeof import('./src').collections
 
-  type UserAlgorithms = typeof import('./src').algorithms
   type SystemAlgorithms = typeof import('@semantic-api/system/algorithms')
+  type UserAlgorithms = typeof import('./src').algorithms
 
   type Collections = {
-    [K in keyof (UserCollections & SystemCollections)]: Awaited<ReturnType<(UserCollections & SystemCollections)[K]>>
+    [K in keyof (SystemCollections & UserCollections)]: Awaited<ReturnType<(SystemCollections & UserCollections)[K]>>
   }
 
   type Algorithms = {
-    [K in keyof (UserAlgorithms & SystemAlgorithms)]: Awaited<ReturnType<(UserAlgorithms & SystemAlgorithms)[K]>>
+    [K in keyof (SystemAlgorithms & UserAlgorithms)]: Awaited<ReturnType<(SystemAlgorithms & UserAlgorithms)[K]>>
   }
 
   type Context<TDescription extends Description=any>

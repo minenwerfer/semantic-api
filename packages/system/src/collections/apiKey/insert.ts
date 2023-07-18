@@ -1,5 +1,5 @@
 import { Token, type Context } from '@semantic-api/api'
-import description, { type ApiKey } from './description'
+import { description, type ApiKey } from './description'
 
 type Props = {
   what: Partial<ApiKey>

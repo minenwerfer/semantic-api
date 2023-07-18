@@ -1,7 +1,7 @@
 import { createHash } from 'crypto'
 import { writeFile, unlink } from 'fs/promises'
 import { type Context, useFunctions } from '@semantic-api/api'
-import description, { File } from './description'
+import { description, type File } from './description'
 
 type Props = {
   what: { content: string } & Pick<File,

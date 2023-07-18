@@ -1,8 +1,6 @@
 import type { Context } from '@semantic-api/api'
 import { Token, makeException } from '@semantic-api/api'
-import description, { type User } from './description'
-
-import { userExtraModel } from './library'
+import { description, type User } from './description'
 
 type Props = {
   email: string
@@ -17,7 +15,6 @@ type Return = {
     | 'roles'
     | 'active'
   >
-  extra: Record<string, any>
   token: {
     type: 'bearer'
     token: string
@@ -48,7 +45,6 @@ const authenticate = async (props: Props, context: Context<typeof description, a
         roles: ['root'],
         active: true,
       },
-      extra: {},
       token: {
         type: 'bearer',
         token
@@ -97,27 +93,11 @@ const authenticate = async (props: Props, context: Context<typeof description, a
       _id: leanUser._id,
       roles: leanUser.roles
     },
-    extra: {}
   }
 
   const response = {
     user: leanUser,
-    extra: {},
   }
-
-  if( context.apiConfig.populateUserExtra ) {
-    const UserExtra = await userExtraModel()
-    const projection = context.apiConfig.populateUserExtra
-      .reduce((a, f) => ({ ...a, [f]: 1 }), {})
-
-    const userExtra = await UserExtra
-      .findOne({ owner: leanUser._id }, projection)
-      .lean() || {}
-
-    tokenContent.extra = userExtra
-    response.extra = userExtra
-  }
-
 
   const token = await Token.sign(tokenContent) as string
 

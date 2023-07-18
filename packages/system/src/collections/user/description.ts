@@ -1,9 +1,9 @@
-import { defineDescription, Reference } from '@semantic-api/api'
+import { defineDescription } from '@semantic-api/api'
 
 export type User = Omit<typeof User, 'roles'> & {
   roles: Array<string>
   testPassword?(password: string): boolean
-  owner: Reference
+  owner: User
 }
 
 export const [User, description] = defineDescription({
@@ -109,10 +109,6 @@ export const [User, description] = defineDescription({
     'ui:spawnEdit': {
       name: 'Editar',
       icon: 'edit',
-    },
-    'ui:spawnExtra': {
-      name: 'Editar detalhes',
-      icon: 'edit'
     },
     'route:dashboard-user-changepass': {
       name: 'Mudar senha',

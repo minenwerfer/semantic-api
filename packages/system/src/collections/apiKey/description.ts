@@ -1,5 +1,7 @@
 import { defineDescription } from '@semantic-api/api'
 
+export type ApiKey = typeof ApiKey
+
 export const [ApiKey, description] = defineDescription({
   $id: 'apiKey',
   owned: true,

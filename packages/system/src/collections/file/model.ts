@@ -1,6 +1,6 @@
 import { unlink } from 'fs/promises'
 import { createModel } from '@semantic-api/api'
-import { File, default as FileDescription } from './description'
+import { description, type File } from './description'
 
 const link = (_id: File['_id']) => `${process.env.API_URL}/file/${_id}`
 
@@ -12,7 +12,7 @@ const deleteFile = async (path: string) => {
   return unlink(path).catch(() => null)
 }
 
-export default () => createModel(FileDescription, {
+export default () => createModel(description, {
   schemaCallback: (schema) => {
     schema.pre('deleteOne', async function() {
       const doc = await this.model

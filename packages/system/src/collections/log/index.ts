@@ -1,10 +1,10 @@
 import { defineCollection, useFunctions } from '@semantic-api/api'
-import description, { type Log } from './description'
+import { description, Log } from './description'
 
-const { get, getAll, insert } = useFunctions<Log, typeof description>()
+const { get, getAll, insert } = useFunctions<typeof Log, typeof description>()
 
 export default defineCollection(() => ({
-  item: {} as Log,
+  item: Log,
   description,
   functions: {
     get,

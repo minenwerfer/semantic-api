@@ -12,7 +12,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./collections": "./dist/collections/index.js",
-    "./algorithms": "./dist/algorithms/index.js"
+    "./algorithms": "./dist/algorithms/index.js",
+    "./*": "./dist/*"
   },
   "keywords": [],
   "author": "",

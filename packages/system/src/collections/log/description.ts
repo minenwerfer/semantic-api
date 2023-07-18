@@ -1,6 +1,6 @@
 import { defineDescription } from '@semantic-api/api'
 
-export const [File, description] = defineDescription({
+export const [Log, description] = defineDescription({
   $id: 'log',
   properties: {
     owner: {

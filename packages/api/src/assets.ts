@@ -5,7 +5,9 @@ import { isGranted, ACErrors, type AccessControl } from '@semantic-api/access-co
 const __cachedResources: Awaited<ReturnType<typeof internalGetResources>> & {
   _cached: boolean
 } = {
-  _cached: false
+  _cached: false,
+  collections: {},
+  algorithms: {}
 }
 
 export enum ResourceErrors {
@@ -23,14 +25,13 @@ const internalGetResources = async () => {
   // @ts-ignore
   const { collections, algorithms } = await import('@semantic-api/system')
   const userConfig = await import(process.cwd() + '/index.js')
-  const resources: typeof userConfig = {
-    collections: {},
-    algorithms: {}
+  const resources = {
+    collections,
+    algorithms
   }
 
-  Object.assign(resources, userConfig)
-  Object.assign(resources.collections, collections)
-  Object.assign(resources.algorithms, algorithms)
+  Object.assign(resources.collections, userConfig.collections)
+  Object.assign(resources.algorithms, userConfig.algorithms)
 
   return resources
 }

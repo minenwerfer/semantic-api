@@ -19,9 +19,6 @@ export const baseRoles = <const>{
           'ping',
           'upload'
         ]
-      },
-      userExtra: {
-        grantEverything: true
       }
     }
   },

@@ -1,11 +1,11 @@
 import { defineCollection, useFunctions } from '@semantic-api/api'
-import description, { type ApiKey } from './description'
+import { description, ApiKey } from './description'
 import insert from './insert'
 
 const { getAll } = useFunctions<ApiKey, typeof description>()
 
 export default defineCollection(() => ({
-  item: {} as ApiKey,
+  item: ApiKey,
   description,
   functions: {
     insert,

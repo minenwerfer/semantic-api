@@ -1,5 +1,16 @@
-import { createContext } from '@semantic-api/api'
-import { description, Pet } from './description'
+import { defineDescription, createContext } from '@semantic-api/api'
+
+const [Pet, description] = defineDescription({
+  $id: 'pet',
+  properties: {
+    name: {
+      type: 'string'
+    },
+    favorite_toy: {
+      type: 'string'
+    },
+  }
+})
 
 export default () => ({
   item: Pet,

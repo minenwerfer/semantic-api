@@ -1,14 +1,14 @@
 import { defineCollection, useFunctions } from '@semantic-api/api'
-import description, { type File } from './description'
+import { description, File } from './description'
 import model from './model'
 import insert from './insert'
 import download from './download'
 import _delete from './delete'
 
-const { get } = useFunctions<File, typeof description>()
+const { get } = useFunctions<typeof File, typeof description>()
 
 export default defineCollection(() => ({
-  item: {} as File,
+  item: File,
   description,
   model: model(),
   functions: {

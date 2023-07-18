@@ -1,5 +1,7 @@
 import { defineDescription } from '@semantic-api/api'
 
+export type File = typeof File
+
 export const [File, description] = defineDescription({
   $id: 'file',
   owned: true,

@@ -1,17 +1,20 @@
 import { initWithDatabase } from '@semantic-api/server'
 import { defineAccessControl } from '@semantic-api/access-control'
 
-import person from './person'
-import pet from './pet'
-import algorithm from './algorithm'
+import person from './collections/person'
+import pet from './collections/pet'
+import user from './collections/user'
+
+import hello from './algorithms/hello'
 
 export const collections = {
   person,
-  pet
+  pet,
+  user
 }
 
 export const algorithms = {
-  algorithm
+  hello
 }
 
 export const accessControl = defineAccessControl<Collections, Algorithms>()({
@@ -23,9 +26,14 @@ export const accessControl = defineAccessControl<Collections, Algorithms>()({
             'getAll'
           ]
         },
-        algorithm: {
+        user: {
           functions: [
-            'hello'
+            'test',
+          ]
+        },
+        hello: {
+          functions: [
+            'world'
           ]
         }
       }
