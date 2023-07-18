@@ -13,7 +13,7 @@ type Props = {
 }
 
 const insert = async (props: Props, context: Context<typeof description, any, any>) => {
-  const { insert } = useFunctions<File, typeof description>()
+  const { insert } = useFunctions<File, typeof description>()()
   const what = Object.assign({}, props.what)
   what.owner = context.token?.user._id
   const { STORAGE_PATH } = process.env

@@ -3,18 +3,18 @@ import { description, File } from './description'
 import model from './model'
 import insert from './insert'
 import download from './download'
-import _delete from './delete'
-
-const { get } = useFunctions<typeof File, typeof description>()
+import remove from './remove'
 
 export default defineCollection(() => ({
   item: File,
   description,
   model: model(),
   functions: {
-    get,
+    ...useFunctions<typeof File, typeof description>()([
+      'get'
+    ]),
     insert,
     download,
-    delete: _delete
+    remove
   }
 }))

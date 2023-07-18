@@ -3,7 +3,7 @@ import { type Context, useFunctions } from '@semantic-api/api'
 import { description, type File } from './description'
 
 const download = async (_id: string, context: Context<typeof description, any, any>) => {
-  const { get, } = useFunctions<File, typeof description>()
+  const { get } = useFunctions<File, typeof description>()()
   const file = await get({
     filters: {
       _id,

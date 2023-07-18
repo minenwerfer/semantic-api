@@ -1,7 +1,5 @@
 import { defineDescription, useFunctions } from '@semantic-api/api'
 
-const { getAll, insert } = useFunctions<typeof Person, typeof description>()
-
 const [Person, description] = defineDescription({
   $id: 'person',
   required: [],
@@ -23,8 +21,8 @@ const [Person, description] = defineDescription({
 export default () => ({
   item: Person,
   description,
-  functions: {
-    getAll,
-    insert
-  },
+  functions: useFunctions<typeof Person, typeof description>()([
+    'getAll',
+    'insert'
+  ])
 })

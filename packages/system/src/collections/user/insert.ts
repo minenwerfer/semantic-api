@@ -47,7 +47,7 @@ const insert = async (props: Props, context: Context<typeof description, any, an
     delete props.what.password
   }
 
-  const { insert } = useFunctions<User, typeof description>()
+  const { insert } = useFunctions<User, typeof description>()()
   return insert(props, context)
 }
 

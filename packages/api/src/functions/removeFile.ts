@@ -4,7 +4,7 @@ import type { UploadAuxProps } from './types'
 import { checkImmutability } from '@semantic-api/access-control'
 import { createContext } from '../context'
 
-export const deleteFile = <
+export const removeFile = <
   TDescription extends Description,
   _TDocument extends MongoDocument
 >() => async (payload: UploadAuxProps & { filters: { _id: string } }, context: Context<TDescription, Collections, Algorithms>) => {
@@ -28,7 +28,7 @@ export const deleteFile = <
     }
   )
 
-  return context.collections.file.functions.delete(props, await createContext({
+  return context.collections.file.functions.remove(props, await createContext({
     resourceName: 'file',
     parentContext: context
   }))

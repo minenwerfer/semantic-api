@@ -8,15 +8,15 @@ type Props = {
   }
 }
 
-const _delete = async (props: Props, context: Context<typeof description, any, any>) => {
-  const { delete: _delete } = useFunctions<File, typeof description>()
+const remove = async (props: Props, context: Context<typeof description, any, any>) => {
+  const { remove } = useFunctions<File, typeof description>()()
   const file = await context.collection.functions.get(props, context)
   if( !file ) {
     throw new Error('file not found')
   }
 
   await unlink(file.absolute_path!).catch(() => null)
-  return _delete(props, context)
+  return remove(props, context)
 }
 
-export default _delete
+export default remove
