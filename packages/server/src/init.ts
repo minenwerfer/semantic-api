@@ -8,10 +8,7 @@ import { defaultApiConfig } from './constants'
 import { warmup } from './warmup'
 import getRoutes from './routes'
 
-// #region init
-export const init = async (_apiConfig?: ApiConfig): Promise<Hapi.Server> =>
-// #endregion init
-  {
+export const init = async (_apiConfig?: ApiConfig): Promise<Hapi.Server> => {
   const apiConfig: ApiConfig = {}
   Object.assign(apiConfig, defaultApiConfig)
   Object.assign(apiConfig, _apiConfig)

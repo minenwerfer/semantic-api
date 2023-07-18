@@ -15,6 +15,7 @@ type Models = {
   [K in keyof Collections]: CollectionModel<Collections[K]['description']>
 }
 
+// #region ContextOptions
 export type ContextOptions<
   TCollections extends Collections,
   TAlgorithms extends Algorithms
@@ -24,7 +25,9 @@ export type ContextOptions<
   resourceType?: ResourceType
   resourceName?: keyof TCollections | keyof TAlgorithms
 }
+// #endregion ContextOptions
 
+// #region Context
 export type Context<
   TDescription extends Description,
   TCollections extends Collections,
@@ -45,6 +48,7 @@ export type Context<
   apiConfig: ApiConfig
   accessControl: TAccessControl
 }
+// #endregion Context
 
 export const internalCreateContext = async <
   TCollections extends Collections,
@@ -82,7 +86,7 @@ export const internalCreateContext = async <
     apiConfig: {},
 
     validate: validateFromDescription,
-    log: async (message: string, details?: string) => {
+    log: async (message: string, details?: any) => {
       return collections.log().functions.insert({
         what: {
           message,
