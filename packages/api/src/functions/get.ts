@@ -19,5 +19,5 @@ export const get = <
   return context.model.findOne(
     filters,
     normalizeProjection(project, context.description)
-  ).lean(LEAN_OPTIONS) as Promise<TDocument>
+  ).lean(LEAN_OPTIONS) as Promise<TDocument|null>
 }
