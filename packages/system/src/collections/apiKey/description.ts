@@ -1,11 +1,8 @@
-import { Schema, defineDescription } from '@semantic-api/api'
+import { defineDescription } from '@semantic-api/api'
 
-export type ApiKey = Schema<typeof schema>
-
-const schema = <const>{
+export const [ApiKey, description] = defineDescription({
   $id: 'apiKey',
   owned: true,
-  strict: true,
   immutable: [
     'name',
     'content',
@@ -33,10 +30,7 @@ const schema = <const>{
       format: 'date-time',
       s$meta: true
     }
-  }
-}
-
-export default defineDescription(schema, {
+  },
   icon: 'brackets-curly',
   presets: [
     'crud'

@@ -1,8 +1,6 @@
-import { defineDescription, Schema } from '@semantic-api/api'
+import { defineDescription } from '@semantic-api/api'
 
-export type ResourceUsage = Schema<typeof schema>
-
-const schema = <const>{
+export const [ResourceUsage, description] = defineDescription({
   $id: 'resourceUsage',
   properties: {
     hits: {
@@ -13,6 +11,5 @@ const schema = <const>{
       format: 'date-time'
     }
   }
-}
+})
 
-export default defineDescription(schema)

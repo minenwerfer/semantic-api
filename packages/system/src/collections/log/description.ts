@@ -1,8 +1,6 @@
-import { defineDescription, Schema } from '@semantic-api/api'
+import { defineDescription } from '@semantic-api/api'
 
-export type Log = Schema<typeof schema>
-
-const schema = <const>{
+export const [File, description] = defineDescription({
   $id: 'log',
   properties: {
     owner: {
@@ -22,10 +20,7 @@ const schema = <const>{
       type: 'string',
       format: 'date-time'
     }
-  }
-}
-
-export default defineDescription(schema, {
+  },
   icon: 'search-alt',
   presets: [
     'view'

@@ -1,8 +1,6 @@
-import { defineDescription, Schema } from '@semantic-api/api'
+import { defineDescription } from '@semantic-api/api'
 
-export type File = Schema<typeof schema>
-
-const schema = <const>{
+export const [File, description] = defineDescription({
   $id: 'file',
   owned: true,
   alwaysOwned: true,
@@ -51,9 +49,6 @@ const schema = <const>{
       s$meta: true
     }
   },
-}
-
-export default defineDescription(schema, {
   actions: {
     deleteAll: {
       name: 'Remover',

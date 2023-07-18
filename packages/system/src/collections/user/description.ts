@@ -1,12 +1,12 @@
-import { defineDescription, Schema, Reference } from '@semantic-api/api'
+import { defineDescription, Reference } from '@semantic-api/api'
 
-export type User = Omit<Schema<typeof schema>, 'roles'> & {
+export type User = Omit<typeof User, 'roles'> & {
   roles: Array<string>
   testPassword?(password: string): boolean
   owner: Reference
 }
 
-const schema = <const>{
+export const [User, description] = defineDescription({
   $id: 'user',
   required: [
     'full_name',
@@ -63,7 +63,7 @@ const schema = <const>{
     },
     picture: {
       $ref: 'file',
-      accept: [
+      s$accept: [
         'image/*',
       ]
     },
@@ -92,10 +92,7 @@ const schema = <const>{
       format: 'date-time',
       s$meta: true
     },
-  }
-}
-
-export default defineDescription(schema, {
+  },
   presets: [
     'crud',
     'view',
@@ -146,11 +143,13 @@ export default defineDescription(schema, {
     'last_name'
   ],
   formLayout: {
-    first_name: {
-      span: 3,
-    },
-    last_name: {
-      span: 3
+    fields: {
+      first_name: {
+        span: 3,
+      },
+      last_name: {
+        span: 3
+      }
     }
   }
 })
