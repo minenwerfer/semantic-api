@@ -73,7 +73,7 @@ export const getResourceAsset = async <
     switch( assetName ) {
       case 'model': {
         if( !asset ) {
-          const description = unsafe(await getResourceAsset(resourceName, 'description')) as any
+          const description = unsafe(await getResourceAsset(resourceName, 'description'), `${String(resourceName)} description`) as any
           const { createModel } = await import('./collection/schema')
           return createModel(description)
         }

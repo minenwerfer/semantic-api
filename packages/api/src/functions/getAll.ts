@@ -2,6 +2,7 @@ import type { Description } from '@semantic-api/types'
 import type { Context, MongoDocument } from '../types'
 import type { Filters, Projection, QuerySort } from './types'
 import { useAccessControl } from '@semantic-api/access-control'
+import { unsafe } from '..'
 import { LEAN_OPTIONS, DEFAULT_SORT } from '../constants'
 import { normalizeProjection } from '../collection/utils'
 
@@ -32,7 +33,10 @@ export const getAll = <
     ])
 
   const parsedFilters = Object.fromEntries(entries) || {}
-  const query = await accessControl.beforeRead({ filters: parsedFilters }, context)
+  const query = unsafe(await accessControl.beforeRead({
+    ...payload,
+    filters: parsedFilters
+  }))
 
   const sort = payload?.sort
     ? payload.sort

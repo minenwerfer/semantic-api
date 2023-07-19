@@ -49,22 +49,22 @@ export type FormLayoutField<TDescription extends Description> = {
 export type TableLayout<TDescription extends Description> = {
   actions: Partial<Record<keyof TDescription['individualActions'], {
     button?: boolean
-    condition?: Condition<TDescription>
+    if?: Condition<TDescription>
   }>>
 }
 
 export type FiltersPreset<TDescription extends Description> = {
   name?: string
   icon?: string
-  filters: Partial<Record<keyof TDescription['properties'], any>>
+  filters: Partial<Record<keyof TDescription['properties'] | `$${string}`, any>>
   table?: Array<keyof TDescription['properties']>
   badgeFunction?: string
 }
 
 export type CollectionOptions<TDescription extends Description> = {
   queryPreset?: {
-    filters?: Record<keyof TDescription['properties'], any>
-    sort?: Record<keyof TDescription['properties'], any>
+    filters?: Partial<Record<keyof TDescription['properties'] | `$${string}`, any>>
+    sort?: Partial<Record<keyof TDescription['properties'], any>>
   }
 }
 

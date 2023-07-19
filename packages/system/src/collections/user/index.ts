@@ -5,10 +5,12 @@ import authenticate from './authenticate'
 import insert from './insert'
 import ping from './ping'
 
+export { schemaCallback as userSchemaCallback } from './model'
+
 export default defineCollection(async () => ({
   item: User,
   description,
-  model: model(),
+  model,
   functions: {
     ...useFunctions<typeof User, typeof description>()([
       'get',

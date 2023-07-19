@@ -13,12 +13,12 @@ const getFunctions = <
   removeAll: collFunctions.removeAll<TDescription, TDocument>(),
   removeFile: collFunctions.removeFile<TDescription, TDocument>(),
   insert: collFunctions.insert<TDescription, TDocument>(),
-  modify: collFunctions.modify<TDescription, TDocument>(),
-  modifyAll: collFunctions.modifyAll<TDescription, TDocument>(),
   upload: collFunctions.upload<TDescription, TDocument>(),
 })
 
-type SelectFunctions<TSelectedFunctions extends Array<keyof typeof collFunctions>> = TSelectedFunctions extends Array<infer K>
+type SelectFunctions<
+  TSelectedFunctions extends Array<keyof typeof collFunctions>
+> = TSelectedFunctions extends Array<infer K>
   ? K
   : keyof typeof collFunctions
 
@@ -30,7 +30,6 @@ export const useFunctions = <
 ): {
   [P in SelectFunctions<TSelectedFunctions>]: ReturnType<typeof getFunctions<TDocument, TDescription>>[P]
 } => {
-
   const functions = getFunctions<TDocument, TDescription>()
 
   if( selectedFunctions ) {

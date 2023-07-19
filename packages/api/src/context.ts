@@ -1,8 +1,7 @@
 import type { Description } from '@semantic-api/types'
 import type { AccessControl } from '@semantic-api/access-control'
-import type { ApiConfig } from '@semantic-api/server'
 import type { Schema } from './collection'
-import type { FunctionPath, DecodedToken, ResourceType } from './types'
+import type { FunctionPath, DecodedToken, ResourceType, ApiConfig } from './types'
 import mongoose, { type Model } from 'mongoose'
 import { validateFromDescription } from './collection/validate'
 import { limitRate, type RateLimitingParams } from './rateLimiting'
@@ -24,6 +23,7 @@ export type ContextOptions<
   parentContext?: Context<any, TCollections, TAlgorithms>,
   resourceType?: ResourceType
   resourceName?: keyof TCollections | keyof TAlgorithms
+  token?: DecodedToken
 }
 // #endregion ContextOptions
 
@@ -33,7 +33,12 @@ export type Context<
   TCollections extends Collections,
   TAlgorithms extends Algorithms,
   TAccessControl extends AccessControl<TCollections, TAlgorithms, TAccessControl>=any
-> = Omit<Awaited<ReturnType<typeof internalCreateContext>>, 'collection' | 'collections'> & {
+> = Omit<Awaited<ReturnType<typeof internalCreateContext>>,
+  'resourceName'
+  | 'collection'
+  | 'collections'
+  | 'accessControl'
+> & {
   description: TDescription
   model:  CollectionModel<TDescription>
   collection: TCollections[TDescription['$id']]
@@ -53,17 +58,26 @@ export type Context<
 export const internalCreateContext = async <
   TCollections extends Collections,
   TAlgorithms extends Algorithms
->(options?: Pick<ContextOptions<TCollections, TAlgorithms>, 'resourceName' | 'resourceType'>) => {
+>(options?: Pick<ContextOptions<TCollections, TAlgorithms>,
+  'resourceName'
+  | 'resourceType'
+  | 'apiConfig'
+  | 'token'
+>) => {
   const {
     resourceName,
     resourceType = 'collection',
+    apiConfig,
+    token
+
   } = options||{}
 
   const { getResources, getResourceAsset, getAccessControl } = await import('./assets')
   const { collections, algorithms } = await getResources()
   const accessControl = await getAccessControl()
 
-  return {
+  const context = {
+    resourceName,
     accessControl,
     description: (resourceName && resourceType === 'collection') && unsafe(await getResourceAsset(resourceName, 'description')),
     model: (resourceName && resourceType === 'collection') && unsafe(await getResourceAsset(resourceName, 'model'), resourceName),
@@ -83,7 +97,6 @@ export const internalCreateContext = async <
         return mongoose.models[String(key)]
       }
     }),
-    apiConfig: {},
 
     validate: validateFromDescription,
     log: async (message: string, details?: any) => {
@@ -92,8 +105,7 @@ export const internalCreateContext = async <
           message,
           details,
           context: resourceName,
-          // @ts-ignore
-          owner: options?.parentContext.token?.user._id
+          owner: token?.user?._id
         }
       }, {
         // @ts-ignore
@@ -107,6 +119,16 @@ export const internalCreateContext = async <
       return limitRate(options?.parentContext, params)
     }
   }
+
+  if( token ) {
+    Object.assign(context, { token })
+  }
+
+  if( apiConfig ) {
+    Object.assign(context, { apiConfig })
+  }
+
+  return context
 }
 
 export const createContext = async <
@@ -114,19 +136,14 @@ export const createContext = async <
   TCollections extends Collections,
   TAlgorithms extends Algorithms
 >(options?: ContextOptions<TCollections, TAlgorithms>) => {
-  const {
-    parentContext = {},
-    apiConfig = {},
-    resourceName = null
-  } = options||{}
-
- const context = Object.assign({}, parentContext)
+ const context = Object.assign({}, options?.parentContext || {})
  Object.assign(context, await internalCreateContext<TCollections, TAlgorithms>(options))
 
- Object.assign(context, {
-   apiConfig,
-   resourceName
- })
+ if( options?.parentContext ) {
+   Object.assign(context, {
+     apiConfig: options.parentContext.apiConfig || {}
+   })
+ }
 
  return context as Context<TDescription, TCollections, TAlgorithms>
 }

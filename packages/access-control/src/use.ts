@@ -1,27 +1,52 @@
-import { deepMerge } from '@semantic-api/common'
-import type { Context } from '@semantic-api/api'
+import { deepMerge, right, isLeft, unwrapEither } from '@semantic-api/common'
+import type { Context, CollectionStructure, AlgorithmStructure } from '@semantic-api/api'
 import type { Description } from '@semantic-api/types'
-import * as baseControl from './baseLayers'
+import type { ReadPayload, WritePayload, AccessControlLayer, AccessControlLayerProps } from './layers/types'
+import type { AccessControl } from './types'
 
-type ReadPayload = {
-  filters: Record<string, any>
-  sort: Record<string, any>
-  limit: number
+import {
+  checkImmutability,
+  checkOwnershipRead,
+  checkOwnershipWrite
+
+} from './layers'
+
+const chainFunctions = <TPayload extends Partial<ReadPayload | WritePayload>>() => async <
+  TFunction extends AccessControlLayer<any, any, any>|undefined,
+  TProps extends AccessControlLayerProps<TPayload>
+>(context: Context<any, any, any>, _props: TProps, ...functions: TFunction[]) => {
+  const props = Object.assign({ filters: {} }, _props)
+
+  for( const fn of functions ) {
+    if( !fn ) {
+      continue
+    }
+
+    const resultEither = await fn(context, props)
+    if( isLeft(resultEither) ) {
+      return resultEither
+    }
+
+    const result = unwrapEither(resultEither)
+    Object.assign(props.payload, result)
+  }
+
+  return right(props.payload)
 }
 
-type WritePayload = {
-  what: Record<string, any>
-  filters: Record<string, any>
-}
-
-export const useAccessControl = <TDescription extends Description>(context: Context<TDescription, any, any>) => {
+export const useAccessControl = <
+  TDescription extends Description,
+  TCollections extends Record<string, CollectionStructure>,
+  TAlgorithms extends Record<string, AlgorithmStructure>,
+  TAccessControl extends AccessControl<TCollections, TAlgorithms, TAccessControl>=any
+>(context: Context<TDescription, TCollections, TAlgorithms, TAccessControl>) => {
   const options = context.description.options
     ? Object.assign({}, context.description.options)
     : {}
 
   const accessControl = context?.accessControl||{}
 
-  const beforeRead = async <Payload extends Partial<ReadPayload>>(payload: Payload, context: Context<any, any, any>): Promise<ReadPayload> => {
+  const beforeRead = async <const Payload extends Partial<ReadPayload>>(payload: Payload) => {
     const newPayload = Object.assign({}, {
       filters: payload?.filters||{},
       sort: payload?.sort,
@@ -29,34 +54,41 @@ export const useAccessControl = <TDescription extends Description>(context: Cont
     }) as ReadPayload
 
     if( options.queryPreset ) {
-      deepMerge(
+      Object.assign(newPayload, deepMerge(
         newPayload,
         options.queryPreset
-      )
+      ))
     }
 
-    if( accessControl.layers?.read && context.token ) {
-      await accessControl.layers?.read(context, { payload: newPayload })
-    }
-
-    await baseControl.read!(context, { payload: newPayload })
-
-    if( newPayload.limit > 150 ) {
+    if( newPayload.limit||0 > 150 ) {
       newPayload.limit = 150
     }
 
-    return newPayload
-  }
-
-  const beforeWrite = async <Payload extends Partial<WritePayload>>(payload: Payload, context: Context<any, any, any>): Promise<WritePayload> => {
-    const newPayload = Object.assign({ what: {} }, payload) as unknown as WritePayload
-
-    if( accessControl.layers?.write && context.token ) {
-      await accessControl.layers?.write(context, { payload: newPayload })
+    const props = {
+      payload: newPayload
     }
 
-    await baseControl.write!(context, { payload: newPayload })
-    return newPayload
+    return chainFunctions<Payload>()(
+      context,
+      props as any,
+      (accessControl.layers?.read && context.token) && accessControl.layers.read,
+      checkOwnershipRead
+    )
+  }
+
+  const beforeWrite = async <const Payload extends Partial<WritePayload>>(payload: Payload) => {
+    const newPayload = Object.assign({ what: {} }, payload)
+    const props = {
+      payload: newPayload
+    }
+
+    return chainFunctions<Payload>()(
+      context,
+      props,
+      (accessControl.layers?.write && context.token) && accessControl.layers.write,
+      checkOwnershipWrite,
+      checkImmutability
+    )
   }
 
   return {

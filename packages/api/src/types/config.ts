@@ -34,3 +34,19 @@ export type DecodedToken<TAccessControl extends AccessControl<any, any>=any> = {
   key_id?: string
   key_name?: string
 }
+
+// #region ApiConfig
+export type ApiConfig = {
+  port?: number
+  group?: string
+
+  allowSignup?: boolean
+  signupDefaults?: {
+    roles: Array<string>
+    active: boolean
+  }
+
+  logSuccessfulAuthentications?: boolean
+  tokenUserProperties?: Array<string>
+}
+// #endregion ApiConfig

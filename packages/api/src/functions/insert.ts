@@ -1,21 +1,31 @@
 import type { Description } from '@semantic-api/types'
 import type { Context, MongoDocument } from '../types'
-import type { Projection } from './types'
+import type { Projection, What } from './types'
 import { LEAN_OPTIONS } from '../constants'
 import { useAccessControl } from '@semantic-api/access-control'
+import { isError, unpack } from '..'
 import { normalizeProjection, prepareInsert } from '../collection/utils'
 
 export const insert = <
   TDescription extends Description,
   TDocument extends MongoDocument
 >() => async (payload: {
-  what: Partial<TDocument>,
+  what: What<TDocument>,
   project?: Projection<TDocument>
 }, context: Context<TDescription, Collections, Algorithms>) => {
   const accessControl = useAccessControl(context)
 
-  const { _id } = payload.what
-  const { what } = await accessControl.beforeWrite(payload, context)
+  const queryEither = await accessControl.beforeWrite(payload)
+  if( isError(queryEither) ) {
+    const error = unpack(queryEither)
+    throw new Error(error)
+  }
+
+  const { what } = payload
+  const { _id } = what
+
+  throw new Error('tewrwfda')
+
   const readyWhat = prepareInsert(what, context.description)
   const projection = payload.project
     && normalizeProjection(payload.project, context.description)

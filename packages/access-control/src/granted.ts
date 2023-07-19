@@ -23,7 +23,7 @@ const applyInheritance = async (accessControl: AccessControl<any, any>, targetRo
         throw new Error(`inherit: role ${roleName} doesnt exist`)
       }
 
-      deepMerge(role, await applyInheritance(accessControl, parentRole))
+      Object.assign(role, deepMerge(role, await applyInheritance(accessControl, parentRole)))
     }
   }
 

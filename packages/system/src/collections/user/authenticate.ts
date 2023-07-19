@@ -75,7 +75,7 @@ const authenticate = async (props: Props, context: Context<typeof description, a
     })
   }
 
-  const { password, ...leanUser } = await context.model
+  const { _password, ...leanUser } = await context.model
     .findOne({ email: user.email })
     .lean({
       autopopulate: true,
@@ -98,13 +98,18 @@ const authenticate = async (props: Props, context: Context<typeof description, a
   }
 
   if( context.apiConfig.tokenUserProperties ) {
-    const pick = (obj: any, properties: Array<string>) => properties.reduce((a, prop) => ({
-      ...a,
-      [prop]: obj[prop]
-    }), {})
+    const pick = (obj: any, properties: Array<string>) => properties.reduce((a, prop) => {
+      if( 'prop' in obj ) {
+        return a
+      }
+
+      return {
+        ...a,
+        [prop]: obj[prop]
+      }
+    }, {})
 
     Object.assign(tokenContent.user, pick(leanUser, context.apiConfig.tokenUserProperties))
-
   }
 
   const token = await Token.sign(tokenContent) as string

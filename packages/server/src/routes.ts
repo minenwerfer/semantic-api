@@ -1,7 +1,6 @@
 import type { Context } from '@semantic-api/api'
 import { ServerRoute } from '@hapi/hapi'
 import {
-  safeHandle,
   safeHandleContext,
   regularVerb,
   customVerbs,

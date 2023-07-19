@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import type { Description } from '@semantic-api/types'
+import type { Description, CollectionProperty } from '@semantic-api/types'
 import { getReferencedCollection, serialize, isLeft, unwrapEither } from '@semantic-api/common'
 import { getResourceAsset } from '../assets'
 
@@ -99,7 +99,7 @@ export const preloadDescription = async <Options extends PreloadOptions, Return=
         ...await a,
         [key]: property
       }
-    }, {} as Promise<any>)
+    }, {} as Promise<Record<Lowercase<string>, CollectionProperty>>)
   }
 
   return (options?.serialize

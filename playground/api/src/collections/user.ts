@@ -1,5 +1,5 @@
 import type { Schema, Context } from '@semantic-api/api'
-import user from '@semantic-api/system/collections/user/index.js'
+import { default as user } from '@semantic-api/system/collections/user/index.js'
 
 export default async () => {
   const userCollection = await user()

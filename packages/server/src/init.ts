@@ -1,8 +1,7 @@
 import Hapi from '@hapi/hapi'
 import Inert from '@hapi/inert'
 
-import type { ApiConfig } from './types'
-import { createContext } from '@semantic-api/api'
+import { createContext, type ApiConfig } from '@semantic-api/api'
 import { connectDatabase } from '@semantic-api/api'
 import { defaultApiConfig } from './constants'
 import { warmup } from './warmup'

@@ -6,9 +6,7 @@ type Props = {
   what: Partial<User>
 }
 
-type Return = Promise<Partial<User>>
-
-const insert = async (props: Props, context: Context<typeof description, any, any>): Return => {
+const insert = async (props: Props, context: Context<typeof description, any, any>) => {
   const { token, apiConfig } = context
   props.what.group = apiConfig.group
 
@@ -48,7 +46,12 @@ const insert = async (props: Props, context: Context<typeof description, any, an
   }
 
   const { insert } = useFunctions<User, typeof description>()()
-  return insert(props, context)
+  try {
+    const r = await insert(props, context)
+    return r
+  } catch( e ) {
+    console.trace(e)
+  }
 }
 
 export default insert

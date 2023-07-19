@@ -1,13 +1,4 @@
-import { checkOwnership } from './ownership'
-import { checkImmutability } from './immutability'
+export * from './checkImmutability'
+export * from './checkOwnershipRead'
+export * from './checkOwnershipWrite'
 export * from './types'
-
-export {
-  checkOwnership,
-  checkImmutability
-}
-
-export const writeLayers = [
-  checkOwnership,
-  checkImmutability
-]

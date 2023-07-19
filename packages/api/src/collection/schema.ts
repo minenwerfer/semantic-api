@@ -83,7 +83,7 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
     }
 
     if( typeof referencedCollection === 'string' ) {
-      const referenceDescription = unsafe(await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description'))
+      const referenceDescription = unsafe(await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description'), `${property.s$referencedCollection} description at ${(<any>description).$id}.${propertyName}`)
       hasRefs = true
 
       const actualReferenceName = result.ref = referenceDescription.alias || referenceDescription.$id
@@ -179,8 +179,8 @@ export const createModel = async <TDescription extends Description>(
   _description: TDescription,
   config?: {
     options?: SchemaOptions|null,
-    modelCallback?: ((structure: SchemaStructure) => void)|null,
-    schemaCallback?: (schema: Schema<CollectionSchema<TDescription>>) => void
+    modelCallback?: ((structure: SchemaStructure) => void|Promise<void>)|null,
+    schemaCallback?: (schema: Schema<CollectionSchema<TDescription>>) => void|Promise<void>
   }
 ) => {
   const description = await preloadDescription(_description)
@@ -211,7 +211,7 @@ export const createModel = async <TDescription extends Description>(
 
   for( const [propertyName, property] of Object.entries(description.properties) as Array<[Lowercase<string>, CollectionProperty]> ) {
     if( property.s$isFile || property.s$inline ) {
-      const referenceDescription = unsafe(await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description'))
+      const referenceDescription = unsafe(await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description'), `${property.s$referencedCollection} description at ${modelName}.${propertyName}`)
 
       cascadingDelete.push({
         propertyName,
@@ -269,7 +269,7 @@ export const createModel = async <TDescription extends Description>(
   }
 
   if( schemaCallback ) {
-    schemaCallback(schema)
+    await schemaCallback(schema)
   }
 
   return connections.default.model<CollectionSchema<TDescription>>(modelName, schema)

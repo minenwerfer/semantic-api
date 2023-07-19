@@ -99,8 +99,7 @@ export const safeHandleContext = (
   return safeHandle(fn2)
 }
 
-export const customVerbs = (resourceType: ResourceType) =>
-  async (
+export const customVerbs = (resourceType: ResourceType) => async (
   request: HandlerRequest,
   h: ResponseToolkit,
   parentContext: Context<any, any, any>
@@ -160,11 +159,10 @@ export const customVerbs = (resourceType: ResourceType) =>
   })
 }
 
-export const regularVerb = (functionName: RegularVerb) =>
-  async (
-    request: HandlerRequest,
-    h: ResponseToolkit,
-    parentContext: Context<any, any, any>
+export const regularVerb = (functionName: RegularVerb) => async (
+  request: HandlerRequest,
+  h: ResponseToolkit,
+  parentContext: Context<any, any, any>
 ) => {
   const {
     params: {

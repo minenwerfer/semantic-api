@@ -8,7 +8,7 @@ import remove from './remove'
 export default defineCollection(() => ({
   item: File,
   description,
-  model: model(),
+  model,
   functions: {
     ...useFunctions<typeof File, typeof description>()([
       'get'
