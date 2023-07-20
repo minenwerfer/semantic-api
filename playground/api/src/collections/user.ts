@@ -25,18 +25,10 @@ export default async () => {
   const userCollection = await user()
   const description = userCollection.description as typeof userCollection['description'] & typeof newDescription
 
-  Object.assign(description, deepMerge(description, {
-    ...newDescription,
-    form: [
-      'full_name',
-      'active',
-      'roles',
-      'automatic_tasks',
-      'current_organization',
-      'phone',
-      'picture'
-    ]
-  }))
+  Object.assign(
+    description,
+    deepMerge(description, newDescription)
+  )
 
   return {
     item: {} as Schema<typeof description>,
