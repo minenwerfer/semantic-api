@@ -12,7 +12,7 @@ type Props = {
   >
 }
 
-const insert = async (props: Props, context: Context<typeof description, any, any>) => {
+const insert = async (props: Props, context: Context<typeof description>) => {
   const { insert } = useFunctions<File>()()
   const what = Object.assign({}, props.what)
   what.owner = context.token?.user._id

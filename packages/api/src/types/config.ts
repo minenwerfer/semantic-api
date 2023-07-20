@@ -3,7 +3,10 @@ import type { AccessControl } from '@semantic-api/access-control'
 import type { createModel } from '../collection/schema'
 import type { FunctionPath } from './resource'
 
-type User = any
+type User = {
+  _id: string
+  roles: Array<string>
+}
 
 // #region Collection
 export type CollectionStructure = {

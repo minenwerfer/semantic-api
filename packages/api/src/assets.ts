@@ -22,6 +22,13 @@ export const requireWrapper = (path: string) => {
 }
 
 const internalGetResources = async () => {
+  if( process.env.SEMANTIC_API_SHALLOW_IMPORT ) {
+    return {
+      collections: {},
+      algorithms: {}
+    }
+  }
+
   // @ts-ignore
   const { collections, algorithms } = await import('@semantic-api/system')
   const userConfig = await import(process.cwd() + '/index.js')
@@ -37,6 +44,10 @@ const internalGetResources = async () => {
 }
 
 export const getAccessControl = async () => {
+  if( process.env.SEMANTIC_API_SHALLOW_IMPORT ) {
+    return {}
+  }
+
   const userConfig = await import(process.cwd() + '/index.js')
   return userConfig.accessControl as AccessControl<Collections, Algorithms>
 }
@@ -64,6 +75,10 @@ export const getResourceAsset = async <
   assetName: AssetName,
   _resourceType?: TResourceType
 ) => {
+  if( process.env.SEMANTIC_API_SHALLOW_IMPORT ) {
+    return {} as Exclude<typeof result, Right<never>>
+  }
+
   const resources = await getResources()
   const resourceType = _resourceType || 'collections'
 

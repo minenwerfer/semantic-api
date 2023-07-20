@@ -1,7 +1,7 @@
 import type { Context } from '@semantic-api/api'
 import { makeException } from '@semantic-api/api'
 
-const ping = async (_props: null, { token }: Context<any, any, any>) => {
+const ping = async (_props: null, { token }: Context) => {
   if( !token.user?.roles?.length ) {
     throw makeException({
       name: 'AuthorizationError',

@@ -6,7 +6,7 @@ type Props = {
   what: Partial<User>
 }
 
-const insert = async (props: Props, context: Context<typeof description, any, any>) => {
+const insert = async (props: Props, context: Context<typeof description>) => {
   const { token, apiConfig } = context
   props.what.group = apiConfig.group
 

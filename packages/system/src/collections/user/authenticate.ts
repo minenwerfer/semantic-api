@@ -5,6 +5,8 @@ import { description, type User } from './description'
 type Props = {
   email: string
   password: string
+} | {
+  revalidate: true
 }
 
 type Return = {
@@ -21,7 +23,59 @@ type Return = {
   }
 }
 
-const authenticate = async (props: Props, context: Context<typeof description, any, any>) => {
+const getUser = async (user: Pick<User, '_id'>, context: Context<typeof description>) => {
+  const { _password, ...leanUser } = await context.model
+    .findOne({ _id: user._id }, {}, { autopopulate: false })
+    .lean({
+      virtuals: true
+    })
+
+  const tokenContent = {
+    user: {
+      _id: leanUser._id,
+      roles: leanUser.roles
+    },
+  }
+
+  if( context.apiConfig.logSuccessfulAuthentications ) {
+    context.log('successful authentication', {
+      email: leanUser.email,
+      roles: leanUser.roles,
+      _id: leanUser._id
+    })
+  }
+
+  if( context.apiConfig.tokenUserProperties ) {
+    const pick = (obj: any, properties: Array<string>) => properties.reduce((a, prop) => {
+      if( 'prop' in obj ) {
+        return a
+      }
+
+      return {
+        ...a,
+        [prop]: obj[prop]
+      }
+    }, {})
+
+    Object.assign(tokenContent.user, pick(leanUser, context.apiConfig.tokenUserProperties))
+  }
+
+  const token = await Token.sign(tokenContent)
+
+  return {
+    user: leanUser,
+    token: {
+      type: 'bearer',
+      token
+    }
+  } as Return
+}
+
+const authenticate = async (props: Props, context: Context<typeof description>) => {
+  if( 'revalidate' in props ) {
+    return getUser(context.token.user, context)
+  }
+
   if( !props?.email ) {
     throw new Error('Empty email or password')
   }
@@ -58,7 +112,8 @@ const authenticate = async (props: Props, context: Context<typeof description, a
       email: 1,
       password: 1,
       active: 1
-    }
+    },
+    { autopopulate: false }
   )
 
   if( !user || !await user.testPassword!(props.password) ) {
@@ -75,52 +130,7 @@ const authenticate = async (props: Props, context: Context<typeof description, a
     })
   }
 
-  const { _password, ...leanUser } = await context.model
-    .findOne({ email: user.email })
-    .lean({
-      autopopulate: true,
-      virtuals: true
-    })
-
-  const tokenContent = {
-    user: {
-      _id: leanUser._id,
-      roles: leanUser.roles
-    },
-  }
-
-  if( context.apiConfig.logSuccessfulAuthentications ) {
-    context.log('successful authentication', {
-      email: leanUser.email,
-      roles: leanUser.roles,
-      _id: user._id
-    })
-  }
-
-  if( context.apiConfig.tokenUserProperties ) {
-    const pick = (obj: any, properties: Array<string>) => properties.reduce((a, prop) => {
-      if( 'prop' in obj ) {
-        return a
-      }
-
-      return {
-        ...a,
-        [prop]: obj[prop]
-      }
-    }, {})
-
-    Object.assign(tokenContent.user, pick(leanUser, context.apiConfig.tokenUserProperties))
-  }
-
-  const token = await Token.sign(tokenContent) as string
-
-  return {
-    user: leanUser,
-    token: {
-      type: 'bearer',
-      token
-    }
-  } as Return
+  return getUser(user, context)
 }
 
 export default authenticate

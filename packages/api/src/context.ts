@@ -29,9 +29,9 @@ export type ContextOptions<
 
 // #region Context
 export type Context<
-  TDescription extends Description,
-  TCollections extends Collections,
-  TAlgorithms extends Algorithms,
+  TDescription extends Description=any,
+  TCollections extends Collections=any,
+  TAlgorithms extends Algorithms=any,
   TAccessControl extends AccessControl<TCollections, TAlgorithms, TAccessControl>=any
 > = Omit<Awaited<ReturnType<typeof internalCreateContext>>,
   'resourceName'

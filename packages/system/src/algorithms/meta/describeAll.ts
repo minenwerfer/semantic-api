@@ -5,7 +5,7 @@ type Props = {
   noSerialize?: boolean
 }
 
-const describeAll = async (props: Props, context: Context<any, any, any>): Promise<any> => {
+const describeAll = async (props: Props, context: Context): Promise<any> => {
   const resources = await getResources()
 
   const descriptions = Object.fromEntries(

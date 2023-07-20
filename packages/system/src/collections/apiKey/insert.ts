@@ -5,7 +5,7 @@ type Props = {
   what: Partial<ApiKey>
 }
 
-const insert = async (props: Props, context: Context<typeof description, any, any>) => {
+const insert = async (props: Props, context: Context<typeof description>) => {
   if( props.what._id ) {
     return context.collection.insert(props)
   }

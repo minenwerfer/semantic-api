@@ -7,7 +7,7 @@ import { defaultApiConfig } from './constants'
 import { warmup } from './warmup'
 import getRoutes from './routes'
 
-export const init = async (_apiConfig?: ApiConfig): Promise<Hapi.Server> => {
+export const init = async (_apiConfig?: ApiConfig) => {
   const apiConfig: ApiConfig = {}
   Object.assign(apiConfig, defaultApiConfig)
   Object.assign(apiConfig, _apiConfig)

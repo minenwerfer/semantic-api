@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises'
 import { type Context, useFunctions } from '@semantic-api/api'
 import { description, type File } from './description'
 
-const download = async (_id: string, context: Context<typeof description, any, any>) => {
+const download = async (_id: string, context: Context<typeof description>) => {
   const { get } = useFunctions<File>()()
   const file = await get({
     filters: {

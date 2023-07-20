@@ -183,6 +183,10 @@ export const createModel = async <TDescription extends Description>(
     schemaCallback?: (schema: Schema<CollectionSchema<TDescription>>) => void|Promise<void>
   }
 ) => {
+  if( process.env.SEMANTIC_API_SHALLOW_IMPORT ) {
+    return {} as Model<CollectionSchema<TDescription>>
+  }
+
   const description = await preloadDescription(_description)
 
   const {
