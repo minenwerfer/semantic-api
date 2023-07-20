@@ -9,7 +9,7 @@ type Props = {
 }
 
 const remove = async (props: Props, context: Context<typeof description, any, any>) => {
-  const { remove } = useFunctions<File, typeof description>()()
+  const { remove } = useFunctions<File>()()
   const file = await context.collection.functions.get(props, context)
   if( !file ) {
     throw new Error('file not found')

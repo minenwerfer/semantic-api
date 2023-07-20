@@ -1,4 +1,3 @@
-import type { Description } from '@semantic-api/types'
 import type { Context, MongoDocument } from '../types'
 import type { Projection, What } from './types'
 import { LEAN_OPTIONS } from '../constants'
@@ -6,13 +5,10 @@ import { useAccessControl } from '@semantic-api/access-control'
 import { isError, unpack } from '..'
 import { normalizeProjection, prepareInsert } from '../collection/utils'
 
-export const insert = <
-  TDescription extends Description,
-  TDocument extends MongoDocument
->() => async (payload: {
+export const insert = <TDocument extends MongoDocument>() => async (payload: {
   what: What<TDocument>,
   project?: Projection<TDocument>
-}, context: Context<TDescription, Collections, Algorithms>) => {
+}, context: Context<any, Collections, Algorithms>) => {
   const accessControl = useAccessControl(context)
 
   const queryEither = await accessControl.beforeWrite(payload)

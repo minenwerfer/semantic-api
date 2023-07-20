@@ -1,4 +1,3 @@
-import type { Description } from '@semantic-api/types'
 import type { Context, MongoDocument } from '../types'
 import type { Filters, Projection, QuerySort } from './types'
 import { useAccessControl } from '@semantic-api/access-control'
@@ -6,16 +5,13 @@ import { unsafe } from '..'
 import { LEAN_OPTIONS, DEFAULT_SORT } from '../constants'
 import { normalizeProjection } from '../collection/utils'
 
-export const getAll = <
-  TDescription extends Description,
-  TDocument extends MongoDocument
->() => async (payload: {
+export const getAll = <TDocument extends MongoDocument>() => async (payload: {
   filters?: Filters<TDocument>
   project?: Projection<TDocument>
   offset?: number
   limit?: number
   sort?: QuerySort<TDocument>
-}, context: Context<TDescription, Collections, Algorithms>) => {
+}, context: Context<any, Collections, Algorithms>) => {
   const accessControl = useAccessControl(context)
 
   const {

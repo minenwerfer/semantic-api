@@ -10,7 +10,7 @@ export default defineCollection(() => ({
   description,
   model,
   functions: {
-    ...useFunctions<typeof File, typeof description>()([
+    ...useFunctions<typeof File>()([
       'get'
     ]),
     insert,

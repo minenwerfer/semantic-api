@@ -1,19 +1,15 @@
-import type { Description } from '@semantic-api/types'
 import type { MongoDocument } from '../types'
 import * as collFunctions from '.'
 
-const getFunctions = <
-  TDocument extends MongoDocument,
-  TDescription extends Description
->() => ({
-  count: collFunctions.count<TDescription, TDocument>(),
-  get: collFunctions.get<TDescription, TDocument>(),
-  getAll: collFunctions.getAll<TDescription, TDocument>(),
-  remove: collFunctions.remove<TDescription, TDocument>(),
-  removeAll: collFunctions.removeAll<TDescription, TDocument>(),
-  removeFile: collFunctions.removeFile<TDescription, TDocument>(),
-  insert: collFunctions.insert<TDescription, TDocument>(),
-  upload: collFunctions.upload<TDescription, TDocument>(),
+const getFunctions = <TDocument extends MongoDocument>() => ({
+  count: collFunctions.count<TDocument>(),
+  get: collFunctions.get<TDocument>(),
+  getAll: collFunctions.getAll<TDocument>(),
+  remove: collFunctions.remove<TDocument>(),
+  removeAll: collFunctions.removeAll<TDocument>(),
+  removeFile: collFunctions.removeFile<TDocument>(),
+  insert: collFunctions.insert<TDocument>(),
+  upload: collFunctions.upload<TDocument>(),
 })
 
 type SelectFunctions<
@@ -22,15 +18,12 @@ type SelectFunctions<
   ? K
   : keyof typeof collFunctions
 
-export const useFunctions = <
-  TDocument extends MongoDocument,
-  TDescription extends Description
->() => <TSelectedFunctions extends Array<keyof typeof collFunctions>>(
+export const useFunctions = <TDocument extends MongoDocument>() => <TSelectedFunctions extends Array<keyof typeof collFunctions>>(
   selectedFunctions?: TSelectedFunctions
 ): {
-  [P in SelectFunctions<TSelectedFunctions>]: ReturnType<typeof getFunctions<TDocument, TDescription>>[P]
+  [P in SelectFunctions<TSelectedFunctions>]: ReturnType<typeof getFunctions<TDocument>>[P]
 } => {
-  const functions = getFunctions<TDocument, TDescription>()
+  const functions = getFunctions<TDocument>()
 
   if( selectedFunctions ) {
     return selectedFunctions.reduce((a, fnName) => ({

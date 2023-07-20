@@ -12,7 +12,7 @@ export default defineCollection(async () => ({
   description,
   model,
   functions: {
-    ...useFunctions<typeof User, typeof description>()([
+    ...useFunctions<typeof User>()([
       'get',
       'getAll',
       'remove',

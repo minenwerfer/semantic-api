@@ -21,7 +21,7 @@ const [Person, description] = defineDescription({
 export default () => ({
   item: Person,
   description,
-  functions: useFunctions<typeof Person, typeof description>()([
+  functions: useFunctions<typeof Person>()([
     'getAll',
     'insert'
   ])

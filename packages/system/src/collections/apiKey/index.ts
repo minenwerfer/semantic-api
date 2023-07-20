@@ -6,7 +6,7 @@ export default defineCollection(() => ({
   item: ApiKey,
   description,
   functions: {
-    ...useFunctions<ApiKey, typeof description>()([
+    ...useFunctions<ApiKey>()([
       'getAll'
     ]),
     insert,
