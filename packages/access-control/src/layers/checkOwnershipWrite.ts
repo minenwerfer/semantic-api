@@ -3,7 +3,7 @@ import type { Context } from '@semantic-api/api'
 import { left, right } from '@semantic-api/common'
 import { ACErrors } from '../errors'
 
-export const checkOwnershipWrite = async (context: Context<any, any, any>, props: AccessControlLayerProps<WritePayload>) => {
+export const checkOwnershipWrite = async (context: Context, props: AccessControlLayerProps<WritePayload>) => {
   const { token, description } = context
   const { parentId } = props
 

@@ -4,7 +4,7 @@ import { left, right, isLeft } from '@semantic-api/common'
 import * as R from 'ramda'
 import { ACErrors } from '../errors'
 
-const internalCheck = async (context: Context<any, any, any>, props: AccessControlLayerProps<ReadPayload|WritePayload>) => {
+const internalCheckImmutability = async (context: Context, props: AccessControlLayerProps<ReadPayload|WritePayload>) => {
   const {
     propertyName = '',
     parentId,
@@ -14,9 +14,9 @@ const internalCheck = async (context: Context<any, any, any>, props: AccessContr
   } = props
 
   const { description } = context
-  const source = 'what' in props.payload
-    ? props.payload.what
-    : props.payload.filters
+  const source = 'what' in payload
+    ? payload.what
+    : payload.filters
 
   const property = description.properties[propertyName]
   if( !property ) {
@@ -59,14 +59,14 @@ const internalCheck = async (context: Context<any, any, any>, props: AccessContr
   return right(props.payload)
 }
 
-export const checkImmutability = async (context: Context<any, any, any>, props: AccessControlLayerProps<ReadPayload|WritePayload>) => {
+export const checkImmutability = async (context: Context, props: AccessControlLayerProps<ReadPayload|WritePayload>) => {
   if( !props.parentId ) {
     return right(props.payload)
   }
 
   if( props.payload ) {
     for( const propertyName of Object.keys(props.payload) ) {
-      const result = await internalCheck(context, {
+      const result = await internalCheckImmutability(context, {
         ...props,
         propertyName
       })
@@ -77,5 +77,5 @@ export const checkImmutability = async (context: Context<any, any, any>, props: 
     }
   }
 
-  return internalCheck(context, props)
+  return internalCheckImmutability(context, props)
 }

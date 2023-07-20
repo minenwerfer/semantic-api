@@ -2,7 +2,7 @@ import type { AccessControlLayerProps, ReadPayload } from './types'
 import type { Context } from '@semantic-api/api'
 import { right } from '@semantic-api/common'
 
-export const checkOwnershipRead = async (context: Context<any, any, any>, props: AccessControlLayerProps<ReadPayload>) => {
+export const checkOwnershipRead = async (context: Context, props: AccessControlLayerProps<ReadPayload>) => {
   const { token, description } = context
   const payload = Object.assign({}, props.payload)
 
