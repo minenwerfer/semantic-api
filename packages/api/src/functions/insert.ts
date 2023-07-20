@@ -24,8 +24,6 @@ export const insert = <
   const { what } = payload
   const { _id } = what
 
-  throw new Error('tewrwfda')
-
   const readyWhat = prepareInsert(what, context.description)
   const projection = payload.project
     && normalizeProjection(payload.project, context.description)

@@ -1,6 +1,6 @@
 {
   "name": "@semantic-api/access-control",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "## Instalation",
   "main": "index.js",
   "scripts": {

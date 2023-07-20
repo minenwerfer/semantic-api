@@ -99,21 +99,15 @@ export const internalCreateContext = async <
     }),
 
     validate: validateFromDescription,
-    log: async (message: string, details?: any) => {
-      return collections.log().functions.insert({
-        what: {
-          message,
-          details,
-          context: resourceName,
-          owner: token?.user?._id
-        }
-      }, {
+    log: async (message: string, details?: any) => mongoose.models.log.create({
+      message,
+      details,
+      context: resourceName,
+      owner: token?.user?._id
         // @ts-ignore
-        ...options?.parentContext || {},
-        description: unsafe(await getResourceAsset('log', 'description')),
-        model: unsafe(await getResourceAsset('log', 'model'))
-      })
-    },
+        || options?.parentContext?.token.user._id,
+      created_at: new Date
+    }),
     limitRate: (params: RateLimitingParams): any => {
       // @ts-ignore
       return limitRate(options?.parentContext, params)
