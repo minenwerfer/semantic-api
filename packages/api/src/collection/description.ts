@@ -15,7 +15,7 @@ type SchemaProps =
 export const defineDescription = <const TDescription extends Omit<Description<TDescription>, SchemaProps> & {
   [P in Exclude<SchemaProps, 'properties'>]: TDescription[P] extends NonNullable<Description[P]>
     ? P extends PropertyDependent
-      ? (TDescription[P] & Array<keyof TDescription['properties']>) | []
+      ? (TDescription[P] & ReadonlyArray<keyof TDescription['properties']>) | []
       : TDescription[P]
     : Description[P]
 } & {
