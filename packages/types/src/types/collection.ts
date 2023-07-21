@@ -44,6 +44,10 @@ export type FormLayoutField<TDescription extends Description> = {
   span?: number
   verticalSpacing?: number
   if?: Condition<TDescription>
+  component?: {
+    name: string
+    props?: Record<string, any>
+  }
 }
 
 export type TableLayout<TDescription extends Description> = {
@@ -94,7 +98,7 @@ export type Description<TDescription extends Description=any> = {
   system?: boolean
   inline?: boolean
 
-  preferred?: Record<string, Partial<TDescription>>
+  preferred?: Record<string, Partial<TDescription | Description>>
 
   alias?: string
   icon?: string
@@ -142,8 +146,13 @@ export type Description<TDescription extends Description=any> = {
 }
 // #endregion Description
 
-export type CollectionProperty = Property
-  & { [P in keyof CollectionPropertyAux as `s$${P}`]: CollectionPropertyAux[P] }
+export type CollectionPropertyAdditions = {
+  [P in keyof CollectionPropertyAux as `s$${P}`]: CollectionPropertyAux[P]
+}
+
+export type CollectionProperty = CollectionPropertyAdditions & Omit<Property, 'properties'> & {
+  properties?: Record<Lowercase<string>, CollectionProperty>
+}
 
 export type PropertyElement =
   'select'

@@ -2,6 +2,10 @@ import { defineDescription } from '@semantic-api/api'
 
 export const [Log, description] = defineDescription({
   $id: 'log',
+  required: [
+    'context',
+    'message'
+  ],
   properties: {
     owner: {
       // don't use "owned: true", we want it this way
