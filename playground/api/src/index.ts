@@ -26,11 +26,6 @@ export const accessControl = defineAccessControl<Collections, Algorithms>()({
             'getAll'
           ]
         },
-        user: {
-          functions: [
-            'test',
-          ]
-        },
         hello: {
           functions: [
             'world'
@@ -40,15 +35,15 @@ export const accessControl = defineAccessControl<Collections, Algorithms>()({
     }
   }   
 })({
-  write: async (context, { payload }) => {
-    const {
-      resourceName,
-      token
-    } = context
+  write: async (context, props) => {
+    const { resourceName, token } = context
+    const payload = Object.assign({}, props.payload)
 
     if( resourceName === 'person' && token.user.roles.includes('guest') ) {
       payload.what.name = `Modified: ${payload.what.name}`
     }
+
+    return payload
   }
 })
 

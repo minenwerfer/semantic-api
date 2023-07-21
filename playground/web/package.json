@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@savitri/web": "file:../../../savitri/packages/web",
-    "api": "file:../api",
-    "pinia": "^2.1.4"
+    "@savitri/web": "file:../../../savitri/packages/web"
   }
 }

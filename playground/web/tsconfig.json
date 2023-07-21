@@ -4,6 +4,9 @@
       "@savitri/web": [
         "./node_modules/@savitri/web/dist/esm"
       ],
+      "@savitri/web/types": [
+        "./node_modules/@savitri/web/dist/esm/types"
+      ],
       "@semantic-api/api": [
         "../../packages/api/dist"
       ],

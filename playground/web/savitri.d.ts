@@ -1,21 +1,24 @@
-import type { Context } from '@semantic-api/api'
-import type { CollectionStore } from '@savitri/web'
-
 declare module '@savitri/web' {
-  type UserCollections = typeof import('api').collections
+  import type { CollectionStore } from '@savitri/web/types'
+
+  type UserCollections = typeof import('../api/src').collections
   type SystemCollections = typeof import('@semantic-api/system/collections')
 
   type Collections = {
-    [K in keyof (UserCollections & SystemCollections)]: Awaited<ReturnType<(UserCollections & SystemCollections)[K]>>
+    [K in keyof (SystemCollections & UserCollections)]: Awaited<ReturnType<(SystemCollections & UserCollections)[K]>>
   }
 
   export function useStore<StoreId extends keyof Collections>(storeId: StoreId): Omit<CollectionStore<Collections[StoreId]>,
     'functions'
     | 'item'
     | 'items'> & {
-    functions: {
-      [P in keyof Collections[StoreId]['functions']]: (arg: Parameters<Collections[StoreId]['functions'][P]>[0]) => ReturnType<Collections[StoreId]['functions'][P]>
-    }
+    functions: 'functions' extends keyof Collections[StoreId]
+      ? {
+        [P in keyof Collections[StoreId]['functions']]: Collections[StoreId]['functions'][P] extends (...args: infer FnParameters) => infer FnReturn
+          ? (arg: FnParameters[0]) => FnReturn
+          : never
+      }
+      : never
     item: Collections[StoreId]['item']
     items: Array<Collections[StoreId]['item']>
   }
