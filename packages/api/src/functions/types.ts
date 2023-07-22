@@ -4,13 +4,13 @@ export type UploadAuxProps = {
 }
 
 export type Filters<T> = Record<`$${string}`, any> & {
-  [P in keyof T]?: T[P] extends { _id: infer _Id }
+  [P in keyof T]?: '_id' extends keyof T[P]
     ? T[P] | Record<`$${string}`, any> | string
     : T[P] | Record<`$${string}`, any>
 }
 
 export type What<T> = {
-  [P in keyof T]?: T[P] extends { _id: infer _Id }
+  [P in keyof T]?: '_id' extends keyof T[P]
     ? T[P] | string
     : T[P]
 }
