@@ -1,6 +1,6 @@
 {
   "name": "@semantic-api/server",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/ejs": "^3.1.1",
     "@types/hapi__inert": "^5.2.5",
     "@types/ramda": "^0.28.23"
   },
@@ -30,7 +29,6 @@
     "@semantic-api/system": "latest",
     "@semantic-api/types": "latest",
     "dotenv": "^10.0.0",
-    "ejs": "^3.1.8",
     "mongoose": "^7.3.1",
     "ramda": "^0.29.0"
   }

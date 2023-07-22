@@ -1,5 +1,4 @@
 export { getToken } from './handler'
 export * from './init'
-export * from './render'
 export * from './warmup'
 export * from './types'

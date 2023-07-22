@@ -6,14 +6,14 @@
       "@semantic-api/access-control": [
         "../access-control/dist"
       ],
-      "@semantic-api/server": [
-        "../server/dist"
-      ],
       "@semantic-api/common": [
         "../common/dist"
       ],
       "@semantic-api/common/*": [
         "../common/dist/*"
+      ],
+      "@semantic-api/server": [
+        "../server/dist"
       ],
       "@semantic-api/types": [
         "../types/dist"

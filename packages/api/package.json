@@ -30,7 +30,7 @@
     "@semantic-api/types": "latest",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^7.3.1",
-    "mongoose-autopopulate": "^0.16.0",
+    "mongoose-autopopulate": "^1.0.1",
     "mongoose-lean-getters": "^0.3.5",
     "mongoose-lean-virtuals": "^0.9.1",
     "ramda": "^0.29.0",
