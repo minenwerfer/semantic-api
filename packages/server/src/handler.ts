@@ -42,10 +42,11 @@ export const getToken = async (request: Request) => {
 }
 
 export const safeHandle = (
-  fn: (request: HandlerRequest, h: ResponseToolkit) => any|Promise<any>
+  fn: (request: HandlerRequest, h: ResponseToolkit, context: Context<any, any, any>) => Promise<object>,
+  context: Context<any, any, any>
 ) => async (request: HandlerRequest, h: ResponseToolkit) => {
   try {
-    const response = await fn(request, h)
+    const response = await fn(request, h, context)
     if( !response ) {
       throw new Error('empty response')
     }
@@ -53,6 +54,10 @@ export const safeHandle = (
     return response
 
   } catch(error: any) {
+    if( context.apiConfig.errorHandler ) {
+      return context.apiConfig.errorHandler(error)
+    }
+
     if( process.env.NODE_ENV !== 'production' ) {
       console.trace(error)
     }
@@ -89,14 +94,6 @@ export const safeHandle = (
     error.httpCode ??= 500
     return h.response(response).code(error.httpCode)
   }
-}
-
-export const safeHandleContext = (
-  fn: (request: HandlerRequest, h: ResponseToolkit, context: Context<any, any, any>) => object,
-  context: Context<any, any, any>
-) => {
-  const fn2 = (r: HandlerRequest, h: ResponseToolkit) => fn(r, h, context)
-  return safeHandle(fn2)
 }
 
 export const customVerbs = (resourceType: ResourceType) => async (

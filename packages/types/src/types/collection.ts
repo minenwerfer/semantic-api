@@ -146,12 +146,8 @@ export type Description<TDescription extends Description=any> = {
 }
 // #endregion Description
 
-export type CollectionPropertyAdditions = {
+export type CollectionProperty = Property & {
   [P in keyof CollectionPropertyAux as `s$${P}`]: CollectionPropertyAux[P]
-}
-
-export type CollectionProperty = CollectionPropertyAdditions & Omit<Property, 'properties'> & {
-  properties?: Record<Lowercase<string>, CollectionProperty>
 }
 
 export type PropertyElement =

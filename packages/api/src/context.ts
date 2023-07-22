@@ -3,6 +3,7 @@ import type { AccessControl } from '@semantic-api/access-control'
 import type { Schema } from './collection'
 import type { FunctionPath, DecodedToken, ResourceType, ApiConfig } from './types'
 import mongoose, { type Model } from 'mongoose'
+import { render } from '@semantic-api/server'
 import { validateFromDescription } from './collection/validate'
 import { limitRate, type RateLimitingParams } from './rateLimiting'
 import { unsafe } from '@semantic-api/common'
@@ -111,6 +112,9 @@ export const internalCreateContext = async <
     limitRate: (params: RateLimitingParams): any => {
       // @ts-ignore
       return limitRate(options?.parentContext, params)
+    },
+    render: <const T extends Record<string, any>>(path: string, options?: T) => {
+      return render({} as any, path, options)
     }
   }
 

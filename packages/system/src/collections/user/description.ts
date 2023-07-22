@@ -121,6 +121,7 @@ export const [User, description] = defineDescription({
       ask: true
     }
   },
+  icon: 'users-alt',
   filters: [
     'full_name',
     'roles',

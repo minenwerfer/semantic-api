@@ -1,7 +1,7 @@
 import type { Context } from '@semantic-api/api'
 import { ServerRoute } from '@hapi/hapi'
 import {
-  safeHandleContext,
+  safeHandle,
   regularVerb,
   customVerbs,
   fileDownload
@@ -10,7 +10,7 @@ import {
 
 export default (context: Context<any, any, any>): Array<ServerRoute> => {
   const defaultHandler = (fn: ReturnType<typeof regularVerb>) => {
-    return safeHandleContext(fn, context)
+    return safeHandle(fn, context)
   }
 
   return [

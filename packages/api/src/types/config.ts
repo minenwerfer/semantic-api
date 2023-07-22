@@ -51,5 +51,7 @@ export type ApiConfig = {
 
   logSuccessfulAuthentications?: boolean
   tokenUserProperties?: Array<string>
+
+  errorHandler?: <TError extends Error>(error?: TError) => any|Promise<any>
 }
 // #endregion ApiConfig

@@ -1,5 +1,6 @@
 import { PROPERTY_TYPES, PROPERTY_FORMATS } from '../constants'
 import type { Description } from '.'
+import type { CollectionProperty } from '.'
 
 export type PropertyType = typeof PROPERTY_TYPES[number]
 export type PropertyFormat = typeof PROPERTY_FORMATS[number]
@@ -8,7 +9,7 @@ export type JsonSchema<TDescription extends Description=any> = {
   $id: string
   required?: ReadonlyArray<keyof TDescription['properties']>
   presets?: ReadonlyArray<keyof TDescription['properties']>
-  properties: Record<Lowercase<string>, Property>
+  properties: Record<Lowercase<string>, CollectionProperty>
 }
 
 export type RefType = {
@@ -29,7 +30,7 @@ export type PropertyAux =
   { [P in keyof PrimitiveType]?: PrimitiveType[P] }
 
 export type Property = /* (RefType | EnumType | PrimitiveType) & */ PropertyAux &  {
-  properties?: Record<string, Property>
+  properties?: Record<string, CollectionProperty>
   additionalProperties?: Property
   format?: PropertyFormat
 
