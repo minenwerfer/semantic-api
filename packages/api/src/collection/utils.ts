@@ -1,4 +1,3 @@
-import * as R from 'ramda'
 import type { Description } from '@semantic-api/types'
 import type { MongoDocument } from '../types'
 
@@ -83,7 +82,7 @@ export const prepareInsert = (
     }
 
     if(
-      ( [undefined, null].includes(value) || R.isEmpty(value) )
+      ( [undefined, null].includes(value) || !Object.keys(value).length )
         && !Array.isArray(value)
         && !(key in (description.defaults||{}))
     ) {
@@ -115,7 +114,7 @@ export const prepareInsert = (
     : prepareCreate()
 
   Object.keys(what).forEach(k => {
-    if( R.isEmpty(what[k]) ) {
+    if( !Object.keys(what[k]).length  ) {
       delete what[k]
     }
   })

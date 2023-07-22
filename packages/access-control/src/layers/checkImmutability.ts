@@ -1,7 +1,6 @@
 import type { AccessControlLayerProps, ReadPayload, WritePayload } from './types'
 import type { Context } from '@semantic-api/api'
 import { left, right, isLeft } from '@semantic-api/common'
-import * as R from 'ramda'
 import { ACErrors } from '../errors'
 
 const internalCheckImmutability = async (context: Context, props: AccessControlLayerProps<ReadPayload|WritePayload>) => {
@@ -43,7 +42,7 @@ const internalCheckImmutability = async (context: Context, props: AccessControlL
   }
 
   const fulfilled = currentDocument[propertyName]
-    && !R.isEmpty(currentDocument[propertyName])
+    && !Object.keys(currentDocument[propertyName]).length
 
   if(
     immutable

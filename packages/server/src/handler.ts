@@ -1,4 +1,3 @@
-import * as R from 'ramda'
 import { createContext, getFunction, Token, makeException, ResourceErrors } from '@semantic-api/api'
 import { isLeft, unwrapEither, unsafe } from '@semantic-api/common'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
@@ -6,6 +5,7 @@ import type { HandlerRequest } from './types'
 import type { DecodedToken, Context, ResourceType, } from '@semantic-api/api'
 
 import { Error as MongooseError } from 'mongoose'
+import { pipe } from './utils'
 import { sanitizeRequest, prependPagination } from './hooks/pre'
 import { appendPagination } from './hooks/post'
 
@@ -18,14 +18,14 @@ export type RegularVerb =
   | 'deleteAll'
   | 'upload'
 
-const prePipe = R.pipeWith(R.andThen)([
+const prePipe = pipe(
   sanitizeRequest,
   prependPagination
-])
+)
 
-const postPipe = R.pipeWith(R.andThen)([
+const postPipe = pipe(
   appendPagination
-])
+)
 
 export const getToken = async (request: Request) => {
   try {

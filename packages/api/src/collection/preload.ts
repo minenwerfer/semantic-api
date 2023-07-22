@@ -1,6 +1,5 @@
-import * as R from 'ramda'
 import type { Description, CollectionProperty } from '@semantic-api/types'
-import { getReferencedCollection, serialize, isLeft, unwrapEither } from '@semantic-api/common'
+import { getReferencedCollection, deepMerge, serialize, isLeft, unwrapEither } from '@semantic-api/common'
 import { getResourceAsset } from '../assets'
 
 export type PreloadOptions = {
@@ -11,13 +10,7 @@ export const applyPreset = (entry: Description | Description['properties'], pres
   const preset = require(`@semantic-api/api/presets/${presetName}.json`)
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
-  return R.mergeDeepWith(
-    (l, r) => R.is(Object, l) && R.is(Object, r)
-      ? R.concat(l, r)
-      : l,
-    entry,
-    presetObject
-  )
+  return deepMerge(entry, presetObject)
 }
 
 export const preloadDescription = async <Options extends PreloadOptions, Return=Options extends { serialize: true }

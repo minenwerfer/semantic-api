@@ -2,7 +2,8 @@
   "name": "semantic-mangler",
   "version": "1.0.9",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
@@ -24,14 +25,13 @@
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.0.0",
+    "@semantic-api/common": "latest",
     "glob": "^9.3.0",
-    "ramda": "^0.28.0",
     "rollup": "^3.19.1",
     "tslib": "^2.5.0",
     "typescript": "^5.0.2"
   },
   "devDependencies": {
-    "@types/node": "^18.15.3",
-    "@types/ramda": "^0.28.23"
+    "@types/node": "^18.15.3"
   }
 }

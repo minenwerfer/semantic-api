@@ -2,7 +2,8 @@
   "name": "@semantic-api/access-control",
   "version": "1.0.7",
   "description": "## Instalation",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
@@ -15,14 +16,10 @@
   "exports": {
     ".": "./dist/index.js"
   },
-  "devDependencies": {
-    "@types/ramda": "^0.28.23"
-  },
   "dependencies": {
     "@semantic-api/common": "latest",
     "@semantic-api/server": "latest",
     "@semantic-api/system": "latest",
-    "@semantic-api/types": "latest",
-    "ramda": "^0.29.0"
+    "@semantic-api/types": "latest"
   }
 }

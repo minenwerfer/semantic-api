@@ -1,7 +1,7 @@
 import ts from 'typescript'
 import path from 'path'
 import { readFile } from 'fs/promises'
-import * as R from 'ramda'
+import { deepMerge } from '@semantic-api/common'
 import { log } from './log'
 
 export const compile = async (fileList: Array<string>) => {
@@ -12,10 +12,7 @@ export const compile = async (fileList: Array<string>) => {
   if( tsConfig.extends ) {
     const resolvedPath = require.resolve(path.join(process.cwd(), tsConfig.extends))
 
-    Object.assign(tsConfig, R.mergeDeepWith(
-      (l, r) => R.is(Object, l) && R.is(Object, r)
-        ? R.concat(l, r)
-        : r,
+    Object.assign(tsConfig, deepMerge(
       tsConfig,
       JSON.parse((await readFile(resolvedPath)).toString())
     ))

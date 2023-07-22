@@ -1,19 +1,32 @@
-import * as R from 'ramda'
-
 export type MergeOptions = {
   arrays?: false
 }
 
-export const deepMerge = <TLeft, TRight>(left: TLeft, right: TRight, options?: MergeOptions): TLeft & TRight => {
-  const mergeArrays = (left: any) => options?.arrays !== false || !R.is(Array, left)
-  const merged = Object.assign({}, left)
+export const deepMerge = <
+  TLeft extends Record<keyof TRight, any>,
+  TRight extends object
+>(left: TLeft, right: TRight, options?: MergeOptions): TLeft & TRight => {
+  const result = Object.assign({}, left)
 
-  return Object.assign(merged, R.mergeDeepWith(
-    (l, r) => R.is(Object, l) && R.is(Object, r) && mergeArrays(l)
-      ? R.concat(l, r)
-      : r,
-    left,
-    right
-  ))
+  for( const key in right ) {
+    const leftVal: any = result[key]
+    const rightVal: any = right[key]
+
+    if( Array.isArray(leftVal) && Array.isArray(rightVal) ) {
+      result[key] = options?.arrays
+        ? result[key].concat(...rightVal)
+        : rightVal
+
+      continue
+    }
+
+    if( leftVal instanceof Object && rightVal instanceof Object ) {
+      result[key] = deepMerge(leftVal, rightVal, options)
+      continue
+    }
+
+    result[key] = rightVal
+  }
+
+  return result
 }
-

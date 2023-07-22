@@ -1,5 +1,4 @@
 import type { CollectionProperty } from '@semantic-api/types'
-import * as R from 'ramda'
 import { formatDateTime } from './string'
 
 export const formatValue = (
@@ -18,7 +17,7 @@ export const formatValue = (
       return firstIndex && value?.[firstIndex]
     }
     
-    if( R.is(Object, value) ) {
+    if( value instanceof Object ) {
       return Object.values(value)[0]
     }
 
