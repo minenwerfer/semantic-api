@@ -12,7 +12,7 @@ const inputOptions: InputOptions = {
     }),
     nodeResolve(),
     json(),
-    // terser()
+    terser()
   ],
   external: [
     /node_modules/,
