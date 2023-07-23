@@ -1,52 +1,35 @@
-import glob from 'glob'
 import { rollup, InputOptions, OutputOptions } from 'rollup'
+import commonjs from '@rollup/plugin-commonjs'
+import nodeResolve from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 import json from '@rollup/plugin-json'
 
-const root = process.cwd()
-
 const inputOptions: InputOptions = {
+  input: `${process.cwd()}/dist/index.js`,
   plugins: [
+    commonjs({
+      ignoreDynamicRequires: true
+    }),
+    nodeResolve(),
     json(),
-    terser({
-      output: {
-        comments: true
-      }
-    })
+    // terser()
   ],
   external: [
-    /node_modules/
+    /node_modules/,
   ],
   onwarn: () => null
 }
 
 
 const outputOptions: OutputOptions = {
+  dir: 'release',
   format: 'cjs',
   sourcemap: false,
 }
 
-const makeInputs = async () => {
-  const files = glob.sync(`${root}/dist/**/*.js`)
-  return files.map((file) => ({
-    ...inputOptions,
-    input: file,
-  }))
-}
-
 export const build = async () => {
-  const inputs = await makeInputs()
+  const bundle = await rollup(inputOptions)
+  await bundle.write(outputOptions)
 
-  for( const input of inputs ) {
-    const path = input.input.replace('/dist/', '/release/')
-    const output = {
-      ...outputOptions,
-      file: path
-    }
-
-    const bundle = await rollup(input)
-    await bundle.write(output)
-
-    bundle?.close()
-  }
+  bundle?.close()
 }

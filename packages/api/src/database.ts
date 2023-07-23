@@ -8,8 +8,12 @@ export const options = {
   }
 }
 
-export const connections = {} as {
+type Connections = {
   default: Awaited<ReturnType<typeof mongoose.connect>>
+}
+
+declare global {
+  var semanticapi__Connections: Connections
 }
 
 const isDevelopment = process.env.NODE_ENV === 'development'
@@ -34,6 +38,10 @@ export const connectDatabase = async () => {
     return envUri
   })()
 
-  const connection = connections.default = await mongoose.connect(mongodbUri)
+  global.semanticapi__Connections ??= {
+    default: {}
+  } as Connections
+
+  const connection = global.semanticapi__Connections.default = await mongoose.connect(mongodbUri)
   return connection
 }

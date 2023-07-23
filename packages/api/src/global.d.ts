@@ -5,10 +5,6 @@ import * as SystemCollections from '@semantic-api/system/collections'
 import * as SystemAlgorithms from '@semantic-api/system/algorithms'
 
 declare global {
-  var descriptions: Record<string, Description>
-  var modules: Record<string, any>
-  var mongoose: typeof mongoose
-
   type UserCollections = Record<string, Collection>
   type UserAlgorithms = Record<string, Algorithm>
 

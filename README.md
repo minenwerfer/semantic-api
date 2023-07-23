@@ -25,3 +25,7 @@ In semantic-api the "physical objects" are referred as "collections" and are alw
 
 - [Official documentation](https://semantic-api.github.io/semantic-api/)
 - [Examples](https://github.com/ringeringeraja/semantic-api/tree/master/examples)
+
+## Milestones
+
+- 23/06: `semantic-mangler` now bundles all the API in a single file!

@@ -1,16 +1,9 @@
-import {
-  model as mongooseModel,
-  models as mongooseModels,
-  Model,
-  Schema,
-  SchemaOptions
-} from 'mongoose'
-
+import { model as mongooseModel, Model, Schema, SchemaOptions } from 'mongoose'
 import type { Description, CollectionProperty } from '@semantic-api/types'
 import type { Schema as CollectionSchema } from './schema.types'
 import { getReferencedCollection, unsafe } from '@semantic-api/common'
 
-import { options as defaultOptions, connections } from '../database'
+import { options as defaultOptions } from '../database'
 import { getResourceAsset } from '../assets'
 import { preloadDescription, applyPreset } from './preload'
 import { getTypeConstructor } from './typemapping'
@@ -187,6 +180,7 @@ export const createModel = async <TDescription extends Description>(
     return {} as Model<CollectionSchema<TDescription>>
   }
 
+  const connections = global.semanticapi__Connections
   const description = await preloadDescription(_description)
 
   const {
@@ -195,9 +189,9 @@ export const createModel = async <TDescription extends Description>(
     schemaCallback
   } = config||{}
 
-  const modelName = description.$id.split('/').pop() as string
-  if( mongooseModels[modelName] ) {
-    return mongooseModels[modelName] as Model<CollectionSchema<TDescription>>
+  const modelName = description.$id.split('/').pop()!
+  if( connections.default.models[modelName] ) {
+    return connections.default.models[modelName] as Model<CollectionSchema<TDescription>>
   }
 
   if( __loadedModels.includes(modelName) ) {
