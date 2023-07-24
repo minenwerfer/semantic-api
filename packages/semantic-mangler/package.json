@@ -27,7 +27,7 @@
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.0.0",
     "@semantic-api/common": "file:../common",
-    "glob": "^10.3.3",
+    "glob": "^9.3.0",
     "rollup": "^3.19.1",
     "tslib": "^2.5.0",
     "typescript": "^5.0.2"

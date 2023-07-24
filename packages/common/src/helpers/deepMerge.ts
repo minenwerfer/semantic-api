@@ -3,9 +3,9 @@ export type MergeOptions = {
 }
 
 export const deepMerge = <
-  TLeft extends Record<keyof TRight, any>,
+  TLeft extends Partial<Record<keyof TRight, any>>,
   TRight extends object
->(left: TLeft, right: TRight, options?: MergeOptions): TLeft & TRight => {
+>(left: TLeft, right: TRight, options?: MergeOptions) => {
   const result = Object.assign({}, left)
 
   for( const key in right ) {
@@ -28,5 +28,5 @@ export const deepMerge = <
     result[key] = rightVal
   }
 
-  return result
+  return result as TLeft & TRight
 }

@@ -31,7 +31,7 @@ export const baseRoles = <const>{
       },
       user: {
         functions: [
-          'insert',
+          'createAccount',
           'authenticate',
           'ping'
         ]

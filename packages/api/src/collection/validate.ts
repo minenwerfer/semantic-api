@@ -1,5 +1,5 @@
 import type { Description, CollectionProperty } from '@semantic-api/types'
-import { left } from '@semantic-api/common'
+import { left, right } from '@semantic-api/common'
 import { Types } from 'mongoose'
 import { getTypeConstructor } from './typemapping'
 
@@ -28,7 +28,7 @@ export const validateFromDescription = async <T>(
 ) => {
   if( !what ) {
     return left({
-      code: ValidationErrors.EmptyTarget
+      code: ValidationErrors.EmptyTarget as ValidationErrors
     })
   }
 
@@ -60,7 +60,7 @@ export const validateFromDescription = async <T>(
     const property = description.properties[prop]
 
     if( prop === '_id' && typeof value === 'string' ) {
-      return
+      continue
     }
 
     if( !property ) {
@@ -72,7 +72,7 @@ export const validateFromDescription = async <T>(
         }
       }
 
-      return
+      continue
     }
 
     if( !value ) {
@@ -89,7 +89,7 @@ export const validateFromDescription = async <T>(
         }
       }
 
-      return
+      continue
     }
 
     const expectedConstructor = await getTypeConstructor(description.properties[prop], () => null)
@@ -150,4 +150,6 @@ export const validateFromDescription = async <T>(
       errors
     })
   }
+
+  return right(what)
 }

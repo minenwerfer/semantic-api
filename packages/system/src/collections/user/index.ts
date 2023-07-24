@@ -3,6 +3,7 @@ import { description, User } from './description'
 import model from './model'
 import authenticate from './authenticate'
 import insert from './insert'
+import createAccount from './createAccount'
 import ping from './ping'
 
 export { schemaCallback as userSchemaCallback } from './model'
@@ -20,6 +21,7 @@ export default defineCollection(async () => ({
       'removeFile'
     ]),
     insert,
+    createAccount,
     authenticate,
     ping,
   }
