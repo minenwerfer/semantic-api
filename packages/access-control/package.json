@@ -16,7 +16,7 @@
   "exports": {
     ".": "./dist/index.js"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@semantic-api/common": "latest",
     "@semantic-api/server": "latest",
     "@semantic-api/system": "latest",

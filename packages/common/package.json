@@ -19,7 +19,7 @@
     "./string": "./dist/string.js",
     "./date": "./dist/date.js"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@semantic-api/system": "latest",
     "bson": "latest"
   }

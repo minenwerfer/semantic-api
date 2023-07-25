@@ -24,7 +24,7 @@
     "@types/node": "^17.0.1",
     "@types/sharp": "^0.31.1"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@semantic-api/access-control": "latest",
     "@semantic-api/common": "latest",
     "@semantic-api/system": "latest",

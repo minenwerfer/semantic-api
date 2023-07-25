@@ -20,12 +20,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semantic-api/api": "latest",
-    "@semantic-api/common": "latest",
-    "bcrypt": "^5.1.0",
-    "mongoose": "^7.3.1"
+    "bcrypt": "^5.1.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@semantic-api/api": "latest",
+    "@semantic-api/common": "latest",
+    "mongoose": "^7.3.1"
   }
 }

@@ -1,6 +1,17 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "paths": {
+      "@semantic-api/api": [
+        "../api/dist"
+      ],
+      "@semantic-api/common": [
+        "../common/dist"
+      ],
+      "@semantic-api/types": [
+        "../types/dist"
+      ]
+    }
   }
 }

@@ -22,13 +22,15 @@
   "dependencies": {
     "@hapi/hapi": "^21.1.0",
     "@hapi/inert": "^7.0.0",
+    "dotenv": "^10.0.0",
+    "mongoose": "^7.3.1"
+  },
+  "peerDependencies": {
     "@semantic-api/access-control": "latest",
     "@semantic-api/api": "latest",
     "@semantic-api/common": "latest",
     "@semantic-api/server": "latest",
     "@semantic-api/system": "latest",
-    "@semantic-api/types": "latest",
-    "dotenv": "^10.0.0",
-    "mongoose": "^7.3.1"
+    "@semantic-api/types": "latest"
   }
 }
