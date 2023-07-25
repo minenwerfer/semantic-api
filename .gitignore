@@ -4,4 +4,4 @@ __pycache__
 .env
 production.env
 dist
-packages/*/semantic-api.d.ts
+semantic-api.d.ts
