@@ -76,7 +76,7 @@ declare module '@semantic-api/api' {
 // `
 
 const install = async () => {
-  await writeFile(path.join('..', '..', '..', DTS_FILENAME), dts)
+  await writeFile(path.join(process.cwd(), DTS_FILENAME), dts)
 }
 
 install()

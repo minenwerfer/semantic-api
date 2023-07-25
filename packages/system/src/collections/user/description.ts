@@ -74,11 +74,8 @@ export const [User, description] = defineDescription({
       type: 'boolean',
       readOnly: true
     },
-    wizard_versions: {
-      type: 'array',
-      items: {
-        type: 'string'
-      },
+    activation_key: {
+      type: 'string'
     },
     resources_usage: {
       type: 'object',

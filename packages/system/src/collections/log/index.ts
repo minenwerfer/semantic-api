@@ -1,7 +1,7 @@
-import { defineCollection, useFunctions } from '@semantic-api/api'
+import { useFunctions } from '@semantic-api/api'
 import { description, Log } from './description'
 
-export default defineCollection(() => ({
+export default () => ({
   item: Log,
   description,
   functions: {
@@ -11,4 +11,4 @@ export default defineCollection(() => ({
       'insert'
     ])
   }
-}))
+})

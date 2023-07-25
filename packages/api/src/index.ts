@@ -8,4 +8,4 @@ export * from './types'
 export * from './database'
 export * from './functions/use'
 
-export { ok, error, isOk, isError, unsafe, unpack } from '@semantic-api/common/either'
+export { ok, error, isOk, isError, unsafe, unpack } from '@semantic-api/common'

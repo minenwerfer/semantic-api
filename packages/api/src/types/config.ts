@@ -12,7 +12,7 @@ type User = {
 export type CollectionStructure = {
   item: any
   description: Description
-  model?: ReturnType<typeof createModel>
+  model?: () => ReturnType<typeof createModel>
   functions?: Record<string, (...args: any[]) => any>
 }
 

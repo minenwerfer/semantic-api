@@ -21,10 +21,13 @@ const isValidReference = (property: CollectionProperty, value: any) => {
   }
 }
 
-export const validateFromDescription = async <T>(
-  description: Omit<Description, '$id'>,
-  what: T,
-  required?: Array<keyof T>|null
+export const validateFromDescription = async <
+  const TDescription extends Omit<Description, '$id'>,
+  const TWhat extends Record<string, any>
+>(
+  description: TDescription,
+  what: TWhat,
+  required?: Array<keyof TDescription['properties']>|null
 ) => {
   if( !what ) {
     return left({
@@ -56,7 +59,7 @@ export const validateFromDescription = async <T>(
 
   for( const _prop of propsSet ) {
     const prop = _prop as Lowercase<string>
-    const value = what[prop as keyof T]
+    const value = what[prop as keyof TWhat]
     const property = description.properties[prop]
 
     if( prop === '_id' && typeof value === 'string' ) {
@@ -78,7 +81,7 @@ export const validateFromDescription = async <T>(
     if( !value ) {
       if(
         (!required && description.required?.includes(prop))
-        || (required && required.includes(prop as keyof T))
+        || (required && required.includes(prop as Lowercase<string>))
       ) {
         errors[prop] = {
           type: 'missing',

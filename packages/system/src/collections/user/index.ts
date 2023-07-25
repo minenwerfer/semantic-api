@@ -1,4 +1,4 @@
-import { defineCollection, useFunctions } from '@semantic-api/api'
+import { useFunctions } from '@semantic-api/api'
 import { description, User } from './description'
 import model from './model'
 import authenticate from './authenticate'
@@ -8,7 +8,7 @@ import ping from './ping'
 
 export { schemaCallback as userSchemaCallback } from './model'
 
-export default defineCollection(async () => ({
+export default async () => ({
   item: User,
   description,
   model,
@@ -25,4 +25,4 @@ export default defineCollection(async () => ({
     authenticate,
     ping,
   }
-}))
+})

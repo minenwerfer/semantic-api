@@ -11,11 +11,21 @@ const createAccount = async (props: Props, context: Context<typeof description>)
 
   const validationEither = await context.validate({
     properties: {
+      full_name: {
+        type: 'string'
+      },
       email: {
+        type: 'string'
+      },
+      phone: {
         type: 'string'
       }
     }
-  }, props.what)
+  }, props.what, [
+    'full_name',
+    'email',
+    'phone'
+  ])
 
   if( isLeft(validationEither) ) {
     return validationEither

@@ -30,7 +30,7 @@ const internalGetResources = async () => {
   }
 
   // @ts-ignore
-  const { collections, algorithms } = await import('@semantic-api/system')
+  const { collections, algorithms } = await import('./node_modules/@semantic-api/system/dist')
   const userConfig = await import(process.cwd() + '/index.js')
   const resources = {
     collections,
