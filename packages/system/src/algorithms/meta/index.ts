@@ -1,8 +1,8 @@
-import describeAll from './describeAll'
+import describe from './describe'
 
 export default () => ({
   functions: {
-    describeAll,
+    describe,
     test: (name: 'joao'|'jurandir') => `Hello, ${name}!`
   }
 })

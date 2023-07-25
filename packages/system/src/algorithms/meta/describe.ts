@@ -2,14 +2,19 @@ import { type Context, getResources, getResourceAsset } from '@semantic-api/api'
 import { serialize } from '@semantic-api/common'
 
 type Props = {
+  collections?: Array<string>
   noSerialize?: boolean
 }
 
-const describeAll = async (props: Props, context: Context): Promise<any> => {
+const describe = async (props: Props, context: Context): Promise<any> => {
   const resources = await getResources()
 
+  const collections = props.collections?.length
+    ? Object.entries(resources.collections).filter(([key]) => props.collections!.includes(key)).map(([, value]) => value)
+    : Object.values(resources.collections)
+
   const descriptions = Object.fromEntries(
-    await Promise.all(Object.values(resources.collections as any[]).map(async (collection) => {
+    await Promise.all(collections.map(async (collection: any) => {
       const { description } = await collection()
       await getResourceAsset(description.$id, 'model')
 
@@ -31,4 +36,4 @@ const describeAll = async (props: Props, context: Context): Promise<any> => {
     .header('content-type', 'application/bson')
 }
 
-export default describeAll
+export default describe
