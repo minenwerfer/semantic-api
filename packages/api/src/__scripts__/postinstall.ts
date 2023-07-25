@@ -4,8 +4,9 @@ import path from 'path'
 const DTS_FILENAME = 'semantic-api.d.ts'
 
 const dts = `// this file will be overwritten
-import type { AssetType, ResourceErrors, Context as Context_ } from '@semantic-api/api'
+import type { AssetType, ResourceErrors, Schema, Context as Context_ } from '@semantic-api/api'
 import type { Description } from '@semantic-api/types'
+import type { Model } from 'mongoose'
 import { Either } from '@semantic-api/common'
 
 declare global {
@@ -38,8 +39,10 @@ declare module '@semantic-api/api' {
     const ResourceName extends keyof Collections,
     const AssetName extends (keyof Collections[ResourceName] & AssetType) | 'model',
     ReturnedAsset=ResourceName extends keyof Collections
-        ? AssetName extends keyof Collections[ResourceName]
-          ? Collections[ResourceName][AssetName]
+        ? AssetName extends keyof Collections[ResourceName] | 'model'
+          ? AssetName extends 'model'
+            ? Model<Schema<Collections[ResourceName]['description']>>
+            : Collections[ResourceName][AssetName]
           : never
           : never
   >(
@@ -51,6 +54,7 @@ declare module '@semantic-api/api' {
       ReturnedAsset
     >
   >
+
 
   export const get = getResourceAsset
 
@@ -73,10 +77,21 @@ declare module '@semantic-api/api' {
     >
   >
 }
-// `
+//`
 
 const install = async () => {
-  await writeFile(path.join(process.cwd(), DTS_FILENAME), dts)
+  try {
+    // prevent the script from installing the dts on @semantic-api/* packages
+    const { name } = require(path.join(process.cwd(), '..', '..', '..', 'package.json'))
+    if( name.startsWith('@semantic-api') ) {
+      return
+    }
+
+  } catch( e ) {
+    //
+  }
+
+  await writeFile(path.join(process.cwd(), '..', '..', '..', DTS_FILENAME), dts)
 }
 
 install()

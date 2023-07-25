@@ -3,7 +3,7 @@ export const baseRoles = <const>{
     capabilities: {
       meta: {
         functions: [
-          'describeAll'
+          'describe'
         ]
       },
       file: {
@@ -26,7 +26,7 @@ export const baseRoles = <const>{
     capabilities: {
       meta: {
         functions: [
-          'describeAll'
+          'describe'
         ]
       },
       user: {

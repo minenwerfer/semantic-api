@@ -76,7 +76,7 @@ export const getResourceAsset = async <
   _resourceType?: TResourceType
 ) => {
   if( process.env.SEMANTIC_API_SHALLOW_IMPORT ) {
-    return {} as Exclude<typeof result, Right<never>>
+    return {} as Right<{}>
   }
 
   const resources = await getResources()

@@ -195,7 +195,7 @@ export const createModel = async <TDescription extends Description>(
   }
 
   if( __loadedModels.includes(modelName) ) {
-    return
+    return {} as Model<CollectionSchema<TDescription>>
   }
 
   __loadedModels.push(modelName)
@@ -272,3 +272,4 @@ export const createModel = async <TDescription extends Description>(
 
   return connections.default.model<CollectionSchema<TDescription>>(modelName, schema)
 }
+
