@@ -4,12 +4,13 @@ import { serialize } from '@semantic-api/common'
 type Props = {
   collections?: Array<string>
   noSerialize?: boolean
+  roles?: boolean
 }
 
 const describe = async (props: Props, context: Context): Promise<any> => {
   const resources = await getResources()
 
-  const collections = props.collections?.length
+  const collections = props?.collections?.length
     ? Object.entries(resources.collections).filter(([key]) => props.collections!.includes(key)).map(([, value]) => value)
     : Object.values(resources.collections)
 
@@ -22,9 +23,15 @@ const describe = async (props: Props, context: Context): Promise<any> => {
     }))
   )
 
-  const result =  {
+  const result: {
+    descriptions: typeof descriptions
+    roles?: typeof context.accessControl.roles
+  } = {
     descriptions,
-    roles: context.accessControl.roles
+  }
+
+  if( props.roles ) {
+    result.roles = context.accessControl.roles
   }
 
   if( props?.noSerialize ) {
