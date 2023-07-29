@@ -80,10 +80,12 @@ declare module '@semantic-api/api' {
 //`
 
 const install = async () => {
+  const base = path.join(process.cwd(), '..', '..', '..')
+
   try {
     // prevent the script from installing the dts on @semantic-api/* packages
-    const { name } = require(path.join(process.cwd(), '..', '..', '..', 'package.json'))
-    if( name.startsWith('@semantic-api') ) {
+    const { name } = require(path.join(base, 'package.json'))
+    if( name.startsWith('@semantic-api/') ) {
       return
     }
 
@@ -91,7 +93,7 @@ const install = async () => {
     //
   }
 
-  await writeFile(path.join(process.cwd(), '..', '..', '..', DTS_FILENAME), dts)
+  await writeFile(path.join(base, DTS_FILENAME), dts)
 }
 
 install()
