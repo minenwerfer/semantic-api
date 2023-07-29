@@ -86,7 +86,7 @@ const get = (name: string, context: Context<typeof description>) => {
   console.log(pet.name)
   // The below would produce TS diagnostics since 'age' property doesn't exist
   // on Pet.
-  console.log(pet.age)
+  // console.log(pet.age)
 
   return pet
 }
