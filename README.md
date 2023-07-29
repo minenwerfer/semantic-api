@@ -13,11 +13,11 @@ Semantic API is a **REST framework** that focuses on developer experience and si
 
 ## Features
 
-- 🌍 World class developer experience using the latest TypeScript features
-- 🔑 Out of the box authentication, file management, logging, rate limiting & more
-- 🔍 Every use case can be trivially accessed for scripting and unit testing
-- 📦 Output your entire API as a single auto-executable JS file
-- 🐜 Tiny dependency graph
+- World class developer experience using the latest TypeScript features
+- Out of the box authentication, file management, logging, rate limiting & more
+- Every use case can be trivially accessed for scripting and unit testing
+- Output your entire API as a single auto-executable JS file
+- Tiny dependency graph
 
 
 ## Quick start
