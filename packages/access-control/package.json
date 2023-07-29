@@ -14,7 +14,8 @@
   "author": "",
   "license": "ISC",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./untyped": "./dist/untyped.js"
   },
   "peerDependencies": {
     "@semantic-api/common": "latest",

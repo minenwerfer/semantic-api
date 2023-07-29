@@ -14,7 +14,8 @@
   "exports": {
     ".": "./dist/index.js",
     "./presets/*": "./presets/*",
-    "./database": "./dist/database.js"
+    "./database": "./dist/database.js",
+    "./untyped": "./dist/untyped.js"
   },
   "keywords": [],
   "author": "",
