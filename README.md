@@ -40,7 +40,7 @@ const [Pet, description] = defineDescription({
     name: {
       type: 'string'
     },
-    species: {
+    tags: {
       type: 'array',
       items: {
         enum: [
@@ -64,7 +64,9 @@ const [Pet, description] = defineDescription({
 const pet: typeof Pet = {
   name: 'Thor',
   // error! "'dogx'" is not assignable to "'dog' | 'cat' | 'bird'"
-  // species: 'dogx'
+  // tags: [
+  //    'dogx'
+  //]
 }
 
 export default () => ({
