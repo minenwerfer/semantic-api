@@ -61,7 +61,7 @@ const [Pet, description] = defineDescription({
   }
 })
 
-const pet: Pet = {
+const pet: typeof Pet = {
   name: 'Thor',
   // error! "'dogx'" is not assignable to "'dog' | 'cat' | 'bird'"
   // species: 'dogx'
