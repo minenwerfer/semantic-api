@@ -1,15 +1,6 @@
 {
-  "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch -p tsconfig.watch.json"
-  },
   "dependencies": {
-    "@semantic-api/api": "file:dist/staging/api",
-    "@semantic-api/common": "file:dist/staging/common",
-    "@semantic-api/system": "file:dist/staging/system",
-    "@semantic-api/types": "file:dist/staging/types",
-    "tsc": "latest",
+    "tsc": "^2.0.4",
     "typescript": "^5.1.6"
-  },
-  "version": "0.0.9"
+  }
 }
