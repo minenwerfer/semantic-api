@@ -151,4 +151,4 @@ initWithDatabaseThenStart()
 
 ## License
 
-Semantic API is [MIT licensed](https://github.com/ringeringeraja/semantic-api/tree/master/LICENSE.md).
+Semantic API is [MIT licensed](https://github.com/ringeringeraja/semantic-api/tree/master/LICENSE).
