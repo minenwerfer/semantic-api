@@ -17,8 +17,10 @@ export const init = async (_apiConfig?: ApiConfig) => {
   })
 
   console.time('warmup')
-  await warmup(context)
-    .then(() => console.timeEnd('warmup'))
+  await warmup()
+
+  console.log()
+  console.timeEnd('warmup')
 
   const server = Hapi.server({
     port: apiConfig.port,
@@ -40,7 +42,7 @@ export const init = async (_apiConfig?: ApiConfig) => {
     }
   })
 
-  await server.register(Inert as any)
+  await server.register(Inert)
 
   const routes = getRoutes(context)
   for( const route of routes ) {

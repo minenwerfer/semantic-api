@@ -30,14 +30,9 @@ export default (context: Context<any, any, any>): Array<ServerRoute> => {
       handler: defaultHandler(regularVerb('insert'))
     },
     {
-      method: 'PUT',
-      path: '/api/{resourceName}/{id}',
-      handler: defaultHandler(regularVerb('modify'))
-    },
-    {
       method: 'DELETE',
       path: '/api/{resourceName}/{id}',
-      handler: defaultHandler(regularVerb('delete'))
+      handler: defaultHandler(regularVerb('remove'))
     },
     {
       method: 'POST',

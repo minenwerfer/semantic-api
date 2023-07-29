@@ -13,9 +13,8 @@ export type RegularVerb =
   'get'
   | 'getAll'
   | 'insert'
-  | 'modify'
-  | 'delete'
-  | 'deleteAll'
+  | 'remove'
+  | 'removeAll'
   | 'upload'
 
 const prePipe = pipe(

@@ -34,3 +34,7 @@ export const useFunctions = <TDocument extends MongoDocument>() => <TSelectedFun
 
   return functions
 }
+
+export const untypedUseFunctions = (selectedFunctions: Array<keyof typeof collFunctions>) => {
+  return useFunctions<any>()(selectedFunctions)
+}

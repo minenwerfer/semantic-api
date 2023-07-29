@@ -17,14 +17,3 @@ export const defineAccessControl = <
   return accessControl
 }
 // #endregion defineAccessControl
-
-export const accessControl = defineAccessControl<any, any>()({
-  roles: {
-    guest: {
-      inherit: [
-        'unauthenticated'
-      ],
-      grantEverything: true
-    }
-  }
-})()
