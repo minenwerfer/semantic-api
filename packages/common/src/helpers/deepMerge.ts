@@ -20,6 +20,11 @@ export const deepMerge = <
       continue
     }
 
+    if( rightVal instanceof Function ) {
+      result[key] = rightVal
+      continue
+    }
+
     if( leftVal instanceof Object && rightVal instanceof Object ) {
       result[key] = deepMerge(leftVal, rightVal, options)
       continue

@@ -1,10 +1,6 @@
-export const SV_API_URL = process.env.NODE_ENV === 'development'
-  ? 'http://localhost:3000/api'
-  : '/api'
-
 export const PAGINATION_PER_PAGE_LIMIT = 150
 
-export const PROPERTY_TYPES = [
+export const PROPERTY_TYPES = <const>[
   'string',
   'integer',
   'number',
@@ -13,14 +9,14 @@ export const PROPERTY_TYPES = [
   'array',
   'time',
   'month'
-] as const
+]
 
-export const PROPERTY_FORMATS = [
+export const PROPERTY_FORMATS = <const>[
   'date',
   'date-time'
-] as const
+]
 
-export const COLLECTION_PRESETS = [
+export const COLLECTION_PRESETS = <const>[
   'crud',
   'duplicate',
   'delete',
@@ -28,9 +24,9 @@ export const COLLECTION_PRESETS = [
   'owned',
   'toggleActive',
   'view',
-] as const
+]
 
-export const STORE_EFFECTS = {
+export const STORE_EFFECTS = <const>{
   'ITEM_SET': 'setItem',
   'ITEM_INSERT': 'insertItem',
   'ITEMS_SET': 'setItems',

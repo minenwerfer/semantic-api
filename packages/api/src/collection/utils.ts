@@ -82,7 +82,7 @@ export const prepareInsert = (
     }
 
     if(
-      ( [undefined, null].includes(value) || !Object.keys(value).length )
+      ( [undefined, null].includes(value) || (typeof value === 'object' && !Object.keys(value).length) )
         && !Array.isArray(value)
         && !(key in (description.defaults||{}))
     ) {
@@ -114,7 +114,7 @@ export const prepareInsert = (
     : prepareCreate()
 
   Object.keys(what).forEach(k => {
-    if( !Object.keys(what[k]).length  ) {
+    if( typeof what[k] === 'object' && !Object.keys(what[k]).length  ) {
       delete what[k]
     }
   })

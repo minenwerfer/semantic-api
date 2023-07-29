@@ -30,7 +30,7 @@ const describe = async (props: Props, context: Context): Promise<any> => {
     descriptions,
   }
 
-  if( props.roles ) {
+  if( props?.roles ) {
     result.roles = context.accessControl.roles
   }
 

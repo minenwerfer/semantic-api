@@ -42,7 +42,7 @@ const internalCheckImmutability = async (context: Context, props: AccessControlL
   }
 
   const fulfilled = currentDocument[propertyName]
-    && !Object.keys(currentDocument[propertyName]).length
+    && (typeof currentDocument[propertyName] === 'object' && !Object.keys(currentDocument[propertyName]).length)
 
   if(
     immutable

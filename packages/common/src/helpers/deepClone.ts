@@ -1,5 +1,5 @@
 export const deepClone = (obj: object) => {
-  return 'structuredClone' in global
+  return typeof 'structuredClone' === 'function'
     ? structuredClone(obj)
     : JSON.parse(JSON.stringify(obj))
 }
