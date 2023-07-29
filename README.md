@@ -66,7 +66,7 @@ const pet: typeof Pet = {
   // error! "'dogx'" is not assignable to "'dog' | 'cat' | 'bird'"
   // tags: [
   //    'dogx'
-  //]
+  // ]
 }
 
 export default () => ({
