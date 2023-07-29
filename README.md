@@ -32,8 +32,7 @@ const [Pet, description] = defineDescription({
   $id: 'pet',
   required: [
     'name'
-    // The below would produce TS diagnostics since 'age' does not exist on
-    // keyof TDescription['properties'].
+    // error! '"age"' is not assignable to keyof TDescription["properties"]
     // 'age'
   ],
   properties: {
@@ -53,8 +52,7 @@ const [Pet, description] = defineDescription({
     picture: {
       $ref: 'file'
     }
-    // Below would also produce TS diagnostics since 'camelCase' is not
-    // assignable to Lowercase<string>.
+    // error! '"camelCase"' is not assignable to Lowercase<string>.
     // camelCase: {
     //   type: 'string'
     // }
@@ -63,7 +61,7 @@ const [Pet, description] = defineDescription({
 
 const pet: typeof Pet = {
   name: 'Thor',
-  // error! "'dogx'" is not assignable to "'dog' | 'cat' | 'bird'"
+  // error! '"dogx"' is not assignable to '"dog" | "cat" | "bird"'
   // tags: [
   //    'dogx'
   // ]
@@ -86,8 +84,7 @@ const get = (name: string, context: Context<typeof description>) => {
   const pet = await context.model.findOne({ name }).lean()
 
   console.log(pet.name)
-  // The below would produce TS diagnostics since 'age' property doesn't exist
-  // on Pet.
+  // error! 'age' property doesn't exist on Pet.
   // console.log(pet.age)
 
   return pet
@@ -104,7 +101,7 @@ export const accessControl = defineAccessControl<Collections, Algorithms>()({
     guest: {
       inherit: [
         'unauthenticated',
-        // The below would throw because you can't inherit from an unexisting role.
+        // Trying to inherit from an unexisting role will produce TS diagnostics.
         // 'unexisting_role'
       ],
       capabilities: {
@@ -146,7 +143,7 @@ initWithDatabaseThenStart()
 
 ## Leveling up
 
-- Read the [official documentation](https://semantic-api.github.io/docs/)
+- Read the [official documentation](https://semantic-api.github.io/docs/getting-started)
 - Take a look at some neat [examples](https://github.com/ringeringeraja/semantic-api/tree/master/examples)
 - Join our [Discord community]()
 - Ready to participate? Read the [Contributing Guide](https://github.com/ringeringeraja/semantic-api/tree/master/CONTRIBUTING.md)
