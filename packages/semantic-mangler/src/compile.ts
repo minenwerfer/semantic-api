@@ -7,6 +7,8 @@ import { log } from './log'
 export const compile = async (fileList: Array<string>) => {
   const tsConfig = JSON.parse((await readFile(`${process.cwd()}/tsconfig.json`)).toString()) as {
     extends?: string
+    include?: Array<string>
+    exclude?: Array<string>
   } & typeof import('./config/tsconfig.json')
 
   if( tsConfig.extends ) {
@@ -20,7 +22,12 @@ export const compile = async (fileList: Array<string>) => {
 
   const compilerOptions = tsConfig.compilerOptions as unknown
 
-  const program = ts.createProgram(fileList, compilerOptions as ts.CompilerOptions)
+  const selectedFiles = tsConfig.include || (tsConfig.exclude
+    ? fileList.filter((file) => !tsConfig.exclude!.some((exp) => new RegExp(exp.replace('*', '([^\/]+)'), 'g').test(file)))
+    : fileList
+  )
+
+  const program = ts.createProgram(selectedFiles, compilerOptions as ts.CompilerOptions)
   const emitResult = program.emit()
 
   const allDiagnostics = ts

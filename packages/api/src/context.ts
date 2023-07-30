@@ -111,8 +111,9 @@ export const internalCreateContext = async <
     limitRate: (params: RateLimitingParams): any => {
       // @ts-ignore
       return limitRate(options?.parentContext, params)
-    }
+    },
   }
+
 
   if( token ) {
     Object.assign(context, { token })

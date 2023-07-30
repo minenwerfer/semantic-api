@@ -9,7 +9,7 @@ export type Filters<T> = Record<`$${string}`, any> & {
     : T[P] | Record<`$${string}`, any>
 }
 
-export type What<T> = {
+export type What<T> = Record<`$${string}`, any> & {
   [P in keyof T]?: '_id' extends keyof T[P]
     ? T[P] | string
     : T[P]
