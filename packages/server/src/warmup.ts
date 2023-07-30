@@ -1,4 +1,5 @@
 import { getResources, type Collection, type Algorithm } from '@semantic-api/api'
+import { grantedFor } from '@semantic-api/access-control'
 
 if( process.env.MODE !== 'PRODUCTION' ) {
   require('dotenv').config()
@@ -11,13 +12,18 @@ const colors = {
   white: '\x1b[37m',
 }
 
-const colorizedRoute = (color: keyof typeof colors, resourceType?: 'collection' | 'algorithm') =>
+const colorizedRoute = (color: keyof typeof colors, resourceType?: 'collection' | 'algorithm', roles?: Array<string>) =>
   (verb: string, resourceName: string, path?: string|null, parameters?: Array<string>) => {
-  const params = parameters
-    ? '/' + parameters.map(p => `{${colors.green}${p}\x1b[0m}`).join('/')
-    : ''
 
-  return `\x1b[1m${colors[color]}${verb}\x1b[0m\t\x1b[90m/api\x1b[0m${resourceType === 'algorithm'?'/_':''}/\x1b[1m${resourceName}\x1b[0m${path?`/${path}`:''}${params}`
+  let line = `\x1b[1m${colors[color]}${verb}\x1b[0m\t\x1b[90m/api\x1b[0m`
+
+  if( resourceType === 'algorithm' ) line += '/_'
+  line += `/\x1b[1m${resourceName}\x1b[0m`
+
+  if( path )        line += `/${path}`
+  if( parameters )  line += `${parameters.map(p => `{${colors.green}${p}\x1b[0m}`).join('/')}`
+  if( roles )       line += ` \x1b[90m[${roles.join('|')}]\x1b[0m`
+  return line
 }
 
 export const warmup = async () => {
@@ -49,17 +55,19 @@ export const warmup = async () => {
       return
     }
 
-    const routes = Object.keys(resource.functions).sort().map((fn) => {
-      if( resourceType === 'collection' ) switch( fn ) {
-        case 'get': return colorizedRoute('green', resourceType)('GET', resourceName, null, ['id'])
-        case 'getAll': return colorizedRoute('green', resourceType)('GET', resourceName)
-        case 'insert': return colorizedRoute('blue', resourceType)('POST', resourceName)
-        case 'remove': return colorizedRoute('red', resourceType)('DELETE', resourceName, null, ['id'])
-        default: return colorizedRoute('white', resourceType)('POST', resourceName, fn)
+    const routes = await Promise.all(Object.keys(resource.functions).sort().map(async (functionName) => {
+      const roles = await grantedFor(resourceName, functionName)
+
+      if( resourceType === 'collection' ) switch( functionName ) {
+        case 'get': return colorizedRoute('green', resourceType, roles)('GET', resourceName, null, ['id'])
+        case 'getAll': return colorizedRoute('green', resourceType, roles)('GET', resourceName)
+        case 'insert': return colorizedRoute('blue', resourceType, roles)('POST', resourceName)
+        case 'remove': return colorizedRoute('red', resourceType, roles)('DELETE', resourceName, null, ['id'])
+        default: return colorizedRoute('white', resourceType, roles)('POST', resourceName, functionName)
       }
 
-      return colorizedRoute('white', resourceType)('POST', resourceName, fn)
-    })
+      return colorizedRoute('white', resourceType, roles)('POST', resourceName, functionName)
+    }))
 
     console.log(routes.join('\n'))
 

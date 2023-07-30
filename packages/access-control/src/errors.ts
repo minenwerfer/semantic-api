@@ -4,5 +4,8 @@ export enum ACErrors {
   ImmutabilityIncorrectChild = 'IMMUTABILITY_INCORRECT_CHILD',
   ImmutabilityParentNotFound = 'IMMUTABILITY_PARENT_NOT_FOUND',
   ImmutabilityTargetImmutable = 'IMMUTABILITY_TARGET_IMMUTABLE',
-  OwnershipError = 'OWNERSHIP_ERROR'
+  OwnershipError = 'OWNERSHIP_ERROR',
+  ResourceNotFound = 'RESOURCE_NOT_FOUND',
+  AssetNotFound = 'ASSET_NOT_FOUND',
+  FunctionNotFound = 'FUNCTION_NOT_FOUND'
 }

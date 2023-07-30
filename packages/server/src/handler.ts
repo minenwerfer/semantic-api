@@ -1,4 +1,5 @@
-import { createContext, getFunction, Token, makeException, ResourceErrors } from '@semantic-api/api'
+import { createContext, getFunction, Token, makeException } from '@semantic-api/api'
+import { ACErrors } from '@semantic-api/access-control'
 import { isLeft, unwrapEither, unsafe } from '@semantic-api/common'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest } from './types'
@@ -136,9 +137,9 @@ export const customVerbs = (resourceType: ResourceType) => async (
   if( isLeft(fnEither) ) {
     const error = unwrapEither(fnEither)
     switch( error ) {
-      case ResourceErrors.ResourceNotFound: throw new Error(`no such resource ${resourceName}`)
-      case ResourceErrors.FunctionNotFound: throw new Error(`no such function ${resourceName}@${functionName}`)
-      case ResourceErrors.AssetNotFound: throw new Error(`resource ${resourceName} has no registered functions`)
+      case ACErrors.ResourceNotFound: throw new Error(`no such resource ${resourceName}`)
+      case ACErrors.FunctionNotFound: throw new Error(`no such function ${resourceName}@${functionName}`)
+      case ACErrors.AssetNotFound: throw new Error(`resource ${resourceName} has no registered functions`)
       default: throw new Error(`unknown error: ${error}`)
     }
   }

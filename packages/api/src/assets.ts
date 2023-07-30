@@ -1,5 +1,5 @@
 import type { ResourceType, AssetType, Context } from './types'
-import { unsafe, left, right, isLeft, unwrapEither, Right } from '@semantic-api/common'
+import { unsafe, left, right, isLeft, unwrapEither, type Right } from '@semantic-api/common'
 import { isGranted, ACErrors, type AccessControl } from '@semantic-api/access-control'
 
 const __cachedResources: Awaited<ReturnType<typeof internalGetResources>> & {
@@ -8,12 +8,6 @@ const __cachedResources: Awaited<ReturnType<typeof internalGetResources>> & {
   _cached: false,
   collections: {},
   algorithms: {}
-}
-
-export enum ResourceErrors {
-  ResourceNotFound = 'RESOURCE_NOT_FOUND',
-  AssetNotFound = 'ASSET_NOT_FOUND',
-  FunctionNotFound = 'FUNCTION_NOT_FOUND'
 }
 
 export const requireWrapper = (path: string) => {
@@ -45,7 +39,7 @@ const internalGetResources = async () => {
 
 export const getAccessControl = async () => {
   if( process.env.SEMANTIC_API_SHALLOW_IMPORT ) {
-    return {}
+    return {} as AccessControl<Collections, Algorithms>
   }
 
   const userConfig = await import(process.cwd() + '/index.js')
@@ -104,8 +98,8 @@ export const getResourceAsset = async <
   })())
 
   if( !result.value ) {
-    if( !(resourceName in resources[resourceType]) ) return left(ResourceErrors.ResourceNotFound)
-    if( !(assetName in resources[resourceType][resourceName]()) ) return left(ResourceErrors.AssetNotFound)
+    if( !(resourceName in resources[resourceType]) ) return left(ACErrors.ResourceNotFound)
+    if( !(assetName in resources[resourceType][resourceName]()) ) return left(ACErrors.AssetNotFound)
   }
 
   return result as Exclude<typeof result, Right<never>>
@@ -136,13 +130,12 @@ export const getFunction = async <
 
   const functionsEither = await getResourceAsset(resourceName, 'functions', resourceType || 'collections')
   if( isLeft(functionsEither) ) {
-    const error = unwrapEither(functionsEither)
-    return left(error)
+    return functionsEither
   }
 
   const functions = unwrapEither(functionsEither) 
   if( !(functionName in functions) ) {
-    return left(ResourceErrors.FunctionNotFound)
+    return left(ACErrors.FunctionNotFound)
   }
 
   const accessControl = await getAccessControl()

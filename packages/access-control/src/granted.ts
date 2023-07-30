@@ -76,3 +76,32 @@ export const isGranted = async <
     return false
   }
 }
+
+export const grantedFor = async <
+  const ResourceName extends string,
+  const FunctionName extends string
+>(
+  resourceName: ResourceName,
+  functionName: FunctionName
+) => {
+  const accessControl = await getAccessControl()
+
+  if( !accessControl.roles ) {
+    return []
+  }
+
+  const roles = []
+  for( const role in accessControl.roles ) {
+    const granted = await isGranted(resourceName, functionName, {
+      roles: [
+        role
+      ]
+    })
+
+    if( granted ) {
+      roles.push(role)
+    }
+  }
+
+  return roles
+}

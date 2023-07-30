@@ -3,6 +3,9 @@
   "compilerOptions": {
     "outDir": "dist",
     "paths": {
+      "@semantic-api/access-control": [
+        "../access-control/dist"
+      ],
       "@semantic-api/common": [
         "../common/dist"
       ],

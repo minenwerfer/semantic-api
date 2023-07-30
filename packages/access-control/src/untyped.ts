@@ -1,1 +1,0 @@
-export { untypedUseFunctions } from './functions'
