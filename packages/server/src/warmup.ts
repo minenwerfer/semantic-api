@@ -21,7 +21,7 @@ const colorizedRoute = (color: keyof typeof colors, resourceType?: 'collection' 
   line += `/\x1b[1m${resourceName}\x1b[0m`
 
   if( path )        line += `/${path}`
-  if( parameters )  line += `${parameters.map(p => `{${colors.green}${p}\x1b[0m}`).join('/')}`
+  if( parameters )  line += `/${parameters.map(p => `{${colors.green}${p}\x1b[0m}`).join('/')}`
   if( roles )       line += ` \x1b[90m[${roles.join('|')}]\x1b[0m`
   return line
 }
