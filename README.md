@@ -24,7 +24,7 @@ Semantic API is a **REST framework** that focuses on developer experience and si
 
 ## Quick start
 
-Semantic API lets you define your API resources using a `JSON schema` superset called `Description`. The `defineDescription` function is strongely typed, and thanks to the latest TypeScript releases we can catch unintended choices such as setting an unexisting property as required. Trying to define a property that doesn't follow default casing will also result in a TS error as a way to ensure consistency.
+Semantic API lets you define your collections using a `JSON schema` superset called `Description`. The `defineDescription` function is strongely typed, and thanks to the latest TypeScript releases we can catch unintended choices such as setting an unexisting property as required. Trying to define a property that doesn't follow default casing will also result in a TS error as a way to ensure consistency. The function will also build a type from the object literal you can use later in your project.
 
 ```typescript
 import { defineDescription } from '@semantic-api/api'
