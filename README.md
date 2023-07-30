@@ -144,7 +144,7 @@ initWithDatabaseThenStart()
 
 ## Leveling up
 
-- Read the [official documentation](https://semantic-api.github.io/docs/getting-started)
+- Read the [official documentation](https://semantic-api.github.io/docs/guide/getting-started)
 - Take a look at some neat [examples](https://github.com/ringeringeraja/semantic-api/tree/master/examples)
 - Join our [Discord community]()
 - Ready to participate? Read the [Contributing Guide](https://github.com/ringeringeraja/semantic-api/tree/master/CONTRIBUTING.md)
