@@ -8,6 +8,10 @@ export const deepMerge = <
   TRight extends object
 >(left: TLeft, right: TRight, options?: MergeOptions) => {
   const result = Object.assign({}, left)
+  const {
+    arrays = true
+
+  } = options || {}
 
   for( const key in right ) {
     const leftVal: any = result[key]
@@ -22,7 +26,7 @@ export const deepMerge = <
     }
 
     if( Array.isArray(leftVal) && Array.isArray(rightVal) ) {
-      result[key] = options?.arrays
+      result[key] = arrays
         ? result[key].concat(...rightVal)
         : rightVal
 
