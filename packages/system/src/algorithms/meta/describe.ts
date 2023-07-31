@@ -1,4 +1,4 @@
-import { type Context, getResources, getResourceAsset } from '@semantic-api/api'
+import { type Context, getResources, getResourceAsset, preloadDescription } from '@semantic-api/api'
 import { serialize } from '@semantic-api/common'
 
 type Props = {
@@ -16,7 +16,8 @@ const describe = async (props: Props, context: Context): Promise<any> => {
 
   const descriptions = Object.fromEntries(
     await Promise.all(collections.map(async (collection: any) => {
-      const { description } = await collection()
+      const { description: rawDescription } = await collection()
+      const description = await preloadDescription(rawDescription)
       await getResourceAsset(description.$id, 'model')
 
       return [description.$id, description]

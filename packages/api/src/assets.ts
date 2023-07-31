@@ -1,6 +1,7 @@
 import type { ResourceType, AssetType, Context } from './types'
 import { unsafe, left, right, isLeft, unwrapEither, type Right } from '@semantic-api/common'
 import { isGranted, ACErrors, type AccessControl } from '@semantic-api/access-control'
+import { preloadDescription } from './collection/preload'
 
 const __cachedResources: Awaited<ReturnType<typeof internalGetResources>> & {
   _cached: boolean
@@ -8,6 +9,12 @@ const __cachedResources: Awaited<ReturnType<typeof internalGetResources>> & {
   _cached: false,
   collections: {},
   algorithms: {}
+}
+
+const __cachedAssets: {
+  assets: Record<string, Record<string, Awaited<ReturnType<typeof internalGetResourceAsset>>>> 
+} = {
+  assets: {}
 }
 
 export const requireWrapper = (path: string) => {
@@ -60,7 +67,7 @@ export const getResources = async () => {
   return resources
 }
 
-export const getResourceAsset = async <
+export const internalGetResourceAsset = async <
   ResourceName extends keyof Collections,
   AssetName extends (keyof Collections[ResourceName] & AssetType) | 'model',
   TResourceType extends `${ResourceType}s`
@@ -105,7 +112,29 @@ export const getResourceAsset = async <
   return result as Exclude<typeof result, Right<never>>
 }
 
-export const get = getResourceAsset
+export const getResourceAsset = async <
+  ResourceName extends keyof Collections,
+  AssetName extends (keyof Collections[ResourceName] & AssetType) | 'model',
+  TResourceType extends `${ResourceType}s`
+>(
+  resourceName: ResourceName,
+  assetName: AssetName,
+  _resourceType?: TResourceType
+) => {
+  const cached = __cachedAssets.assets[resourceName as string]
+  if( cached?.[assetName] ) {
+    return cached[assetName] as Exclude<Collections[ResourceName][AssetName], unknown>
+  }
+
+  const asset = await internalGetResourceAsset(resourceName, assetName, _resourceType)
+
+  __cachedAssets.assets[resourceName as string] ??= {}
+  __cachedAssets.assets[resourceName as string][assetName] = asset
+
+  return asset
+}
+
+export const get = internalGetResourceAsset
 
 export const getFunction = async <
   ResourceName extends keyof Collections,

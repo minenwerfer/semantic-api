@@ -76,7 +76,7 @@ export const descriptionToSchemaObj = async (description: Omit<Description, '$id
     }
 
     if( typeof referencedCollection === 'string' ) {
-      const referenceDescription = unsafe(await getResourceAsset(property.s$referencedCollection! as keyof Collections, 'description'), `${property.s$referencedCollection} description at ${(<any>description).$id}.${propertyName}`)
+      const referenceDescription = unsafe(await getResourceAsset(referencedCollection as keyof Collections, 'description'), `${referencedCollection} description at ${(<any>description).$id}.${propertyName}`)
       hasRefs = true
 
       const actualReferenceName = result.ref = referenceDescription.alias || referenceDescription.$id

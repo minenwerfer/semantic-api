@@ -10,13 +10,21 @@ export const applyPreset = (entry: Description | Description['properties'], pres
   const preset = require(`@semantic-api/api/presets/${presetName}.json`)
   const presetObject = Object.assign({}, parentName ? (preset[parentName]||{}) : preset)
 
-  return deepMerge(entry, presetObject)
+  return deepMerge(entry, presetObject, {
+    callback: (_, left) => {
+      if( left === null ) {
+        return left
+      }
+    }
+  })
 }
 
 export const preloadDescription = async <Options extends PreloadOptions, Return=Options extends { serialize: true }
   ? Buffer
   : Description
->(description: Partial<Description>, options?: Options) => {
+>(originalDescription: Partial<Description>, options?: Options) => {
+  const description = Object.assign({}, originalDescription)
+
   if( description.alias ) {
     const aliasedCollectionEither = await getResourceAsset(description.alias as keyof Collections, 'description')
     if( isLeft(aliasedCollectionEither) ) {

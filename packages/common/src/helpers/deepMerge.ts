@@ -1,5 +1,6 @@
 export type MergeOptions = {
   arrays?: false
+  callback?: (key: string, leftVal: any, rightVal: any) => any
 }
 
 export const deepMerge = <
@@ -11,6 +12,14 @@ export const deepMerge = <
   for( const key in right ) {
     const leftVal: any = result[key]
     const rightVal: any = right[key]
+
+    if( options?.callback ) {
+      const res = options.callback(key, leftVal, rightVal)
+      if( res !== undefined ) {
+        result[key] = res
+        continue
+      }
+    }
 
     if( Array.isArray(leftVal) && Array.isArray(rightVal) ) {
       result[key] = options?.arrays
