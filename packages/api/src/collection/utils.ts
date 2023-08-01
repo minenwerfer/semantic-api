@@ -82,7 +82,8 @@ export const prepareInsert = (
     }
 
     if(
-      ( [undefined, null].includes(value) || (typeof value === 'object' && !Object.keys(value).length) )
+        !(value instanceof Date)
+        && ( [undefined, null].includes(value) || (typeof value === 'object' && !Object.keys(value).length) )
         && !Array.isArray(value)
         && !(key in (description.defaults||{}))
     ) {
