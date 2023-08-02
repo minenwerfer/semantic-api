@@ -24,7 +24,7 @@ export const appendPagination = async (params: PostHookParams) => {
     return result
   }
 
-  const response = result._tag
+  const response = result?._tag
     ? result
     : { result }
 

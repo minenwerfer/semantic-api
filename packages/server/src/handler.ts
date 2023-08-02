@@ -1,4 +1,4 @@
-import { createContext, getFunction, Token, makeException } from '@semantic-api/api'
+import { createContext, getFunction, Token } from '@semantic-api/api'
 import { ACErrors } from '@semantic-api/access-control'
 import { right, left, isLeft, unwrapEither, unsafe } from '@semantic-api/common'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
