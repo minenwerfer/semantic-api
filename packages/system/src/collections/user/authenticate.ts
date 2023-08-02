@@ -1,5 +1,5 @@
-import type { Context } from '@semantic-api/api'
-import { Token, makeException } from '@semantic-api/api'
+import { type Context, Token } from '@semantic-api/api'
+import { left } from '@semantic-api/common'
 import { description, type User } from './description'
 
 type Props = {
@@ -21,6 +21,11 @@ type Return = {
     type: 'bearer'
     token: string
   }
+}
+
+export enum AuthenticationErrors {
+  InvalidCredentials = 'INVALID_CREDENTIALS',
+  InactiveUser = 'INACTIVE_USER'
 }
 
 const getUser = async (user: Pick<User, '_id'>, context: Context<typeof description>) => {
@@ -117,17 +122,11 @@ const authenticate = async (props: Props, context: Context<typeof description>) 
   )
 
   if( !user || !await user.testPassword!(props.password) ) {
-    return makeException({
-      name: 'AuthenticationError',
-      message: 'AuthenticationError.invalid_credentials'
-    })
+    return left(AuthenticationErrors.InvalidCredentials)
   }
 
   if( !user.active ) {
-    return makeException({
-      name: 'AuthenticationError',
-      message: 'AuthenticationError.inactive_user'
-    })
+    return left(AuthenticationErrors.InactiveUser)
   }
 
   return getUser(user, context)

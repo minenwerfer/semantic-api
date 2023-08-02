@@ -1,6 +1,6 @@
 import { createContext, getFunction, Token, makeException } from '@semantic-api/api'
 import { ACErrors } from '@semantic-api/access-control'
-import { isLeft, unwrapEither, unsafe } from '@semantic-api/common'
+import { right, left, isLeft, unwrapEither, unsafe } from '@semantic-api/common'
 import type { Request, ResponseToolkit } from '@hapi/hapi'
 import type { HandlerRequest } from './types'
 import type { DecodedToken, Context, ResourceType, } from '@semantic-api/api'
@@ -27,17 +27,15 @@ const postPipe = pipe(
   appendPagination
 )
 
-export const getToken = async (request: Request) => {
+export const getDecodedToken = async (request: Request) => {
   try {
-    return request.headers.authorization
-      ? Token.decode(request.headers.authorization.split('Bearer ').pop() || '')
+    const decodedToken: DecodedToken = request.headers.authorization
+      ? await Token.decode(request.headers.authorization.split('Bearer ').pop() || '')
       : { user: {} }
+
+    return right(decodedToken)
   } catch( e: any ) {
-    throw makeException({
-      name: 'AuthenticationError',
-      message: e.message,
-      logout: true
-    })
+    return left('AUTHENTICATION_ERROR')
   }
 }
 
@@ -109,7 +107,12 @@ export const customVerbs = (resourceType: ResourceType) => async (
   } = request
 
 
-  const token = await getToken(request) as DecodedToken
+  const tokenEither = await getDecodedToken(request)
+  if( isLeft(tokenEither) ) {
+    return tokenEither
+  }
+
+  const token = unwrapEither(tokenEither)
 
   Object.assign(parentContext, {
     token,
@@ -168,7 +171,12 @@ export const regularVerb = (functionName: RegularVerb) => async (
     }
   } = request
 
-  const token = await getToken(request) as DecodedToken
+  const tokenEither = await getDecodedToken(request)
+  if( isLeft(tokenEither) ) {
+    return tokenEither
+  }
+
+  const token = unwrapEither(tokenEither)
 
   Object.assign(parentContext, {
     token,
@@ -230,7 +238,12 @@ export const fileDownload = async (
   h: ResponseToolkit,
   parentContext: Context<any, any, any>
 ) => {
-  const token = await getToken(request) as DecodedToken
+  const tokenEither = await getDecodedToken(request)
+  if( isLeft(tokenEither) ) {
+    return tokenEither
+  }
+
+  const token = unwrapEither(tokenEither)
   parentContext.token = token
 
   const context = await createContext({
