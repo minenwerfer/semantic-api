@@ -7,5 +7,6 @@ export * from './token'
 export * from './types'
 export * from './database'
 export * from './functions/use'
+export * from './mailing'
 
 export { ok, error, isOk, isError, unsafe, unpack } from '@semantic-api/common'

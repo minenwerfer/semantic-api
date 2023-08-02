@@ -33,7 +33,9 @@ export const baseRoles = <const>{
         functions: [
           'createAccount',
           'authenticate',
-          'ping'
+          'ping',
+          'activate',
+          'getInfo'
         ]
       }
     }

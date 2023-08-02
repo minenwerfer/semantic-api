@@ -2,7 +2,6 @@ import { defineDescription } from '@semantic-api/api'
 
 export type User = Omit<typeof User, 'roles'> & {
   roles: Array<string>
-  testPassword?(password: string): boolean
   owner: User
 }
 
@@ -38,7 +37,6 @@ export const [User, description] = defineDescription({
     },
     active: {
       type: 'boolean',
-      default: true
     },
     roles: {
       type: 'array',
@@ -73,9 +71,6 @@ export const [User, description] = defineDescription({
     self_registered: {
       type: 'boolean',
       readOnly: true
-    },
-    activation_key: {
-      type: 'string'
     },
     resources_usage: {
       type: 'object',

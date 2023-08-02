@@ -1,13 +1,12 @@
-import { type Context, useFunctions } from '@semantic-api/api'
+import { type Context, sendTransactionalEmail } from '@semantic-api/api'
 import { isLeft, unwrapEither } from '@semantic-api/common'
 import { description, type User } from './description'
+import bcrypt from 'bcrypt'
 
-type Props = {
-  what: Partial<User>
-}
+type Props = Partial<User>
 
 const createAccount = async (props: Props, context: Context<typeof description>) => {
-  const { token, apiConfig } = context
+  const user = Object.assign({}, props)
 
   const validationEither = await context.validate({
     properties: {
@@ -19,23 +18,54 @@ const createAccount = async (props: Props, context: Context<typeof description>)
       },
       phone: {
         type: 'string'
+      },
+      password: {
+        type: 'string'
       }
     }
-  }, props.what, [
-    'full_name',
-    'email',
-    'phone'
-  ])
+  }, user, {
+    required: [
+      'full_name',
+      'email',
+      'phone'
+    ],
+    extraneous: [
+      '_id',
+      'roles',
+      'active'
+    ]
+  })
 
   if( isLeft(validationEither) ) {
     return validationEither
   }
 
-  props.what.group = apiConfig.group
+  user.group = context.apiConfig.group
 
-  const validatedUser = unwrapEither(validationEither)
-  console.log(validatedUser)
-  // const user = await context.model.create(props.what)
+  if( user.password ) {
+    user.password = await bcrypt.hash(user.password, 10)
+  }
+
+  if( !context.token.user._id ) {
+    user.self_registered = true
+  }
+
+  const newUser = await context.model.create(user)
+  const activationToken = await bcrypt.hash(newUser._id.toString(), 10)
+  const link = `${process.env.API_URL}/user/activate?u=${newUser._id}&t=${activationToken}`
+
+  await sendTransactionalEmail({
+    receiverName: newUser.full_name,
+    receiverEmail: newUser.email,
+    subject: 'Sua senha aew, papai',
+    html: `<div>
+      <div>Clique no link abaixo ou copie e cole na barra do navegador para ativar o seu usuário</div>
+      <a href="${link}">${link}</a>
+    </div>`
+  })
+
+
+  return newUser
 
   // user is being inserted by a non-root user
   // if( !token?.user?.roles.includes('root') ) {

@@ -27,8 +27,18 @@ export const validateFromDescription = async <
 >(
   description: TDescription,
   what: TWhat,
-  required?: Array<keyof TDescription['properties']>|null
+  options?: {
+    required?: Array<keyof TDescription['properties']>|null
+    extraneous?: Array<string>|boolean
+
+  }
 ) => {
+  const { 
+    required,
+    extraneous
+
+  } = options || {}
+
   if( !what ) {
     return left({
       code: ValidationErrors.EmptyTarget as ValidationErrors
@@ -66,7 +76,10 @@ export const validateFromDescription = async <
       continue
     }
 
-    if( !property ) {
+    if(
+      (Array.isArray(extraneous) && extraneous.includes(prop))
+      || (!property && !extraneous)
+    ) {
       errors[prop] = {
         type: 'extraneous',
         details: {
@@ -92,6 +105,10 @@ export const validateFromDescription = async <
         }
       }
 
+      continue
+    }
+
+    if( !description.properties[prop] ) {
       continue
     }
 

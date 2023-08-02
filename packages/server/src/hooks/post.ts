@@ -16,18 +16,17 @@ export const appendPagination = async (params: PostHookParams) => {
   const {
     request,
     result,
-    context,
     resourceName,
     resourceType
   } = params
 
-  if( result?.constructor.name === 'Response' ) {
+  if( result?.constructor?.name === 'Response' ) {
     return result
   }
 
-  const response = {
-    result
-  }
+  const response = result._tag
+    ? result
+    : { result }
 
   if( Array.isArray(result) && resourceType === 'collection' ) {
     const model = unsafe(await getResourceAsset(resourceName, 'model'))

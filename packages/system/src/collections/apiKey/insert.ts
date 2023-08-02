@@ -10,10 +10,12 @@ const insert = async (props: Props, context: Context<typeof description>) => {
     return context.collection.insert(props)
   }
 
-  context.validate(description, props?.what, [
-    'name',
-    'allowed_functions'
-  ])
+  context.validate(description, props?.what, {
+    required: [
+      'name',
+      'allowed_functions'
+    ]
+  })
 
   props.what.content = '/'
 
