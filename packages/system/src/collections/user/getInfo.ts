@@ -14,7 +14,7 @@ type Props = {
   token: string
 }
 
-const activate = async (props: Props, context: Context<typeof description>) => {
+const getInfo = async (props: Props, context: Context<typeof description>) => {
   const {
     userId,
     token
@@ -43,4 +43,4 @@ const activate = async (props: Props, context: Context<typeof description>) => {
   })
 }
 
-export default activate
+export default getInfo
