@@ -81,7 +81,6 @@ Next thing upon creating a collection is adding functions to it. That is, CRUD o
 import type { description } from './description'
 
 const get = (name: string, context: Context<typeof description>) => {
-  // We use Mongoose as a ODM, so context.model will be a typeof import('mongoose').Model<T>.
   const pet = await context.model.findOne({ name }).lean()
 
   console.log(pet.name)

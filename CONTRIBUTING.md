@@ -87,7 +87,7 @@ Also don't add properties on `globalThis`, use another approach like dynamically
 
 ### No uneeded type annotations
 
-In the first example the `name` and `someFn` variables are inferred as '"Semantic API"' and '() => "some inferrable type"' respectively. In the second example they're annotated with the much less useful types 'string' and '() => string'. As a rule, if TypeScript can infer it, don't annotate.
+In the first example the `name` and `someFn` variables are inferred as `'"Semantic API"'` and `'() => "some inferrable type"'` respectively. In the second example they're annotated with the much less useful types `'string'` and `'() => string'`. As a rule, if TypeScript can infer it, don't annotate.
 
 Write this:
 
@@ -182,7 +182,7 @@ pet.name = 'Bobby'
 Instead of:
 
 ```typescript
-// computed propreties have completely no use in this example
+// computed properties have completely no use in this example
 // it is just making the code more verbose
 
 const pet = {
