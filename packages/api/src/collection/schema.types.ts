@@ -64,6 +64,6 @@ type MapTypes<
   { -readonly [P in RequiredProperties<F, ExplicitlyRequired>]: Type<F[P]> } &
   { readonly [P in ReadonlyProperties<F>]?: Type<F[P]> }
 
-type CaseOwned<T extends JsonSchema> = T extends { owned: true }
+type CaseOwned<T extends JsonSchema> = T extends { owned: true | string }
   ? Owned & MapTypes<T>
   : MapTypes<T>

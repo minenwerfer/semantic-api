@@ -4,8 +4,7 @@ export type File = typeof File
 
 export const [File, description] = defineDescription({
   $id: 'file',
-  owned: true,
-  alwaysOwned: true,
+  owned: 'always',
   presets: [
     'owned'
   ],

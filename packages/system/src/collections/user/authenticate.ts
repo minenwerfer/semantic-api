@@ -25,7 +25,8 @@ type Return = {
 
 export enum AuthenticationErrors {
   InvalidCredentials = 'INVALID_CREDENTIALS',
-  InactiveUser = 'INACTIVE_USER'
+  InactiveUser = 'INACTIVE_USER',
+  EmptyCredentials = 'EMPTY_CREDENTIALS'
 }
 
 const getUser = async (user: Pick<User, '_id'>, context: Context<typeof description>) => {
@@ -43,7 +44,7 @@ const getUser = async (user: Pick<User, '_id'>, context: Context<typeof descript
   }
 
   if( context.apiConfig.logSuccessfulAuthentications ) {
-    context.log('successful authentication', {
+    await context.log('successful authentication', {
       email: leanUser.email,
       roles: leanUser.roles,
       _id: leanUser._id
@@ -82,7 +83,7 @@ const authenticate = async (props: Props, context: Context<typeof description>) 
   }
 
   if( !props?.email ) {
-    throw new Error('Empty email or password')
+    return left(AuthenticationErrors.EmptyCredentials)
   }
 
   if(

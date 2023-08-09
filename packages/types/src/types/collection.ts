@@ -108,9 +108,8 @@ export type Description<TDescription extends Description=any> = {
   defaults?: Record<string, any>
 
   // modifiers
-  owned?: boolean
+  owned?: boolean | 'always'
   immutable?: boolean|ReadonlyArray<string>
-  alwaysOwned?: boolean
 
   // takes an array of something
   route?: ReadonlyArray<string>

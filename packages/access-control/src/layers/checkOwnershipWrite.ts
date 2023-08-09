@@ -10,7 +10,7 @@ export const checkOwnershipWrite = async (context: Context, props: AccessControl
   const payload = Object.assign({}, props.payload)
 
   if( token.user && description.owned ) {
-    if( !token.user.roles?.includes('root') || description.alwaysOwned ) {
+    if( !payload.what._id || description.owned === 'always' ) {
       payload.what.owner = token.user._id
     } else {
       return right(payload)
